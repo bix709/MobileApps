@@ -1,0 +1,7 @@
+Tomek:['GTomek_11-12-2015.txt', 'GTomek_25-4-2016.txt', 'GTomek_30-5-2016.txt', 'GTomek_8-6-2016.txt', 'GTomek_18-6-2016.txt', 'GTomek_27-6-2016.txt', 'GTomek_4-7-2016.txt', 'GTomek_11-7-2016.txt', 'GTomek_18-7-2016.txt', 'GTomek_24-10-2016.txt']
+Link:['GLink_27-6-2016.txt', 'GLink_4-7-2016.txt', 'GLink_11-7-2016.txt', 'GLink_18-7-2016.txt']
+Mati:['GMati_27-6-2016.txt', 'GMati_4-7-2016.txt', 'GMati_11-7-2016.txt', 'GMati_18-7-2016.txt']
+Bronia:['GBronia_27-6-2016.txt', 'GBronia_4-7-2016.txt', 'GBronia_11-7-2016.txt', 'GBronia_18-7-2016.txt']
+Waldek:['GWaldek_27-6-2016.txt', 'GWaldek_4-7-2016.txt', 'GWaldek_11-7-2016.txt', 'GWaldek_18-7-2016.txt']
+Suchy:['GSuchy_27-6-2016.txt', 'GSuchy_11-7-2016.txt', 'GSuchy_18-7-2016.txt']
+Joker:['GJoker_27-6-2016.txt', 'GJoker_4-7-2016.txt', 'GJoker_11-7-2016.txt', 'GJoker_18-7-2016.txt']
