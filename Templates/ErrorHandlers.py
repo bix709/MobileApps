@@ -3,10 +3,10 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
-import sys
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 from Templates.CommonWidgets import FontFittingLabel, FontFittingButton
+from kivy.app import App
 
 
 def handle_connection_errors(function):
@@ -29,9 +29,9 @@ class ConnectionErrorPopup(Popup):
     def create_main_layout(self):
         layout = BoxLayout(orientation='vertical', size_hint=(0.8, 0.8))
         layout.add_widget(FontFittingLabel(text=self.error_msg, text_size=self.size))
-        layout.add_widget(FontFittingButton(text="Try to reconnect", text_size=self.size,
-                                            on_press=lambda a: self.reconnect()))
+        layout.add_widget(FontFittingButton(text="Exit", text_size=self.size,
+                                            on_press=lambda a: self.exit()))
         return layout
 
-    def reconnect(self):
-        print 'reconnect'
+    def exit(self):
+        print 'exit'

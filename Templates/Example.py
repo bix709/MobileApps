@@ -17,8 +17,6 @@ class ExampleApp(App):
         Window.size = (230, 365)
         return LoginManager()
 
-    def database_connection_error(self, error_message):
-        ConnectionErrorPopup(error_message).open()
 
 if __name__ == '__main__':
     ExampleApp().run()

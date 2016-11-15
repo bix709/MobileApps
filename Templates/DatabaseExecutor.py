@@ -3,10 +3,7 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
-from concurrent.futures import ThreadPoolExecutor
-
 import cx_Oracle
-from kivy.app import App
 from Templates.ErrorHandlers import *
 from Backgrounds import DatabaseTask
 
@@ -60,5 +57,4 @@ class SqlCommandsExecutor(object):
         if query:
             for result in query:
                 users_logins[result[0]] = result[1]
-                print result
             return {'users_logins': users_logins}
