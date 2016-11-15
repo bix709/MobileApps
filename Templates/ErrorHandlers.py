@@ -14,8 +14,7 @@ def handle_connection_errors(function):
         try:
             return function(*args, **kwargs)
         except:
-            args[0].connection_error()
-
+            args[0].connection_error(function)
     return wrapped
 
 

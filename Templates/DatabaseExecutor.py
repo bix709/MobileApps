@@ -3,14 +3,23 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+from concurrent.futures import ThreadPoolExecutor
 
 import cx_Oracle
 from kivy.app import App
 from Templates.ErrorHandlers import *
+from Backgrounds import DatabaseTask
+
+
+def execute_in_background(function):
+    def wrapped(*args, **kwargs):
+        DatabaseTask(function, *args, **kwargs).start()
+
+    return wrapped
 
 
 class DatabaseConnection(object):
-    def __init__(self, url='teter/fx0507@127.0.0.1/Grafiki'):
+    def __init__(self, url='teter/fx0507@127.10.0.1/Grafiki'):
         super(DatabaseConnection, self).__init__()
         self.url = url
         self.connection = None
@@ -33,20 +42,23 @@ class DatabaseConnection(object):
         self.database_cursor.execute(sql_command)
         self.connection.commit()
 
-    def connection_error(self):
+    def connection_error(self, interrupted_func):
         self.connection_error_popup.open()
+        self.connect_to_database()
+        interrupted_func()
 
 
 class SqlCommandsExecutor(object):
-    def __init__(self):
+    def __init__(self, bag):
         super(SqlCommandsExecutor, self).__init__()
-        self.database = DatabaseConnection()
+        self.bag = bag
 
+    @execute_in_background
     def fetch_logins(self):
         users_logins = {}
-        query = self.database.fetch_query("select login, password from Instruktorzy")
+        query = DatabaseConnection().fetch_query("select login, password from Instruktorzy")
         if query:
             for result in query:
                 users_logins[result[0]] = result[1]
-                print query
+                print result
             return {'users_logins': users_logins}

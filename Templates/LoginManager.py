@@ -7,7 +7,7 @@
 from kivy.uix.screenmanager import ScreenManager
 from Templates.CommonWidgets import MyScreen, LoginScreen
 from kivy.uix.screenmanager import FadeTransition
-from Templates.Backgrounds import UpdatingWithDatabaseInBackground
+from Templates.DatabaseExecutor import SqlCommandsExecutor
 
 
 class LoginManager(ScreenManager):
@@ -18,7 +18,8 @@ class LoginManager(ScreenManager):
         self.transition = FadeTransition()
         self.add_widget(LoginScreen(background_img='tlo2.jpg'))
         self.add_widget(MyScreen(background_img='tlo2.jpg', name='First Screen'))
-        UpdatingWithDatabaseInBackground(self.bag).start()
+        self.database_executor = SqlCommandsExecutor(self.bag)
+        self.database_executor.fetch_logins()
 
     def handle_login(self, username, password):
         users_logins = self.get_from_bag('users_logins')
@@ -34,6 +35,7 @@ class LoginManager(ScreenManager):
             print 'Cant connect / read logins from database.'
 
     def correct_login(self):
+        self.database_executor.fetch_logins()
         self.current = "First Screen"
 
     def wrong_login(self):
