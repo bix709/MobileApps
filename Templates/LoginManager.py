@@ -13,6 +13,7 @@ from Templates.Backgrounds import UpdatingWithDatabaseInBackground
 class LoginManager(ScreenManager):
     def __init__(self, **kwargs):
         super(LoginManager, self).__init__(**kwargs)
+        self.id = "LoginManager"
         self.bag = {}
         self.transition = FadeTransition()
         self.add_widget(LoginScreen(background_img='tlo2.jpg'))
