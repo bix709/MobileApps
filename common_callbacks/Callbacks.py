@@ -11,7 +11,7 @@ from kivy.app import App
 
 def wait_for_future_result(function):
     @wraps(function)
-    def wrapped(*args, **kwargs):
+    def wrapped(*args, **kwargs):  # TODO animation circle
         caller = args[0].get_caller(**kwargs)
         # wait_animation = WaitingCircle(caller)
         # wait_animation.display()
@@ -29,14 +29,13 @@ class CommonCallback(object):
         """ Attribute sql_command should be set by overriding constructor. """
         self.database_args = database_args
         self.database_kwargs = database_kwargs
-        self.sql_command = None
         super(CommonCallback, self).__init__()
 
     def __call__(self, args, kwargs):
         """ Override this method only if you know what you're doing! """
         with ThreadPoolExecutor(max_workers=2) as executor:
             executor.submit(self.perform_callback, *args, **kwargs)
-            self.database_query = executor.submit(self.sql_command, *self.database_args, **self.database_kwargs)
+            self.database_query = executor.submit(self.get_sql_command, *self.database_args, **self.database_kwargs)
 
     def get_caller(self, **kwargs):
         """ Returns caller's screen. """
@@ -44,6 +43,15 @@ class CommonCallback(object):
             return kwargs['instance']
         except KeyError:
             print 'No instance given to callback'
+
+    @property
+    def get_sql_command(self):
+        """
+        Override this method to set sql command to be executed with callback.
+        Must be decorated with @property
+        :return: reference to SQL Command ( callable one ).
+        """
+        return lambda a: 1
 
     @wait_for_future_result
     def perform_callback(self, *args, **kwargs):

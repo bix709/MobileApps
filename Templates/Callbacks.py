@@ -10,9 +10,9 @@ from common_callbacks.Callbacks import CommonCallback, wait_for_future_result
 
 
 class LoginCallback(CommonCallback):
-    def __init__(self, *db_args, **db_kwargs):
-        super(LoginCallback, self).__init__(*db_args, **db_kwargs)
-        self.sql_command = SqlCommands.fetch_logins
+    @property
+    def get_sql_command(self):
+        return SqlCommands.fetch_logins
 
     @wait_for_future_result
     def perform_callback(self, username, password, instance, *args, **kwargs):

@@ -5,13 +5,13 @@
 """
 from kivy.app import App
 from kivy.core.window import Window
-from common_widgets.LoginManager import LoginManager
+from Templates.MyLoginManager import MyLoginManager
 
 
 class ExampleApp(App):
     def build(self):
         Window.size = (230, 365)
-        return LoginManager()
+        return MyLoginManager()
 
 
 if __name__ == '__main__':
