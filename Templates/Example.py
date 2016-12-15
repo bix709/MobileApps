@@ -3,13 +3,9 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
-from Templates.ErrorHandlers import ConnectionErrorPopup
 from kivy.app import App
-from Templates.TabbedCarousel import *
 from kivy.core.window import Window
-from Templates.TimeWidgets import *
-from Templates.LoginManager import LoginManager
-from kivy.config import Config
+from common_widgets.LoginManager import LoginManager
 
 
 class ExampleApp(App):

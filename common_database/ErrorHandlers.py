@@ -3,10 +3,11 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
-from Templates.CommonWidgets import FontFittingLabel, FontFittingButton
-from kivy.app import App
+
+from common_widgets.FittingLabels import FontFittingLabel, FontFittingButton
 
 
 def handle_connection_errors(function):
@@ -15,6 +16,7 @@ def handle_connection_errors(function):
             return function(*args, **kwargs)
         except:
             args[0].connection_error(function, *args, **kwargs)
+
     return wrapped
 
 

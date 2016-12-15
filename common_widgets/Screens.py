@@ -10,6 +10,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.core.window import Window
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from common_widgets.FittingLabels import FontFittingLabel
 
 
 class MyScreen(Screen):
@@ -82,19 +83,3 @@ class LoginScreen(MyScreen):
         self.clear_widgets()
         self.add_widget(self.create_main_layout(wrong_login=True))
         self.get_username_input().focus = True
-
-
-class FontFittingButton(Button):
-    def __init__(self, **kwargs):
-        super(FontFittingButton, self).__init__(**kwargs)
-        self.text_size = self.width * 2, self.height
-        self.valign = 'middle'
-        self.halign = 'center'
-
-
-class FontFittingLabel(Label):
-    def __init__(self, **kwargs):
-        super(FontFittingLabel, self).__init__(**kwargs)
-        self.text_size = self.width * 2, self.height
-        self.valign = 'middle'
-        self.halign = 'center'

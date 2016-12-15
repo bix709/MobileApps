@@ -4,47 +4,41 @@
     copyright : 5517 Company
 """
 
-from kivy.uix.screenmanager import ScreenManager
-from Templates.CommonWidgets import MyScreen, LoginScreen
-from kivy.uix.screenmanager import FadeTransition
-from Templates.DatabaseExecutor import DatabaseExecutor
-from time import sleep
 from Queue import Queue
+
+from kivy.clock import Clock
+from kivy.uix.screenmanager import FadeTransition
+from kivy.uix.screenmanager import ScreenManager
+
+from Templates.Callbacks import LoginCallback
+from common_callbacks.CallbackExecutor import BackgroundCallbackExecutor
+from common_widgets.Screens import MyScreen, LoginScreen
 
 
 class LoginManager(ScreenManager):
     def __init__(self, **kwargs):
-        """ This widget is supposed to be root of application! """
+        """ This widget is supposed to be root of application!
+            Remember to perform GUI move first (with old data) , then callback. """
         super(LoginManager, self).__init__(id="LoginManager", transition=FadeTransition(), **kwargs)
-        self.bag = dict()
         self.task_queue = Queue(maxsize=0)
         self.add_widget(LoginScreen(background_img='tlo2.jpg'))
         self.setup_screens()
-        DatabaseExecutor(self.task_queue).start()
-        self.task_queue.put("users_logins")
+        BackgroundCallbackExecutor(self.task_queue).start()
 
     def setup_screens(self):
         self.add_widget(MyScreen(background_img='tlo2.jpg', name='First Screen'))
 
     def handle_login(self, username, password):
-        users_logins = self.get_from_bag("users_logins")
-        try:
-            self.correct_login() if users_logins[username] == str(hash(password)) else self.wrong_login()
-        except KeyError:
-            self.wrong_login()
+        args = db_args = ()
+        db_kwargs = {}
+        print self.task_queue.unfinished_tasks
+        kwargs = {'username': username, 'password': password, 'instance': self}
+        self.task_queue.put((LoginCallback(db_args, db_kwargs), args, kwargs))
 
-    def get_from_bag(self, item):
-        """Freezes GUI and waits for fetch finished."""
-        try:
-            self.task_queue.join()  # TODO koleczko czekania
-            return self.bag[item]
-        except:
-            print "Error no such item in root bag."
-
-    def correct_login(self):
+    def correct_login(self, *args, **kwargs):
         self.go_to("First Screen")
 
-    def wrong_login(self):
+    def wrong_login(self, *args, **kwargs):
         try:
             self.get_screen("Login Screen").wrong_login_attempt()
         except:
