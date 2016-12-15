@@ -15,13 +15,10 @@ class LoginCallback(CommonCallback):
         self.sql_command = SqlCommands.fetch_logins
 
     @wait_for_future_result
-    def perform_callback(self, *args, **kwargs):  # TODO username, pw , caller as parameters??
-        caller = self.get_caller(**kwargs)
-        username = kwargs['username']
-        password = kwargs['password']
+    def perform_callback(self, username, password, instance, *args, **kwargs):
         users_logins = self.database_query.result()
         try:
-            Clock.schedule_once(caller.correct_login) if users_logins[username] == str(hash(password)) \
-                else Clock.schedule_once(caller.wrong_login)
+            Clock.schedule_once(instance.correct_login) if users_logins[username] == password \
+                else Clock.schedule_once(instance.wrong_login)
         except KeyError:
-            Clock.schedule_once(caller.wrong_login)
+            Clock.schedule_once(instance.wrong_login)

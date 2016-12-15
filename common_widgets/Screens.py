@@ -55,7 +55,7 @@ class LoginScreen(MyScreen):
         main_layout.add_widget(Label(color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30, text="Password:"))
         main_layout.add_widget(TextInput(multiline=False, id='Password', focus=False, size_hint_y=0.20,
                                          password=True, on_text_validate=
-                                         lambda a: self.parent.handle_login(self.get_username(), a.text)))
+                                         lambda a: self.parent.handle_login(self.get_username(), str(hash(a.text)))))
         main_layout.add_widget(Button(background_normal="b3.png", text="Zaloguj!", color=(1, 1, 1, 1),
                                       size_hint_y=0.30, font_size=30, on_press=lambda a:
             self.parent.handle_login(self.get_username(), self.get_password())))
@@ -74,7 +74,7 @@ class LoginScreen(MyScreen):
         return self.get_username_input().text
 
     def get_password(self):
-        return self.get_password_input().text
+        return str(hash(self.get_password_input().text))
 
     def focus_password(self):
         self.get_password_input().focus = True

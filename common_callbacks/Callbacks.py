@@ -46,7 +46,7 @@ class CommonCallback(object):
             print 'No instance given to callback'
 
     @wait_for_future_result
-    def perform_callback(self):
+    def perform_callback(self, *args, **kwargs):
         """ You need to override this method.
             It's executed after result from database query is obtained.
             It must be decorated with @wait_for_future_result.
