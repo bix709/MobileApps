@@ -18,26 +18,25 @@ class DatabaseConnection(object):
         self.database_cursor = None
         self.connect_to_database()
 
-    @handle_connection_errors
     def connect_to_database(self):
-        self.connection = cx_Oracle.connect(self.url)
-        self.database_cursor = self.connection.cursor()
+        try:
+            self.connection = cx_Oracle.connect(self.url)
+            self.database_cursor = self.connection.cursor()
+        except:
+            self.connection_error()
 
-    @handle_connection_errors
     def fetch_query(self, sql_command):
         return self.database_cursor.execute(sql_command)
 
-    @handle_connection_errors
     def execute_command(self, sql_command):
         self.database_cursor.execute(sql_command)
         self.connection.commit()
 
-    def connection_error(self, interrupted_func, *args, **kwargs):
+    def connection_error(self):
         issue = ConnectionError()
         issue.display_connection_error_label()
         while not self.connected():
             sleep(1)
-        interrupted_func(*args, **kwargs)
         issue.hide_connection_error_label()
 
     def connected(self):

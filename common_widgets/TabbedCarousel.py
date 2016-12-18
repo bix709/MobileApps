@@ -11,6 +11,7 @@ from kivy.uix.carousel import Carousel
 class CustomCarousel(Carousel):
     def __init__(self, **kwargs):
         super(CustomCarousel, self).__init__(**kwargs)
+        self.screens = []
 
     def on_index(self, *args):
         super(CustomCarousel, self).on_index(*args)
@@ -48,20 +49,21 @@ class CarouselWithActionBar(Screen):
         self.action_buttons = []
 
     def get_action_bar(self):
-        return list(filter(lambda a: a.id == 'actionBar', self.children))[0]
+        return self.actionBar
 
     def get_carousel(self):
-        return list(filter(lambda a: a.id == 'carousel', self.children))[0]
+        return self.carousel
 
     def add_screen(self, screen):
-        carousel = self.get_carousel()
-        index = len(carousel.slides)
-        carousel.add_widget(screen)
+        index = len(self.carousel.slides)
+        screen.caro_index = index
+        self.carousel.add_widget(screen)
+        self.carousel.screens.append(screen)
         button_state = 'down' if index == 0 else 'normal'
-        action_bar = self.get_action_bar().action_view
-        action_bar.add_widget(ActionSeparator())
+        action_view = self.actionBar.action_view
+        action_view.add_widget(ActionSeparator())
         action_button = ActionButton(id=str(index), size_hint=(None, 1), state=button_state,
                                      background_down='b5.png', color=(0, 0, 0, 1), text=screen.name,
-                                     on_press=lambda a: carousel.load_slide(carousel.slides[int(a.id)]))
+                                     on_press=lambda a: self.carousel.load_slide(self.carousel.slides[int(a.id)]))
         self.action_buttons.append(action_button)
-        action_bar.add_widget(action_button)
+        action_view.add_widget(action_button)

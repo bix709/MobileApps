@@ -12,7 +12,7 @@ from kivy.app import App
 def wait_for_future_result(function):
     @wraps(function)
     def wrapped(*args, **kwargs):  # TODO animation circle
-        caller = args[0].get_caller(**kwargs)
+        caller = App.get_running_app().root
         # wait_animation = WaitingCircle(caller)
         # wait_animation.display()
         caller.task_queue.join()

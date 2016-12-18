@@ -1783,4 +1783,3 @@ if (__name__ == "__main__"):
     # PRZYPOMNIENIA
     # ZROBIC WIECEJ_POPUP W rozliczeniach, pokazujacy
     # kase z tego miesiaca, 2 poprzednich, tego sezonu, i 2 poprzednich.
-    # TODO:hihi

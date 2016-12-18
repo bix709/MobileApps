@@ -3,21 +3,12 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+import sys
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 
 from common_widgets.FittingLabels import FontFittingLabel, FontFittingButton
-
-
-def handle_connection_errors(function):
-    def wrapped(*args, **kwargs):
-        try:
-            return function(*args, **kwargs)
-        except:
-            args[0].connection_error(function, *args, **kwargs)
-
-    return wrapped
 
 
 class ConnectionErrorPopup(Popup):
@@ -34,7 +25,6 @@ class ConnectionErrorPopup(Popup):
         layout.add_widget(FontFittingLabel(text=self.error_msg, text_size=self.size))
         layout.add_widget(FontFittingButton(text="Exit", text_size=self.size,
                                             on_press=lambda a: self.exit()))
-        # TODO: koleczko czekania
         return layout
 
     def exit(self):

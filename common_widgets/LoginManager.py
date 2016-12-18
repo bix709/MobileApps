@@ -20,6 +20,7 @@ class LoginManager(ScreenManager):
         """ This widget is supposed to be root of application!
             Remember to perform GUI move first (with old data) , then callback. """
         super(LoginManager, self).__init__(id="LoginManager", transition=FadeTransition(), **kwargs)
+        self.logged_user = self.chosen_user = None
         self.task_queue = Queue(maxsize=0)
         self.add_widget(LoginScreen(background_img='tlo2.jpg'))
         self.setup_screens()
@@ -31,9 +32,9 @@ class LoginManager(ScreenManager):
 
     def handle_login(self, username, password):
         args = db_args = ()
-        db_kwargs = {}
-        kwargs = {'username': username, 'password': password, 'instance': self}
-        self.task_queue.put((LoginCallback(db_args, db_kwargs), args, kwargs))
+        db_kwargs = {'username': username, 'password': password}
+        kwargs = {'instance': self}
+        self.task_queue.put((LoginCallback(*db_args, **db_kwargs), args, kwargs))
 
     def correct_login(self, *args, **kwargs):
         """ Override this method to navigate to first widget after successfull login. """
