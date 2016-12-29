@@ -40,7 +40,7 @@ class CommonCalendar(BoxLayout):
                 self.month_layout.add_widget(Button(id='{}/{}/{}'.format(*complete_date),
                                                     text="{}".format(day_object.day),
                                                     background_color=(1, 1, 1, intensivity),
-                                                    on_release=lambda instance: self.action(instance)))
+                                                    on_release=lambda instance: self.on_choose(instance)))
 
     def add_days_headers(self):
         self.month_layout.clear_widgets()
@@ -71,7 +71,7 @@ class CommonCalendar(BoxLayout):
         month_chooser.add_widget(FontFittingButton(text="Nastepny", on_release=lambda a: self.next_month()))
         return month_chooser
 
-    def action(self, instance):
+    def on_choose(self, instance):
         print(instance.id)
 
 

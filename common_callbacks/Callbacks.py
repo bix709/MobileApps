@@ -22,6 +22,10 @@ def wait_for_future_result(function):
     return wrapped
 
 
+def schedule_task(callback, cb_args, cb_kwargs):
+    App.get_running_app().root.task_queue.put((callback, cb_args, cb_kwargs))
+
+
 class CommonCallback(object):
     """ Abstract class (template) for callbacks """
 

@@ -12,6 +12,7 @@ from kivy.uix.screenmanager import ScreenManager
 
 from Templates.Callbacks import LoginCallback
 from common_callbacks.CallbackExecutor import BackgroundCallbackExecutor
+from common_callbacks.Callbacks import schedule_task
 from common_widgets.Screens import MyScreen, LoginScreen
 
 
@@ -20,7 +21,7 @@ class LoginManager(ScreenManager):
         """ This widget is supposed to be root of application!
             Remember to perform GUI move first (with old data) , then callback. """
         super(LoginManager, self).__init__(id="LoginManager", transition=FadeTransition(), **kwargs)
-        self.logged_user = self.chosen_user = None
+        self.logged_user = None
         self.task_queue = Queue(maxsize=0)
         self.add_widget(LoginScreen(background_img='tlo2.jpg'))
         self.setup_screens()
@@ -34,7 +35,7 @@ class LoginManager(ScreenManager):
         args = db_args = ()
         db_kwargs = {'username': username, 'password': password}
         kwargs = {'instance': self}
-        self.task_queue.put((LoginCallback(*db_args, **db_kwargs), args, kwargs))
+        schedule_task(callback=LoginCallback(*db_args, **db_kwargs), cb_args=args, cb_kwargs=kwargs)
 
     def correct_login(self, *args, **kwargs):
         """ Override this method to navigate to first widget after successfull login. """

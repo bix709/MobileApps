@@ -3,6 +3,7 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+from kivy.graphics.fbo import Fbo
 from kivy.uix.actionbar import *
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.carousel import Carousel

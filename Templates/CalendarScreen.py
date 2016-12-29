@@ -5,6 +5,7 @@
 """
 from kivy.app import App
 
+from Templates.ChooserPopup import UserChooser
 from common_widgets.Screens import MyScreen
 from common_widgets.TimeWidgets import CommonCalendar
 
@@ -20,8 +21,11 @@ class CalendarScreen(MyScreen):
 
 
 class MyCalendar(CommonCalendar):
-    def action(self, date_button):
+    def on_choose(self, date_button):
         daily_screen = self.parent.get_daily_graph_screen()
-        daily_screen.refresh(date_button.id)
         caro = App.get_running_app().root.get_screen("CarouselWithActionBar").carousel
-        caro.load_slide(caro.slides[int(daily_screen.caro_index)])
+        if App.get_running_app().root.logged_user.privileges != "Admin":
+            daily_screen.refresh(date_button.id)
+            caro.load_slide(caro.slides[int(daily_screen.caro_index)])
+        else:
+            UserChooser(daily_screen, caro, date_button.id).open()
