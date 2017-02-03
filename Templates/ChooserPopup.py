@@ -22,12 +22,10 @@ class UserChooser(Popup):
     def display_users(self, users):
         users_layout = BoxLayout(orientation='vertical')
         for user in users:
-            print user
             users_layout.add_widget(UserButton(text=user, user=users[user], on_press=lambda a: self.choosen_graphic(a)))
         self.add_widget(users_layout)
 
     def choosen_graphic(self, users_button):
-        print users_button.user.name
         App.get_running_app().root.choosen_user = users_button.user
         self.dismiss()
         self.daily_screen.refresh(self.date)

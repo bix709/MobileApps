@@ -4,6 +4,8 @@
     copyright : 5517 Company
 """
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 from kivy.graphics import *
 from kivy.uix.screenmanager import Screen
@@ -83,3 +85,17 @@ class LoginScreen(MyScreen):
         self.clear_widgets()
         self.add_widget(self.create_main_layout(wrong_login=True))
         self.get_username_input().focus = True
+
+
+class ScrollableScreen(MyScreen):
+    def __init__(self, *args, **kwargs):
+        super(ScrollableScreen, self).__init__(size_hint_y=0.9, *args, **kwargs)
+        self.main_layout = GridLayout(cols=1, size_hint_y=None)
+        self.main_layout.bind(minimum_height=self.main_layout.setter('height'))
+        scroll = ScrollView(size=(Window.width, Window.height * 0.9), size_hint=(1, 1))
+        scroll.add_widget(self.main_layout)
+        self.add_widget(scroll)
+        self.setup_widgets()
+
+    def setup_widgets(self):
+        pass

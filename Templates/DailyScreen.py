@@ -14,20 +14,14 @@ from Templates.Callbacks import GetDailyGraph, schedule_task
 from Templates.Lessons import LessonPopup
 from common_widgets.FittingLabels import FontFittingButton
 from common_widgets.FittingLabels import FontFittingLabel
-from common_widgets.Screens import MyScreen
+from common_widgets.Screens import MyScreen, ScrollableScreen
 from time import gmtime
 
 
-class DailyScreen(MyScreen):
+class DailyScreen(ScrollableScreen):
     def __init__(self, *args, **kwargs):
-        super(DailyScreen, self).__init__(size_hint_y=0.9, *args, **kwargs)
         self.day = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
-        self.main_layout = GridLayout(cols=1, size_hint_y=None)
-        self.main_layout.bind(minimum_height=self.main_layout.setter('height'))
-        scroll = ScrollView(size=(Window.width, Window.height * 0.9), size_hint=(1, 1))
-        scroll.add_widget(self.main_layout)
-        self.add_widget(scroll)
-        self.setup_widgets()
+        super(DailyScreen, self).__init__(*args, **kwargs)
 
     def setup_widgets(self):
         today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)

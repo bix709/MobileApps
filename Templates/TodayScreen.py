@@ -16,13 +16,15 @@ from Templates.Lessons import LessonPopup
 from Templates.Users import UserButton
 from common_callbacks.Callbacks import schedule_task
 from common_widgets.FittingLabels import FontFittingButton
-from common_widgets.Screens import MyScreen
+from common_widgets.Screens import MyScreen, ScrollableScreen
+from time import gmtime
 
 
-class TodayScreen(DailyScreen):
+class TodayScreen(ScrollableScreen):
     def __init__(self, **kwargs):
-        super(TodayScreen, self).__init__(**kwargs)
         self.unoccupied_users = DropDown()
+        self.today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
+        super(TodayScreen, self).__init__(**kwargs)
 
     def setup_widgets(self):
         for hour in range(9, 21):
@@ -34,7 +36,7 @@ class TodayScreen(DailyScreen):
 
     def display_unoccupied(self, instance):
         db_kwargs = {
-            'date': self.day,
+            'date': self.today,
             'hour': instance.id
         }
         schedule_task(callback=GetUnoccupied(**db_kwargs), cb_args=tuple(), cb_kwargs={'instance': self,
@@ -55,4 +57,4 @@ class TodayScreen(DailyScreen):
         lesson_info = dict()
         lesson_info['lesson_id'] = "0"
         lesson_info['hour'] = button.text.split(".")[0]
-        LessonPopup(date=self.day, lesson_info=lesson_info).open()
+        LessonPopup(date=self.today, lesson_info=lesson_info).open()

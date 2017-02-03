@@ -87,3 +87,16 @@ class GetUnoccupied(CommonCallback):
     def set_unoccupied(self, instance, button_instance):
         unoccupied_instructors = self.database_query.result()
         instance.set_unoccupied(unoccupied_instructors, button_instance)
+
+
+class GetEarnings(CommonCallback):
+    @property
+    def get_sql_command(self):
+        return SqlCommands.get_earnings
+
+    @wait_for_future_result
+    def perform_callback(self, instance, *args, **kwargs):
+        Clock.schedule_once(lambda a: self.show_earnings(instance))
+
+    def show_earnings(self, instance):
+        instance.show_earnings(self.database_query.result())
