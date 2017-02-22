@@ -16,7 +16,7 @@ from Templates.Lessons import LessonPopup
 from Templates.Users import UserButton
 from common_callbacks.Callbacks import schedule_task
 from common_widgets.FittingLabels import FontFittingButton
-from common_widgets.Screens import MyScreen, ScrollableScreen
+from common_widgets.Screens import BackgroundAdjustableScreen, ScrollableScreen
 from time import gmtime
 
 

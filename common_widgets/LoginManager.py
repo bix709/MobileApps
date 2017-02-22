@@ -14,7 +14,7 @@ from Templates.Callbacks import LoginCallback
 from common_callbacks.CallbackExecutor import BackgroundCallbackExecutor
 from common_callbacks.Callbacks import schedule_task
 from common_widgets.RootWidget import RootWidget
-from common_widgets.Screens import MyScreen, LoginScreen
+from common_widgets.Screens import BackgroundAdjustableScreen, LoginScreen
 
 
 class LoginManager(ScreenManager, RootWidget):
@@ -27,7 +27,7 @@ class LoginManager(ScreenManager, RootWidget):
 
     def setup_screens(self):
         """ Override this method to set up screens to be displayed after correct_login. """
-        self.add_widget(MyScreen(background_img='tlo2.jpg', name='First Screen'))
+        self.add_widget(BackgroundAdjustableScreen(background_img='tlo2.jpg', name='First Screen'))
 
     def handle_login(self, username, password):
         args = db_args = ()
@@ -48,3 +48,8 @@ class LoginManager(ScreenManager, RootWidget):
 
     def go_to(self, name):
         self.current = name
+
+    def logout(self):
+        self.logged_user = None
+        self.get_screen('Login Screen').reinitialize()
+        self.go_to('Login Screen')

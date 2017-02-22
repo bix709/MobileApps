@@ -3,16 +3,13 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
-from kivy.graphics.fbo import Fbo
+from kivy.core.window import Window
 from kivy.uix.actionbar import *
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import Screen
 from kivy.uix.carousel import Carousel
 
 
 class CustomCarousel(Carousel):
-    def __init__(self, **kwargs):
-        super(CustomCarousel, self).__init__(**kwargs)
-        self.screens = []
 
     def on_index(self, *args):
         super(CustomCarousel, self).on_index(*args)
@@ -41,7 +38,11 @@ class CustomActionBar(ActionBar):  # TODO Action previous action - getting back 
 
 class CarouselWithActionBar(Screen):
     def __init__(self, **kwargs):
+        self.actionBar = self.action_buttons = self.carousel = None
         super(CarouselWithActionBar, self).__init__(name='CarouselWithActionBar', **kwargs)
+        self.initialize()
+
+    def initialize(self):
         self.actionBar = CustomActionBar(id='actionBar', background_image='jzielony.png',
                                          pos_hint={'x': 0, 'y': 0.9}, size_hint_y=0.1)
         self.carousel = CustomCarousel(id='carousel')
@@ -49,22 +50,19 @@ class CarouselWithActionBar(Screen):
         self.add_widget(self.actionBar)
         self.action_buttons = []
 
-    def get_action_bar(self):
-        return self.actionBar
-
-    def get_carousel(self):
-        return self.carousel
-
     def add_screen(self, screen):
         index = len(self.carousel.slides)
         screen.caro_index = index
         self.carousel.add_widget(screen)
-        self.carousel.screens.append(screen)
         button_state = 'down' if index == 0 else 'normal'
         action_view = self.actionBar.action_view
-        action_view.add_widget(ActionSeparator())
+        # action_view.add_widget(ActionSeparator())  # TODO handle separators. ( throwing exception after resize )
         action_button = ActionButton(id=str(index), size_hint=(None, 1), state=button_state,
                                      background_down='b5.png', color=(0, 0, 0, 1), text=screen.name,
                                      on_press=lambda a: self.carousel.load_slide(self.carousel.slides[int(a.id)]))
         self.action_buttons.append(action_button)
         action_view.add_widget(action_button)
+
+    def reinitialize(self):
+        self.clear_widgets()
+        self.initialize()

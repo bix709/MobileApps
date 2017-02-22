@@ -4,17 +4,11 @@
     copyright : 5517 Company
 """
 from kivy.app import App
-from kivy.core.window import Window
-from kivy.effects.scroll import ScrollEffect
-from kivy.graphics.fbo import Fbo
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.scrollview import ScrollView
-
 from Templates.Callbacks import GetDailyGraph, schedule_task
 from Templates.Lessons import LessonPopup
 from common_widgets.FittingLabels import FontFittingButton
 from common_widgets.FittingLabels import FontFittingLabel
-from common_widgets.Screens import MyScreen, ScrollableScreen
+from common_widgets.Screens import ScrollableScreen
 from time import gmtime
 
 
@@ -31,11 +25,6 @@ class DailyScreen(ScrollableScreen):
                                                       on_press=lambda a: self.refresh(self.day)))
         self.main_layout.add_widget(FontFittingButton(text='Pokaz dzisiejszy', height=45, size_hint_y=None,
                                                       on_press=lambda a: self.refresh(today)))
-        if App.get_running_app().root.logged_user.privileges == 'Admin':
-            self.main_layout.add_widget(FontFittingButton(text='Wyświetl swój\n (obecnie {})'
-                                                          .format(App.get_running_app().root.choosen_user.name),
-                                                          height=45, size_hint_y=None,
-                                                          on_press=lambda a: self.select_yourself()))
         self.get_day_schedule()
 
     def get_day_schedule(self):
@@ -63,10 +52,6 @@ class DailyScreen(ScrollableScreen):
                 self.main_layout.add_widget(FontFittingButton(text='{}'.format(lesson_info), id="{}".format(lesson_id),
                                                               height=45, on_press=lambda a: self.show_lesson_details(a),
                                                               size_hint_y=None, background_color=color))
-
-    def select_yourself(self):
-        App.get_running_app().root.choosen_user = App.get_running_app().root.logged_user
-        self.refresh(self.day)
 
     def show_lesson_details(self, button_instance):
         lesson_info = self.get_lesson_info(button_instance)

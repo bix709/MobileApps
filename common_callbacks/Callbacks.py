@@ -39,7 +39,7 @@ class CommonCallback(object):
         """ Override this method only if you know what you're doing! """
         with ThreadPoolExecutor(max_workers=2) as executor:
             executor.submit(self.perform_callback, *args, **kwargs)
-            self.database_query = executor.submit(self.get_sql_command, *self.database_args, **self.database_kwargs)
+            self.database_query = executor.submit(self.sql_command, *self.database_args, **self.database_kwargs)
 
     def get_caller(self, **kwargs):
         """ Returns caller's screen. """
@@ -49,7 +49,7 @@ class CommonCallback(object):
             print 'No instance given to callback'
 
     @property
-    def get_sql_command(self):
+    def sql_command(self):
         """
         Override this method to set sql command to be executed with callback.
         Must be decorated with @property

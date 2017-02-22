@@ -15,9 +15,9 @@ from kivy.uix.label import Label
 from common_widgets.FittingLabels import FontFittingLabel
 
 
-class MyScreen(Screen):
+class BackgroundAdjustableScreen(Screen):
     def __init__(self, background_img=None, size=Window.size, **kwargs):
-        super(MyScreen, self).__init__(size=size, **kwargs)
+        super(BackgroundAdjustableScreen, self).__init__(size=size, **kwargs)
         self.background_img = background_img
         self.background_instruction = InstructionGroup()
         self.set_up_background_image()
@@ -30,69 +30,72 @@ class MyScreen(Screen):
 
     def fit_to_window(self, window, width, height):
         rectangle = (Rectangle(pos=self.pos, size=(width, height), source=self.background_img))
-        background = self.get_background_instruction()
-        background.clear()
-        background.add(rectangle)
+        self.canvas_background.clear()
+        self.canvas_background.add(rectangle)
 
-    def get_background_instruction(self):
+    @property
+    def canvas_background(self):
         return list(filter(lambda a: a == self.background_instruction, self.canvas.children))[0]
 
 
-class LoginScreen(MyScreen):
+class LoginScreen(BackgroundAdjustableScreen):
     def __init__(self, background_img=None, **kwargs):
-        super(LoginScreen, self).__init__(background_img=background_img, **kwargs)
-        self.name = 'Login Screen'
-        self.add_widget(self.create_main_layout())
-        self.get_username_input().focus = True
+        super(LoginScreen, self).__init__(name='Login Screen', background_img=background_img, **kwargs)
+        self.__username_input = self.__password_input = None
+        self.main_layout = BoxLayout(id='MainLayout', orientation='vertical', size_hint_x=0.8,
+                                     size_hint_y=0.8, pos_hint={"x": 0.1, "y": 0.15})
+        self.add_widget(self.main_layout)
+        self.initialize()
+
+    def initialize(self):
+        self.create_main_layout()
+        self.__username_input.focus = True
 
     def create_main_layout(self, wrong_login=False):
-        main_layout = BoxLayout(id='MainLayout', orientation='vertical', size_hint_x=0.8,
-                                size_hint_y=0.8, pos_hint={"x": 0.1, "y": 0.15})
         if wrong_login:
-            main_layout.add_widget(FontFittingLabel(markup=True, color=(1, 1, 1, 1), font_size=18, size_hint_y=0.20,
-                                                    text="[b][color=FF0000]Wrong username or password ![/color][/b]"))
-        main_layout.add_widget(Label(color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30, text="Username:"))
-        main_layout.add_widget(TextInput(multiline=False, id='Username', focus=False, size_hint_y=0.20,
-                                         on_text_validate=lambda a: self.focus_password()))
-        main_layout.add_widget(Label(color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30, text="Password:"))
-        main_layout.add_widget(TextInput(multiline=False, id='Password', focus=False, size_hint_y=0.20,
-                                         password=True, on_text_validate=
-                                         lambda a: self.parent.handle_login(self.get_username(), str(hash(a.text)))))
-        main_layout.add_widget(Button(background_normal="b3.png", text="Zaloguj!", color=(1, 1, 1, 1),
-                                      size_hint_y=0.30, font_size=30, on_press=lambda a:
-            self.parent.handle_login(self.get_username(), self.get_password())))
-        return main_layout
+            self.main_layout.add_widget(
+                FontFittingLabel(markup=True, color=(1, 1, 1, 1), font_size=18, size_hint_y=0.20,
+                                 text="[b][color=FF0000]Wrong username or password ![/color][/b]"))
+        self.__username_input = TextInput(multiline=False, id='Username', focus=False, size_hint_y=0.20,
+                                          on_text_validate=lambda a: self.focus_password())
+        self.__password_input = TextInput(multiline=False, id='Password', focus=False, size_hint_y=0.20,
+                                          password=True,
+                                          on_text_validate=lambda a: self.parent.handle_login(
+                                              self.__username_input.text,
+                                              str(hash(a.text))))
+        self.main_layout.add_widget(Label(color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30, text="Username:"))
+        self.main_layout.add_widget(self.__username_input)
+        self.main_layout.add_widget(Label(color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30, text="Password:"))
+        self.main_layout.add_widget(self.__password_input)
+        self.main_layout.add_widget(Button(background_normal="b3.png", text="Zaloguj!", color=(1, 1, 1, 1),
+                                           size_hint_y=0.30, font_size=30,
+                                           on_press=lambda a: self.parent.handle_login(self.__username_input.text,
+                                                                                       self.__password)))
+        self.__password_input.text = self.__username_input.text = ''
 
-    def get_main_layout(self):
-        return list(filter(lambda a: a.id == 'MainLayout', self.children))[0]
-
-    def get_username_input(self):
-        return list(filter(lambda a: a.id == 'Username', self.get_main_layout().children))[0]
-
-    def get_password_input(self):
-        return list(filter(lambda a: a.id == 'Password', self.get_main_layout().children))[0]
-
-    def get_username(self):
-        return self.get_username_input().text
-
-    def get_password(self):
-        return str(hash(self.get_password_input().text))
+    @property
+    def __password(self):
+        return str(hash(self.__password_input.text))
 
     def focus_password(self):
-        self.get_password_input().focus = True
+        self.__password_input.focus = True
 
     def wrong_login_attempt(self):
-        self.clear_widgets()
-        self.add_widget(self.create_main_layout(wrong_login=True))
-        self.get_username_input().focus = True
+        self.main_layout.clear_widgets()
+        self.create_main_layout(wrong_login=True)
+        self.__username_input.focus = True
+
+    def reinitialize(self):
+        self.main_layout.clear_widgets()
+        self.initialize()
 
 
-class ScrollableScreen(MyScreen):
+class ScrollableScreen(BackgroundAdjustableScreen):
     def __init__(self, *args, **kwargs):
         super(ScrollableScreen, self).__init__(size_hint_y=0.9, *args, **kwargs)
         self.main_layout = GridLayout(cols=1, size_hint_y=None)
         self.main_layout.bind(minimum_height=self.main_layout.setter('height'))
-        scroll = ScrollView(size=(Window.width, Window.height * 0.9), size_hint=(1, 1))
+        scroll = ScrollView(size_hint=(1, 1))
         scroll.add_widget(self.main_layout)
         self.add_widget(scroll)
         self.setup_widgets()

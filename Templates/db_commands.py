@@ -3,6 +3,7 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+from Templates.SqlCmdChoosers import EarningsCmdChooser
 from Templates.cennik import cennik
 from Templates.Users import User
 from common_database.DatabaseConnection import DatabaseConnection, sys
@@ -115,27 +116,21 @@ class SqlCommands(object):
     @mark_task_as_done
     def get_earnings(period, user, *args, **kwargs):
         try:
-            option = period[0]
-            if option == "week":
-                start_date = "{}/{}/{}".format(period[1].year, period[1].month, period[1].day)
-                end_date = "{}/{}/{}".format(period[2].year, period[2].month, period[2].day)
-                cmd = "Select sum(koszt) from lekcja where data between " \
-                      "TO_DATE('{}', 'yyyy/mm/dd') and TO_DATE('{}', 'yyyy/mm/dd') " \
-                      "and id_instruktora = {}".format(start_date, end_date, user.id)
-            elif option == "season":
-                cmd = "Select sum(koszt) from lekcja where data between TO_DATE('{}/8/1', 'yyyy/mm/dd') " \
-                      "and TO_DATE('{}/6/1', 'yyyy/mm/dd') " \
-                      "and id_instruktora = {}".format(period[1].split("/")[0], period[1].split("/")[1], user.id)
-            elif option == "month":
-                cmd = "Select sum(koszt) from lekcja where data between TO_DATE('"
-            else:
-                date = "{}/{}/{}".format(period[1].year, period[1].month, period[1].day)
-                cmd = "select sum(koszt) from lekcja where data = TO_DATE('{}', 'yyyy/mm/dd') " \
-                      "and id_instruktora = {}".format(date, user.id)
-            print cmd
+            cmd = EarningsCmdChooser().get_earnings_cmd_from[period[0]](period, user)
             query = DatabaseConnection().fetch_query(cmd)
             if query:
                 return [result for result in query][0][0]
         except:
             print "Couldnt get earnings from date. {}".format(sys.exc_info()[0])
             return None
+
+    @staticmethod
+    @mark_task_as_done
+    def password_update(old_pw, new_pw, user, *args, **kwargs):
+        cmd = "Update instruktorzy set password = '{}' where id = {} and password = '{}'".format(new_pw,
+                                                                                                 user.id,
+                                                                                                 old_pw)
+        DatabaseConnection().execute_command(cmd)
+        query = DatabaseConnection().fetch_query("Select password from instruktorzy where id = '{}'".format(user.id))
+        if query:
+            return True if [result for result in query][0][0] == str(new_pw) else False

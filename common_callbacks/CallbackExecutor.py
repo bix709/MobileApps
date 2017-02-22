@@ -3,8 +3,7 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
-from concurrent.futures import ThreadPoolExecutor
-from threading import Thread, Lock
+from threading import Thread
 import sys
 
 

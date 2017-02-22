@@ -4,33 +4,25 @@
     copyright : 5517 Company
 """
 from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
-from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
-
 from Templates.Callbacks import InsertNewLesson, RemoveLesson
 from common_callbacks.Callbacks import schedule_task
+from common_widgets.CommonPopups import CommonPopup
 from common_widgets.FittingLabels import FontFittingButton, FontFittingLabel
 
 
-class LessonPopup(Popup):
+class LessonPopup(CommonPopup):  # TODO refactoring ( focusing inputs etc. )
     def __init__(self, date, lesson_info, from_today_screen=False, **kwargs):
-        super(LessonPopup, self).__init__(title="Dzien {}, Godzina {}".format(date, lesson_info['hour']),
-                                          size_hint_x=0.75, size_hint_y=0.9, auto_dismiss=True, **kwargs)
-        self.main_layout = BoxLayout(orientation='vertical')
         self.date = date
         self.from_today_screen = from_today_screen
         self.hour = lesson_info['hour']
         self.lesson_info = lesson_info
-        self.setup_widgets()
-        self.add_widget(self.main_layout)
+        super(LessonPopup, self).__init__(title="Dzien {}, Godzina {}".format(date, lesson_info['hour']), **kwargs)
 
     def setup_widgets(self):
-        esc_layout = BoxLayout(size_hint_x=0.2, pos_hint={"x": 0.8})
-        esc_layout.add_widget(FontFittingButton(text="Esc", on_press=lambda a: self.dismiss()))
-        self.main_layout.add_widget(esc_layout)
+        super(LessonPopup, self).setup_widgets()
         self.setup_input_fields()
         self.setup_number_chooser()
         self.main_layout.add_widget(FontFittingButton(text="Zatwierdz", on_press=lambda a: self.confirm()))
@@ -80,7 +72,7 @@ class LessonPopup(Popup):
         if App.get_running_app().root.logged_user.privileges != "Admin":
             App.get_running_app().root.choosen_user = App.get_running_app().root.logged_user
         caro = App.get_running_app().root.get_screen("CarouselWithActionBar").carousel
-        daily_graph = list(filter(lambda a: a.name == "DailyScreen", caro.screens))[0]
+        daily_graph = list(filter(lambda a: a.name == "DailyScreen", caro.slides))[0]
         daily_graph.refresh(self.date)
         self.dismiss()
 

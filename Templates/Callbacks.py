@@ -13,23 +13,24 @@ from common_callbacks.Callbacks import CommonCallback, wait_for_future_result, s
 
 class LoginCallback(CommonCallback):
     @property
-    def get_sql_command(self):
+    def sql_command(self):
         return SqlCommands.fetch_logins
 
     @wait_for_future_result
     def perform_callback(self, instance, *args, **kwargs):
-        try:
-            imie, id, uprawnienia = self.database_query.result()
-            App.get_running_app().root.logged_user = User(name=imie, user_id=id, permission=uprawnienia)
-            App.get_running_app().root.choosen_user = App.get_running_app().root.logged_user
-            Clock.schedule_once(instance.correct_login)
-        except:
-            Clock.schedule_once(instance.wrong_login)
+        if App.get_running_app().root.logged_user is None:
+            try:
+                imie, id, uprawnienia = self.database_query.result()
+                App.get_running_app().root.logged_user = User(name=imie, user_id=id, permission=uprawnienia)
+                App.get_running_app().root.choosen_user = App.get_running_app().root.logged_user
+                Clock.schedule_once(instance.correct_login)
+            except:
+                Clock.schedule_once(instance.wrong_login)
 
 
 class GetDailyGraph(CommonCallback):
     @property
-    def get_sql_command(self):
+    def sql_command(self):
         return SqlCommands.get_daily_graph
 
     @wait_for_future_result
@@ -43,7 +44,7 @@ class GetDailyGraph(CommonCallback):
 
 class UsersToChoose(CommonCallback):
     @property
-    def get_sql_command(self):
+    def sql_command(self):
         return SqlCommands.get_all_users
 
     @wait_for_future_result
@@ -52,12 +53,12 @@ class UsersToChoose(CommonCallback):
 
     def set_users(self, instance):
         users = self.database_query.result()
-        instance.display_users(users)
+        instance.assign_users(users)
 
 
 class InsertNewLesson(CommonCallback):
     @property
-    def get_sql_command(self):
+    def sql_command(self):
         return SqlCommands.insert_new_lesson
 
     @wait_for_future_result
@@ -67,7 +68,7 @@ class InsertNewLesson(CommonCallback):
 
 class RemoveLesson(CommonCallback):
     @property
-    def get_sql_command(self):
+    def sql_command(self):
         return SqlCommands.remove_lesson
 
     @wait_for_future_result
@@ -77,7 +78,7 @@ class RemoveLesson(CommonCallback):
 
 class GetUnoccupied(CommonCallback):
     @property
-    def get_sql_command(self):
+    def sql_command(self):
         return SqlCommands.get_unoccupied
 
     @wait_for_future_result
@@ -91,7 +92,7 @@ class GetUnoccupied(CommonCallback):
 
 class GetEarnings(CommonCallback):
     @property
-    def get_sql_command(self):
+    def sql_command(self):
         return SqlCommands.get_earnings
 
     @wait_for_future_result
@@ -100,3 +101,14 @@ class GetEarnings(CommonCallback):
 
     def show_earnings(self, instance):
         instance.show_earnings(self.database_query.result())
+
+
+class PasswordChange(CommonCallback):
+    @property
+    def sql_command(self):
+        return SqlCommands.password_update
+
+    @wait_for_future_result
+    def perform_callback(self, instance, *args, **kwargs):
+        func = instance.on_successful_change() if self.database_query.result() is True else instance.on_wrong_attempt()
+        Clock.schedule_once(func)

@@ -4,29 +4,26 @@
     copyright : 5517 Company
 """
 from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.popup import Popup
+from kivy.uix.actionbar import ActionGroup
 from Templates.Callbacks import UsersToChoose, schedule_task
-from Templates.Users import UserButton
+from Templates.Users import ActionUserButton
 
 
-class UserChooser(Popup):
-    def __init__(self, daily_screen, carousel, date, **kwargs):
-        super(UserChooser, self).__init__(title="Wybierz instruktora", size_hint_x=0.75, **kwargs)
-        self.daily_screen = daily_screen
-        self.caro = carousel
-        self.date = date
-        self.auto_dismiss = True
+class UserChooser(
+    ActionGroup):  # TODO fix size issues ( not opening spinner ) and resizing exception issue, close dropdown!
+    def __init__(self, **kwargs):
+        super(UserChooser, self).__init__(**kwargs)
+        self.size_hint = (None, 1)
+        self.size = (100, 20)
+        self.text = App.get_running_app().root.logged_user.name
+        self.mode = 'spinner'
         schedule_task(callback=UsersToChoose(), cb_args=tuple(), cb_kwargs={'instance': self})
 
-    def display_users(self, users):
-        users_layout = BoxLayout(orientation='vertical')
+    def assign_users(self, users):
         for user in users:
-            users_layout.add_widget(UserButton(text=user, user=users[user], on_press=lambda a: self.choosen_graphic(a)))
-        self.add_widget(users_layout)
+            self.add_widget(ActionUserButton(text=user, user=users[user],
+                                             on_release=lambda a: self.choose_user(a.user)))
 
-    def choosen_graphic(self, users_button):
-        App.get_running_app().root.choosen_user = users_button.user
-        self.dismiss()
-        self.daily_screen.refresh(self.date)
-        self.caro.load_slide(self.caro.slides[int(self.daily_screen.caro_index)])
+    def choose_user(self, user):
+        App.get_running_app().root.choosen_user = user
+        self.text = user.name

@@ -4,9 +4,7 @@
     copyright : 5517 Company
 """
 from time import sleep
-
 import cx_Oracle
-
 from common_database.ErrorHandlers import *
 
 
