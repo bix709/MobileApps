@@ -21,8 +21,9 @@ class UserChooser(
 
     def assign_users(self, users):
         for user in users:
-            self.add_widget(ActionUserButton(text=user, user=users[user],
-                                             on_release=lambda a: self.choose_user(a.user)))
+            if user is not None:
+                self.add_widget(ActionUserButton(text=user, user=users[user],
+                                                 on_release=lambda a: self.choose_user(a.user)))
 
     def choose_user(self, user):
         App.get_running_app().root.choosen_user = user

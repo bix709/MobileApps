@@ -51,5 +51,7 @@ class LoginManager(ScreenManager, RootWidget):
 
     def logout(self):
         self.logged_user = None
+        self.clear_widgets()
+        self.setup_screens()
         self.get_screen('Login Screen').reinitialize()
         self.go_to('Login Screen')

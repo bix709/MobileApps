@@ -20,8 +20,9 @@ class LoginCallback(CommonCallback):
     def perform_callback(self, instance, *args, **kwargs):
         if App.get_running_app().root.logged_user is None:
             try:
-                imie, id, uprawnienia = self.database_query.result()
-                App.get_running_app().root.logged_user = User(name=imie, user_id=id, permission=uprawnienia)
+                imie, nazwisko, id, uprawnienia = self.database_query.result()
+                App.get_running_app().root.logged_user = User(name=imie, user_id=id,
+                                                              permission=uprawnienia, lastname=nazwisko)
                 App.get_running_app().root.choosen_user = App.get_running_app().root.logged_user
                 Clock.schedule_once(instance.correct_login)
             except:
@@ -63,7 +64,7 @@ class InsertNewLesson(CommonCallback):
 
     @wait_for_future_result
     def perform_callback(self, instance, *args, **kwargs):
-        Clock.schedule_once(instance.on_successful_execution)
+        Clock.schedule_once(lambda a: instance.on_successful_execution(self.database_query.result()))
 
 
 class RemoveLesson(CommonCallback):
@@ -112,3 +113,33 @@ class PasswordChange(CommonCallback):
     def perform_callback(self, instance, *args, **kwargs):
         func = instance.on_successful_change() if self.database_query.result() is True else instance.on_wrong_attempt()
         Clock.schedule_once(func)
+
+
+class CreateUser(CommonCallback):
+    @property
+    def sql_command(self):
+        return SqlCommands.create_user
+
+    @wait_for_future_result
+    def perform_callback(self, instance, *args, **kwargs):
+        Clock.schedule_once(lambda a: instance.display_results(self.database_query.result()))
+
+
+class RemoveUser(CommonCallback):
+    @property
+    def sql_command(self):
+        return SqlCommands.remove_user
+
+    @wait_for_future_result
+    def perform_callback(self, instance, *args, **kwargs):
+        Clock.schedule_once(lambda a: instance.display_results(self.database_query.result()))
+
+
+class ChangePermissions(CommonCallback):
+    @property
+    def sql_command(self):
+        return SqlCommands.change_permissions
+
+    @wait_for_future_result
+    def perform_callback(self, instance, *args, **kwargs):
+        Clock.schedule_once(lambda a: instance.display_results(self.database_query.result()))

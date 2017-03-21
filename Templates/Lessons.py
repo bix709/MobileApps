@@ -20,6 +20,11 @@ class LessonPopup(CommonPopup):  # TODO refactoring ( focusing inputs etc. )
         self.hour = lesson_info['hour']
         self.lesson_info = lesson_info
         super(LessonPopup, self).__init__(title="Dzien {}, Godzina {}".format(date, lesson_info['hour']), **kwargs)
+        self.bind(on_dismiss=lambda a: self.correct_choosen_user())
+
+    def correct_choosen_user(self):
+        if App.get_running_app().root.logged_user.privileges != "Admin":
+            App.get_running_app().root.choosen_user = App.get_running_app().root.logged_user
 
     def setup_widgets(self):
         super(LessonPopup, self).setup_widgets()
@@ -30,8 +35,8 @@ class LessonPopup(CommonPopup):  # TODO refactoring ( focusing inputs etc. )
 
     def setup_input_fields(self):
         self.main_layout.add_widget(FontFittingLabel(text="Imie:"))
-        imie = self.lesson_info['imie'] if 'imie' in self.lesson_info.keys() else ""
-        wiek = self.lesson_info['wiek'] if 'wiek' in self.lesson_info.keys() else ""
+        imie = self.lesson_info.get('imie', "")
+        wiek = self.lesson_info.get('wiek', "")
         self.name_input = TextInput(multiline=False, focus=False, id='imie', text="{}".format(imie),
                                     on_text_validate=lambda a: self.focus_age())
         self.name_input.focus = True
@@ -48,15 +53,15 @@ class LessonPopup(CommonPopup):  # TODO refactoring ( focusing inputs etc. )
         for x in range(6):
             number_chooser.add_widget(Button(text="%s" % x, size_hint_y=None, height=33,
                                              on_release=lambda a: number_chooser.select(a.text)))
-        ilosc_osob = self.lesson_info['ilosc_osob'] if 'ilosc_osob' in self.lesson_info.keys() else "0"
+        ilosc_osob = self.lesson_info.get('ilosc_osob', "0")
         self.choosen = FontFittingButton(text="{}".format(ilosc_osob), size_hint=(1, 1))
-        self.choosen.bind(on_release=number_chooser.open)
+        self.choosen.bind(on_release=lambda a: number_chooser.open(self.choosen))
         number_chooser.bind(on_select=lambda instance, z: setattr(self.choosen, 'text', z))
         self.main_layout.add_widget(FontFittingLabel(text="Ilosc osob:", size_hint=(1, 1)))
         self.main_layout.add_widget(self.choosen)
 
     def confirm(self):
-        lesson_id = self.lesson_info['lesson_id'] if 'lesson_id' in self.lesson_info.keys() else "0"
+        lesson_id = self.lesson_info.get('lesson_id', '0')
         db_kwargs = {
             'name': self.name_input.text,
             'age': self.age_input.text,
@@ -68,16 +73,24 @@ class LessonPopup(CommonPopup):  # TODO refactoring ( focusing inputs etc. )
         }
         schedule_task(callback=InsertNewLesson(**db_kwargs), cb_args=(), cb_kwargs={'instance': self})
 
-    def on_successful_execution(self, *args, **kwargs):
-        if App.get_running_app().root.logged_user.privileges != "Admin":
-            App.get_running_app().root.choosen_user = App.get_running_app().root.logged_user
-        caro = App.get_running_app().root.get_screen("CarouselWithActionBar").carousel
-        daily_graph = list(filter(lambda a: a.name == "DailyScreen", caro.slides))[0]
-        daily_graph.refresh(self.date)
-        self.dismiss()
+    def on_successful_execution(self, added_successfully, **kwargs):
+        if added_successfully:
+            caro = App.get_running_app().root.get_screen("CarouselWithActionBar").carousel
+            daily_graph = list(filter(lambda a: a.name == "DailyScreen", caro.slides))[0]
+            daily_graph.refresh(self.date)
+            self.dismiss()
+        else:
+            self.display_error()
+
+    def display_error(self):
+        self.main_layout.clear_widgets()
+        self.setup_widgets()
+        self.main_layout.add_widget(
+            FontFittingLabel(text="[b][color=FF0000]Please fill in fields with correct data.[/color][/b]",
+                             markup=True))
 
     def cancel_lesson(self):
-        lesson_id = self.lesson_info['lesson_id'] if 'lesson_id' in self.lesson_info.keys() else "0"
+        lesson_id = self.lesson_info.get('lesson_id', "0")
         db_kwargs = {
             'lesson_id': lesson_id
         }

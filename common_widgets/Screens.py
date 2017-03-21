@@ -3,16 +3,15 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+from kivy.core.window import Window
+from kivy.graphics import *
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
-from kivy.graphics import *
-from kivy.uix.screenmanager import Screen
-from kivy.core.window import Window
-from kivy.uix.button import Button
-from kivy.uix.label import Label
-from common_widgets.FittingLabels import FontFittingLabel
+
+from common_widgets.FittingLabels import FontFittingLabel, FontFittingButton
 
 
 class BackgroundAdjustableScreen(Screen):
@@ -63,14 +62,17 @@ class LoginScreen(BackgroundAdjustableScreen):
                                           on_text_validate=lambda a: self.parent.handle_login(
                                               self.__username_input.text,
                                               str(hash(a.text))))
-        self.main_layout.add_widget(Label(color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30, text="Username:"))
+        self.main_layout.add_widget(FontFittingLabel(color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30,
+                                                     text="Username:"))
         self.main_layout.add_widget(self.__username_input)
-        self.main_layout.add_widget(Label(color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30, text="Password:"))
+        self.main_layout.add_widget(FontFittingLabel(color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30,
+                                                     text="Password:"))
         self.main_layout.add_widget(self.__password_input)
-        self.main_layout.add_widget(Button(background_normal="b3.png", text="Zaloguj!", color=(1, 1, 1, 1),
-                                           size_hint_y=0.30, font_size=30,
-                                           on_press=lambda a: self.parent.handle_login(self.__username_input.text,
-                                                                                       self.__password)))
+        self.main_layout.add_widget(FontFittingButton(background_normal="b3.png", text="Zaloguj!", color=(1, 1, 1, 1),
+                                                      size_hint_y=0.30, font_size=30,
+                                                      on_press=lambda a: self.parent.handle_login(
+                                                          self.__username_input.text,
+                                                          self.__password)))
         self.__password_input.text = self.__username_input.text = ''
 
     @property

@@ -43,10 +43,7 @@ class CommonCallback(object):
 
     def get_caller(self, **kwargs):
         """ Returns caller's screen. """
-        try:
-            return kwargs['instance']
-        except KeyError:
-            print 'No instance given to callback'
+        return kwargs.get('instance')
 
     @property
     def sql_command(self):

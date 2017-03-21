@@ -3,11 +3,22 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+from contextlib import contextmanager
+
 from Templates.SqlCmdChoosers import EarningsCmdChooser
 from Templates.cennik import cennik
 from Templates.Users import User
+from Templates.config import privileges
 from common_database.DatabaseConnection import DatabaseConnection, sys
 from common_tools.ThreadSynchronization import mark_task_as_done
+
+
+@contextmanager
+def ignored(exc):
+    try:
+        yield
+    except exc:
+        pass
 
 
 class SqlCommands(object):
@@ -21,7 +32,7 @@ class SqlCommands(object):
             to be decorated with @update_bag_with_result """
         try:
             query = DatabaseConnection().fetch_query(
-                "select imie, id, uprawnienia "
+                "select imie, nazwisko, id, uprawnienia "
                 "from Instruktorzy "
                 "where login = '{}' and password = '{}'".format(username, password))
             if query:
@@ -51,11 +62,11 @@ class SqlCommands(object):
     def get_all_users(*args, **kwargs):
         users = {}
         try:
-            query = DatabaseConnection().fetch_query("select imie, id, uprawnienia from instruktorzy")
+            query = DatabaseConnection().fetch_query("select imie, nazwisko, id, uprawnienia from instruktorzy")
             if query:
                 for output in query:
-                    name, user_id, privileges = output
-                    users[name] = User(user_id=user_id, permission=privileges, name=name)
+                    name, lastname, user_id, privileges = output
+                    users[name] = User(user_id=user_id, permission=privileges, name=name, lastname=lastname)
         finally:
             return users
 
@@ -63,22 +74,25 @@ class SqlCommands(object):
     @mark_task_as_done
     def insert_new_lesson(*args, **kwargs):
         try:
-            if kwargs['lesson_id'] == "0":
-                query = DatabaseConnection().fetch_query("select lesson_id_seq.nextval from dual")
-                if query:
-                    kwargs['lesson_id'] = [result for result in query][0][0]
-            else:
-                DatabaseConnection().execute_command("delete from lekcja where id = {}".format(kwargs['lesson_id']))
+            if kwargs.get('name').isalpha() and kwargs.get('age').isdigit():
+                if kwargs['lesson_id'] == "0":
+                    query = DatabaseConnection().fetch_query("select lesson_id_seq.nextval from dual")
+                    if query:
+                        kwargs['lesson_id'] = [result for result in query][0][0]
+                else:
+                    DatabaseConnection().execute_command("delete from lekcja where id = {}".format(kwargs['lesson_id']))
 
-            ilosc_osob = kwargs['number_of_people']
-            DatabaseConnection().execute_command("insert into lekcja "
-                                                 "(imie, godzina, data, ilosc_osob, koszt, id, id_instruktora, wiek) "
-                                                 "values ('{imie}', {godzina}, TO_DATE('{data}', 'yyyy/mm/dd'), "
-                                                 "{ilosc_osob}, {koszt}, {lesson_id}, {id_instruktora}, {wiek})"
-                                                 .format(imie=kwargs['name'], godzina=kwargs['hour'],
-                                                         data=kwargs['date'], ilosc_osob=ilosc_osob,
-                                                         koszt=cennik[int(ilosc_osob)], lesson_id=kwargs['lesson_id'],
-                                                         id_instruktora=kwargs['user'].id, wiek=kwargs['age']))
+                ilosc_osob = kwargs['number_of_people']
+                DatabaseConnection().execute_command("insert into lekcja "
+                                                     "(imie, godzina, data, ilosc_osob, koszt, id, id_instruktora, wiek) "
+                                                     "values ('{imie}', {godzina}, TO_DATE('{data}', 'yyyy/mm/dd'), "
+                                                     "{ilosc_osob}, {koszt}, {lesson_id}, {id_instruktora}, {wiek})"
+                                                     .format(imie=kwargs['name'], godzina=kwargs['hour'],
+                                                             data=kwargs['date'], ilosc_osob=ilosc_osob,
+                                                             koszt=cennik[int(ilosc_osob)],
+                                                             lesson_id=kwargs['lesson_id'],
+                                                             id_instruktora=kwargs['user'].id, wiek=kwargs['age']))
+                return True
         except:
             print "Couldnt add lesson {}".format(sys.exc_info()[0])
 
@@ -97,17 +111,19 @@ class SqlCommands(object):
         unoccupied_instructors = []
         try:
             all_instructors = busy_instructors = {}
-            query = DatabaseConnection().fetch_query("select imie, id from instruktorzy")
+            query = DatabaseConnection().fetch_query("select imie, nazwisko, id from instruktorzy")
 
             if query:
                 all_instructors = set([result for result in query])
-            query = DatabaseConnection().fetch_query("select instruktorzy.imie, instruktorzy.id from instruktorzy join "
+            query = DatabaseConnection().fetch_query("select instruktorzy.imie, instruktorzy.nazwisko, "
+                                                     "instruktorzy.id from instruktorzy join "
                                                      "lekcja on instruktorzy.id = lekcja.id_instruktora where data = "
                                                      "TO_DATE('{}', 'yyyy/mm/dd') and godzina = {}".format(date, hour))
             if query:
                 busy_instructors = set([result for result in query])
             for instructor in list(all_instructors - busy_instructors):
-                unoccupied_instructors.append(User(name=instructor[0], user_id=instructor[1], permission="User"))
+                unoccupied_instructors.append(User(name=instructor[0], user_id=instructor[2],
+                                                   permission="User", lastname=instructor[1]))
             return unoccupied_instructors
         except:
             print "Error loading unoccupied instructors {}".format(sys.exc_info()[0])
@@ -115,14 +131,11 @@ class SqlCommands(object):
     @staticmethod
     @mark_task_as_done
     def get_earnings(period, user, *args, **kwargs):
-        try:
+        with ignored(Exception):
             cmd = EarningsCmdChooser().get_earnings_cmd_from[period[0]](period, user)
             query = DatabaseConnection().fetch_query(cmd)
             if query:
                 return [result for result in query][0][0]
-        except:
-            print "Couldnt get earnings from date. {}".format(sys.exc_info()[0])
-            return None
 
     @staticmethod
     @mark_task_as_done
@@ -134,3 +147,51 @@ class SqlCommands(object):
         query = DatabaseConnection().fetch_query("Select password from instruktorzy where id = '{}'".format(user.id))
         if query:
             return True if [result for result in query][0][0] == str(new_pw) else False
+
+    @staticmethod
+    @mark_task_as_done
+    def create_user(firstname, lastname, login, *args, **kwargs):
+        try:
+            query = DatabaseConnection().fetch_query("Select login from instruktorzy where login='{}'".format(login))
+            if query:
+                with ignored(IndexError):
+                    if [result for result in query][0][0] == login:
+                        return False
+            cmd = "Insert into instruktorzy (id, login, password, imie, nazwisko, uprawnienia) values " \
+                  "(instruktorzy_id_seq.nextval, " \
+                  "'{login}', '{password}', '{firstname}', '{lastname}', 'User')".format(firstname=firstname,
+                                                                                         lastname=lastname,
+                                                                                         login=login,
+                                                                                         password=hash(login))
+            DatabaseConnection().execute_command(cmd)
+            query = DatabaseConnection().fetch_query("Select login from instruktorzy where login='{}'".format(login))
+            if query:
+                if [result for result in query][0][0] == login:
+                    return True
+        except:
+            return None
+
+    @staticmethod
+    @mark_task_as_done
+    def remove_user(user, *args, **kwargs):
+        with ignored(Exception):
+            DatabaseConnection().execute_command('Delete from instruktorzy where id={}'.format(user.id))
+            query = DatabaseConnection().fetch_query('Select id from instruktorzy where id={}'.format(user.id))
+            if query:
+                if len([result for result in query]) > 0:
+                    return False
+            return True
+
+    @staticmethod
+    @mark_task_as_done
+    def change_permissions(*args, **kwargs):
+        with ignored(Exception):
+            user_button, permission_button = args
+            if permission_button in privileges:
+                DatabaseConnection().execute_command(
+                    "Update instruktorzy set uprawnienia = '{}' where id = {}".format(permission_button,
+                                                                                      user_button.id))
+                query = DatabaseConnection().fetch_query(
+                    'Select uprawnienia from instruktorzy where id = {}'.format(user_button.id))
+                if query:
+                    return True if [result for result in query][0][0] == permission_button else False

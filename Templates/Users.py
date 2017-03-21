@@ -9,15 +9,14 @@ from common_widgets.FittingLabels import FontFittingButton
 
 
 class User(object):
-    def __init__(self, user_id, permission, name):
+    def __init__(self, user_id, permission, name, lastname):
         self.id = user_id
         self.privileges = permission
         self.name = name
+        self.lastname = lastname
 
     def __str__(self):
-        return "User {name}, with id {id}, has permissions {permissions}".format(name=self.name,
-                                                                                 id=self.id,
-                                                                                 permissions=self.privileges)
+        return "#{id} {name} {lastname} ({privileges})".format(**self.__dict__)
 
 
 class UserButton(FontFittingButton):
