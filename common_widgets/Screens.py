@@ -68,9 +68,10 @@ class LoginScreen(BackgroundAdjustableScreen):
         self.main_layout.add_widget(FontFittingLabel(color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30,
                                                      text="Password:"))
         self.main_layout.add_widget(self.__password_input)
-        self.main_layout.add_widget(FontFittingButton(background_normal="b3.png", text="Zaloguj!", color=(1, 1, 1, 1),
-                                                      size_hint_y=0.30, font_size=30,
-                                                      on_press=lambda a: self.parent.handle_login(
+        self.main_layout.add_widget(
+            FontFittingButton(background_normal="../graphics/b3.png", text="Zaloguj!", color=(1, 1, 1, 1),
+                              size_hint_y=0.30, font_size=30,
+                              on_press=lambda a: self.parent.handle_login(
                                                           self.__username_input.text,
                                                           self.__password)))
         self.__password_input.text = self.__username_input.text = ''

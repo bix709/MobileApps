@@ -31,11 +31,11 @@ class MyLoginManager(LoginManager):
         if self.logged_user.privileges == "Admin":
             self.user_chooser = UserChooser()
             caro.actionBar.action_view.add_widget(self.user_chooser)
-        caro.add_screen(CalendarScreen(background_img='b3.png', name='Calendar'))
-        caro.add_screen(DailyScreen(background_img='b4.png', name='DailyScreen'))
-        caro.add_screen(TodayScreen(background_img='b5.png', name='Today'))
-        caro.add_screen(EarningsScreen(background_img='tlo1.jpg', name='Earnings'))
-        caro.add_screen(MaintenanceScreen(background_img='tlo2.jpg', name='Options'))
+        caro.add_screen(CalendarScreen(background_img='../graphics/b3.png', name='Calendar'))
+        caro.add_screen(DailyScreen(background_img='../graphics/b4.png', name='DailyScreen'))
+        caro.add_screen(TodayScreen(background_img='../graphics/b5.png', name='Today'))
+        caro.add_screen(EarningsScreen(background_img='../graphics/tlo1.jpg', name='Earnings'))
+        caro.add_screen(MaintenanceScreen(background_img='../graphics/tlo2.jpg', name='Options'))
 
     def logout(self):
         super(MyLoginManager, self).logout()
