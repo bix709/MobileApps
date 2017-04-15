@@ -98,7 +98,7 @@ class SqlCommands(object):
                                                      "{ilosc_osob}, {koszt}, {lesson_id}, {id_instruktora}, {wiek})"
                                                      .format(imie=kwargs['name'], godzina=kwargs['hour'],
                                                              data=kwargs['date'], ilosc_osob=number_of_people,
-                                                             koszt=cennik[int(number_of_people)],
+                                                             koszt=cennik.get(int(number_of_people), 0),
                                                              lesson_id=kwargs['lesson_id'],
                                                              id_instruktora=kwargs['user'].id, wiek=kwargs['age']))
                 return True
@@ -161,22 +161,25 @@ class SqlCommands(object):
     @mark_task_as_done
     def create_user(firstname, lastname, login, *args, **kwargs):
         try:
-            query = DatabaseConnection().fetch_query("Select login from instruktorzy where login='{}'".format(login))
-            if query:
-                with ignored(IndexError):
+            if firstname.isalpha() and login.isalnum():
+                query = DatabaseConnection().fetch_query(
+                    "Select login from instruktorzy where login='{}'".format(login))
+                if query:
+                    with ignored(IndexError):
+                        if [result for result in query][0][0] == login:
+                            return False
+                cmd = "Insert into instruktorzy (id, login, password, imie, nazwisko, uprawnienia) values " \
+                      "(instruktorzy_id_seq.nextval, " \
+                      "'{login}', '{password}', '{firstname}', '{lastname}', 'User')".format(firstname=firstname,
+                                                                                             lastname=lastname,
+                                                                                             login=login,
+                                                                                             password=hash(login))
+                DatabaseConnection().execute_command(cmd)
+                query = DatabaseConnection().fetch_query(
+                    "Select login from instruktorzy where login='{}'".format(login))
+                if query:
                     if [result for result in query][0][0] == login:
-                        return False
-            cmd = "Insert into instruktorzy (id, login, password, imie, nazwisko, uprawnienia) values " \
-                  "(instruktorzy_id_seq.nextval, " \
-                  "'{login}', '{password}', '{firstname}', '{lastname}', 'User')".format(firstname=firstname,
-                                                                                         lastname=lastname,
-                                                                                         login=login,
-                                                                                         password=hash(login))
-            DatabaseConnection().execute_command(cmd)
-            query = DatabaseConnection().fetch_query("Select login from instruktorzy where login='{}'".format(login))
-            if query:
-                if [result for result in query][0][0] == login:
-                    return True
+                        return True
         except:
             return None
 

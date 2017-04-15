@@ -176,7 +176,7 @@ class UserAddingPopup(CommonPopup):
         self.unfocus_all_inputs()
         self.main_layout.clear_widgets()
         messages = {
-            None: ('Could not create account. Please fill in at least login field.', 'FF0000'),
+            None: ('Could not create account. Please fill all fields correctly', 'FF0000'),
             False: ('User already exists', 'FF0000'),
             True: ('Account created successfully', '00FF00')
         }
