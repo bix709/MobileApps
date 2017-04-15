@@ -13,6 +13,8 @@ from common_database.DatabaseConnection import DatabaseConnection, sys
 from common_tools.ThreadSynchronization import mark_task_as_done
 
 
+# TODO refactoring kwargs to params!!!!
+
 @contextmanager
 def ignored(exc):
     try:
@@ -72,8 +74,16 @@ class SqlCommands(object):
 
     @staticmethod
     @mark_task_as_done
-    def insert_new_lesson(*args, **kwargs):
+    def insert_new_lesson(number_of_people, *args, **kwargs):
         try:
+            cmd = "Select id from lekcja where id_instruktora = {instructor} and " \
+                  "godzina = {godzina} and " \
+                  "data = TO_DATE('{data}', 'yyyy/mm/dd')".format(instructor=kwargs['user'].id,
+                                                                  godzina=kwargs['hour'], data=kwargs['date'])
+            query = DatabaseConnection().fetch_query(cmd)
+            if query:
+                if len([result for result in query]) != 0:
+                    return False
             if kwargs.get('name').isalpha() and kwargs.get('age').isdigit():
                 if kwargs['lesson_id'] == "0":
                     query = DatabaseConnection().fetch_query("select lesson_id_seq.nextval from dual")
@@ -82,14 +92,13 @@ class SqlCommands(object):
                 else:
                     DatabaseConnection().execute_command("delete from lekcja where id = {}".format(kwargs['lesson_id']))
 
-                ilosc_osob = kwargs['number_of_people']
                 DatabaseConnection().execute_command("insert into lekcja "
                                                      "(imie, godzina, data, ilosc_osob, koszt, id, id_instruktora, wiek) "
                                                      "values ('{imie}', {godzina}, TO_DATE('{data}', 'yyyy/mm/dd'), "
                                                      "{ilosc_osob}, {koszt}, {lesson_id}, {id_instruktora}, {wiek})"
                                                      .format(imie=kwargs['name'], godzina=kwargs['hour'],
-                                                             data=kwargs['date'], ilosc_osob=ilosc_osob,
-                                                             koszt=cennik[int(ilosc_osob)],
+                                                             data=kwargs['date'], ilosc_osob=number_of_people,
+                                                             koszt=cennik[int(number_of_people)],
                                                              lesson_id=kwargs['lesson_id'],
                                                              id_instruktora=kwargs['user'].id, wiek=kwargs['age']))
                 return True

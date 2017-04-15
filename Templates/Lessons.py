@@ -79,14 +79,16 @@ class LessonPopup(CommonPopup):  # TODO refactoring ( focusing inputs etc. )
             daily_graph = list(filter(lambda a: a.name == "DailyScreen", caro.slides))[0]
             daily_graph.refresh(self.date)
             self.dismiss()
+        elif added_successfully is False:
+            self.display_error('Lesson already exists! Refresh your calendar.')
         else:
-            self.display_error()
+            self.display_error('Please fill in fields with correct data.')
 
-    def display_error(self):
+    def display_error(self, error_msg):
         self.main_layout.clear_widgets()
         self.setup_widgets()
         self.main_layout.add_widget(
-            FontFittingLabel(text="[b][color=FF0000]Please fill in fields with correct data.[/color][/b]",
+            FontFittingLabel(text="[b][color=FF0000]{msg}[/color][/b]".format(msg=error_msg),
                              markup=True))
 
     def cancel_lesson(self):
