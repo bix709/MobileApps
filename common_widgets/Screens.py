@@ -11,12 +11,12 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 
-from common_widgets.FittingLabels import FontFittingLabel, FontFittingButton
+from common_widgets.FittingLabels import CustomLabel, CustomButton
 
 
-class BackgroundAdjustableScreen(Screen):
+class CustomScreen(Screen):
     def __init__(self, background_img=None, size=Window.size, **kwargs):
-        super(BackgroundAdjustableScreen, self).__init__(size=size, **kwargs)
+        super(CustomScreen, self).__init__(size=size, **kwargs)
         self.background_img = background_img
         self.background_instruction = InstructionGroup()
         self.set_up_background_image()
@@ -37,7 +37,7 @@ class BackgroundAdjustableScreen(Screen):
         return list(filter(lambda a: a == self.background_instruction, self.canvas.children))[0]
 
 
-class LoginScreen(BackgroundAdjustableScreen):
+class LoginScreen(CustomScreen):
     def __init__(self, background_img=None, **kwargs):
         super(LoginScreen, self).__init__(name='Login Screen', background_img=background_img, **kwargs)
         self.__username_input = self.__password_input = None
@@ -53,8 +53,8 @@ class LoginScreen(BackgroundAdjustableScreen):
     def create_main_layout(self, wrong_login=False):
         if wrong_login:
             self.main_layout.add_widget(
-                FontFittingLabel(markup=True, color=(1, 1, 1, 1), font_size=18, size_hint_y=0.20,
-                                 text="[b][color=FF0000]Wrong username or password ![/color][/b]"))
+                CustomLabel(markup=True, color=(1, 1, 1, 1), font_size=18, size_hint_y=0.20,
+                            text="[b][color=FF0000]Wrong username or password ![/color][/b]"))
         self.__username_input = TextInput(multiline=False, id='Username', focus=False, size_hint_y=0.20,
                                           on_text_validate=lambda a: self.focus_password())
         self.__password_input = TextInput(multiline=False, id='Password', focus=False, size_hint_y=0.20,
@@ -62,16 +62,16 @@ class LoginScreen(BackgroundAdjustableScreen):
                                           on_text_validate=lambda a: self.parent.handle_login(
                                               self.__username_input.text,
                                               str(hash(a.text))))
-        self.main_layout.add_widget(FontFittingLabel(color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30,
-                                                     text="Username:"))
+        self.main_layout.add_widget(CustomLabel(color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30,
+                                                text="Username:"))
         self.main_layout.add_widget(self.__username_input)
-        self.main_layout.add_widget(FontFittingLabel(color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30,
-                                                     text="Password:"))
+        self.main_layout.add_widget(CustomLabel(color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30,
+                                                text="Password:"))
         self.main_layout.add_widget(self.__password_input)
         self.main_layout.add_widget(
-            FontFittingButton(background_normal="../graphics/b3.png", text="Zaloguj!", color=(1, 1, 1, 1),
-                              size_hint_y=0.30, font_size=30,
-                              on_press=lambda a: self.parent.handle_login(
+            CustomButton(background_normal="../graphics/b3.png", text="Log in !", color=(1, 1, 1, 1),
+                         size_hint_y=0.30, font_size=30,
+                         on_press=lambda a: self.parent.handle_login(
                                                           self.__username_input.text,
                                                           self.__password)))
         self.__password_input.text = self.__username_input.text = ''
@@ -93,7 +93,7 @@ class LoginScreen(BackgroundAdjustableScreen):
         self.initialize()
 
 
-class ScrollableScreen(BackgroundAdjustableScreen):
+class ScrollableScreen(CustomScreen):
     def __init__(self, *args, **kwargs):
         super(ScrollableScreen, self).__init__(size_hint_y=0.9, *args, **kwargs)
         self.main_layout = GridLayout(cols=1, size_hint_y=None)

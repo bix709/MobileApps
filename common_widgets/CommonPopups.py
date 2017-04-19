@@ -13,19 +13,20 @@ from Templates.Callbacks import PasswordChange, CreateUser, UsersToChoose, Remov
 from Templates.Users import UserButton
 from Templates.config import privileges
 from common_callbacks.Callbacks import schedule_task
-from common_widgets.FittingLabels import FontFittingButton, FontFittingLabel
+from common_widgets.FittingLabels import CustomButton, CustomLabel
 
 
 class CommonPopup(Popup):
-    def __init__(self, **kwargs):
-        super(CommonPopup, self).__init__(size_hint_x=0.8, size_hint_y=0.9, auto_dismiss=True, **kwargs)
+    def __init__(self, title='', **kwargs):
+        super(CommonPopup, self).__init__(title=App.get_running_app().translator.translate(title),
+                                          size_hint_x=0.8, size_hint_y=0.9, auto_dismiss=True, **kwargs)
         self.main_layout = BoxLayout(orientation='vertical')
         self.add_widget(self.main_layout)
         self.setup_widgets()
 
     def setup_widgets(self):
         esc_layout = BoxLayout(size_hint_x=0.2, pos_hint={"x": 0.8})
-        esc_layout.add_widget(FontFittingButton(text="Esc", on_press=lambda a: self.dismiss()))
+        esc_layout.add_widget(CustomButton(text="Esc", on_press=lambda a: self.dismiss()))
         self.main_layout.add_widget(esc_layout)
 
     def focus_input(self, input_id):
@@ -80,8 +81,8 @@ class UserModifyingPopup(CommonPopup):
             self.confirm_button.bind(on_press=lambda a: self.dismiss(), on_release=lambda a: self.dismiss())
         color, msg = ('00FF00', success_msg) if success else ('FF0000', failure_msg)
         self.main_layout.clear_widgets()
-        self.main_layout.add_widget(FontFittingLabel(markup=True,
-                                                     text="[b][color={}]{}![/color][/b]".format(color, msg)))
+        self.main_layout.add_widget(CustomLabel(markup=True,
+                                                text="[b][color={}]{}![/color][/b]".format(color, msg)))
         self.setup_widgets()
         self.refresh_user_possibilities()
 
@@ -94,7 +95,7 @@ class UserModifyingPopup(CommonPopup):
 
 class PasswordChanger(CommonPopup):
     def __init__(self, **kwargs):
-        super(PasswordChanger, self).__init__(title="Zmien haslo", **kwargs)
+        super(PasswordChanger, self).__init__(title="Change password", **kwargs)
 
     @property
     def password_changing_callback(self):
@@ -105,17 +106,17 @@ class PasswordChanger(CommonPopup):
     def setup_widgets(self):
         super(PasswordChanger, self).setup_widgets()
         self.setup_input_fields()
-        self.main_layout.add_widget(FontFittingButton(text="Zatwierdz", on_press=lambda a: self.confirm()))
+        self.main_layout.add_widget(CustomButton(text="Confirm", on_press=lambda a: self.confirm()))
 
     def setup_input_fields(self):
-        self.main_layout.add_widget(FontFittingLabel(text="Stare haslo:"))
+        self.main_layout.add_widget(CustomLabel(text="Old password:"))
         self.main_layout.add_widget(TextInput(id='old', focus=False, password=True, multiline=False,
                                               on_text_validate=lambda a: self.focus_input('new')))
         self.focus_input('old')
-        self.main_layout.add_widget(FontFittingLabel(text="Nowe haslo:"))
+        self.main_layout.add_widget(CustomLabel(text="New password:"))
         self.main_layout.add_widget(TextInput(id='new', focus=False, password=True, multiline=False,
                                               on_text_validate=lambda a: self.focus_input('repeated')))
-        self.main_layout.add_widget(FontFittingLabel(text="Powtorz Nowe haslo:"))
+        self.main_layout.add_widget(CustomLabel(text="Repeat new password:"))
         self.main_layout.add_widget(TextInput(id='repeated', focus=False, password=True, multiline=False,
                                               on_text_validate=lambda a: self.confirm()))
 
@@ -128,16 +129,16 @@ class PasswordChanger(CommonPopup):
 
     def on_successful_change(self):
         self.main_layout.clear_widgets()
-        self.main_layout.add_widget(FontFittingLabel(text="[color=00FF00]Hasło zostało zmienione poprawnie.[/color]",
-                                                     markup=True))
+        self.main_layout.add_widget(CustomLabel(text="[color=00FF00]Hasło zostało zmienione poprawnie.[/color]",
+                                                markup=True))
         self.bind(on_dismiss=App.get_running_app().root.logout)
-        self.main_layout.add_widget(FontFittingButton(text="Ok", on_release=lambda a: self.dismiss()))
+        self.main_layout.add_widget(CustomButton(text="Ok", on_release=lambda a: self.dismiss()))
 
     def on_wrong_attempt(self):
         self.main_layout.clear_widgets()
         self.setup_widgets()
-        self.main_layout.add_widget(FontFittingLabel(text="[b][color=FF0000]Nie poprawne dane![/color][/b]",
-                                                     markup=True))
+        self.main_layout.add_widget(CustomLabel(text="[b][color=FF0000]Nie poprawne dane![/color][/b]",
+                                                markup=True))
 
 
 class UserAddingPopup(CommonPopup):
@@ -157,18 +158,18 @@ class UserAddingPopup(CommonPopup):
     def setup_widgets(self):
         super(UserAddingPopup, self).setup_widgets()
         self.setup_input_fields()
-        self.main_layout.add_widget(FontFittingButton(text="Zatwierdz",
-                                                      on_press=lambda a: schedule_task(*self.user_adding_callback)))
+        self.main_layout.add_widget(CustomButton(text="Confirm",
+                                                 on_press=lambda a: schedule_task(*self.user_adding_callback)))
 
     def setup_input_fields(self):
-        self.main_layout.add_widget(FontFittingLabel(text="Login:"))
+        self.main_layout.add_widget(CustomLabel(text="Login:"))
         self.main_layout.add_widget(TextInput(id='login', focus=False, multiline=False,
                                               on_text_validate=lambda a: self.focus_input('firstname')))
         self.focus_input('login')
-        self.main_layout.add_widget(FontFittingLabel(text="Imie:"))
+        self.main_layout.add_widget(CustomLabel(text="First name:"))
         self.main_layout.add_widget(TextInput(id='firstname', focus=False, multiline=False,
                                               on_text_validate=lambda a: self.focus_input('lastname')))
-        self.main_layout.add_widget(FontFittingLabel(text="Nazwisko:"))
+        self.main_layout.add_widget(CustomLabel(text="Last name:"))
         self.main_layout.add_widget(TextInput(id='lastname', focus=False, multiline=False,
                                               on_text_validate=lambda a: schedule_task(*self.user_adding_callback)))
 
@@ -181,8 +182,8 @@ class UserAddingPopup(CommonPopup):
             True: ('Account created successfully', '00FF00')
         }
         message, color = messages[created_successfully]
-        self.main_layout.add_widget(FontFittingLabel(text="[b][color={}]{}![/color][/b]".format(color, message),
-                                                     markup=True))
+        self.main_layout.add_widget(CustomLabel(text="[b][color={}]{}![/color][/b]".format(color, message),
+                                                markup=True))
         self.setup_widgets()
         self.refresh_user_chooser()
 
@@ -205,10 +206,10 @@ class UserRemovingPopup(UserModifyingPopup):
         return RemoveUser, tuple(), {'instance': self}
 
     def assign_users(self, users):
-        self.main_layout.add_widget(FontFittingLabel(text='Choose user to remove:'))
+        self.main_layout.add_widget(CustomLabel(text='Choose user to remove:'))
         super(UserRemovingPopup, self).assign_users(users)
-        self.confirm_button = FontFittingButton(text="Delete account.", size_hint=(1, 1),
-                                                on_press=lambda a:
+        self.confirm_button = CustomButton(text="Delete account.", size_hint=(1, 1),
+                                           on_press=lambda a:
                                                 ConfirmationPopup(confirmed_function=self.remove_choosen,
                                                                   func_args=tuple([self.choosen])).open())
         self.main_layout.add_widget(self.confirm_button)
@@ -234,23 +235,23 @@ class PermissionChanger(UserModifyingPopup):
         return ChangePermissions(self.choosen.user, self.choosen_privilege.text), tuple(), {'instance': self}
 
     def assign_users(self, users):
-        self.main_layout.add_widget(FontFittingLabel(text='Choose user and permissions to grant:'))
+        self.main_layout.add_widget(CustomLabel(text='Choose user and permissions to grant:'))
         super(PermissionChanger, self).assign_users(users)
         self.assign_permissions()
 
     def assign_permissions(self):
         privilege_chooser = DropDown()
         for privilege in privileges:
-            privilege_chooser.add_widget(FontFittingButton(text="{}".format(privilege),
-                                                           size_hint_y=None, height=33,
-                                                           on_release=lambda a: privilege_chooser.select(a.text)))
-        self.choosen_privilege = FontFittingButton(id='privilege_chooser', text="Choose privilege", size_hint=(1, 1),
-                                                   user=None)
+            privilege_chooser.add_widget(CustomButton(text="{}".format(privilege),
+                                                      size_hint_y=None, height=33,
+                                                      on_release=lambda a: privilege_chooser.select(a.text)))
+        self.choosen_privilege = CustomButton(id='privilege_chooser', text="Choose privilege", size_hint=(1, 1),
+                                              user=None)
         self.choosen_privilege.bind(on_release=lambda a: privilege_chooser.open(self.choosen_privilege))
         privilege_chooser.bind(on_select=lambda instance, choosen: setattr(self.choosen_privilege, 'text', choosen))
         self.main_layout.add_widget(self.choosen_privilege)
-        self.confirm_button = FontFittingButton(text="Change permissions.", size_hint=(1, 1),
-                                                on_press=lambda a:
+        self.confirm_button = CustomButton(text="Change permissions.", size_hint=(1, 1),
+                                           on_press=lambda a:
                                                 ConfirmationPopup(
                                                     confirmed_function=schedule_task,
                                                     func_args=self.permission_changing_callback).open())
@@ -273,9 +274,9 @@ class ConfirmationPopup(CommonPopup):
 
     def setup_widgets(self):
         super(ConfirmationPopup, self).setup_widgets()
-        self.main_layout.add_widget(FontFittingLabel(text='Are you sure?'))
-        self.main_layout.add_widget(FontFittingButton(text='Yes', on_press=lambda a: self.confirm()))
-        self.main_layout.add_widget(FontFittingButton(text='No', on_press=lambda a: self.dismiss()))
+        self.main_layout.add_widget(CustomLabel(text='Are you sure?'))
+        self.main_layout.add_widget(CustomButton(text='Yes', on_press=lambda a: self.confirm()))
+        self.main_layout.add_widget(CustomButton(text='No', on_press=lambda a: self.dismiss()))
 
     def confirm(self):
         self.dismiss()

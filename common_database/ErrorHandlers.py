@@ -8,7 +8,7 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 
-from common_widgets.FittingLabels import FontFittingLabel, FontFittingButton
+from common_widgets.FittingLabels import CustomLabel, CustomButton
 
 
 class ConnectionErrorPopup(Popup):
@@ -22,9 +22,9 @@ class ConnectionErrorPopup(Popup):
 
     def create_main_layout(self):
         layout = BoxLayout(orientation='vertical', size_hint=(0.8, 0.8))
-        layout.add_widget(FontFittingLabel(text=self.error_msg, text_size=self.size))
-        layout.add_widget(FontFittingButton(text="Exit", text_size=self.size,
-                                            on_press=lambda a: self.exit()))
+        layout.add_widget(CustomLabel(text=self.error_msg, text_size=self.size))
+        layout.add_widget(CustomButton(text="Exit", text_size=self.size,
+                                       on_press=lambda a: self.exit()))
         return layout
 
     def exit(self):
@@ -39,9 +39,9 @@ class ConnectionError(object):
         super(ConnectionError, self).__init__()
         self.current_screen = App.get_running_app().root.current
         self.current_screen_instance = App.get_running_app().root.get_screen(self.current_screen)
-        self.connection_error_label = FontFittingLabel(text="[color=FF0000][b]Connection error."
+        self.connection_error_label = CustomLabel(text="[color=FF0000][b]Connection error."
                                                             "You will be reconnected automatically.[/b][/color]",
-                                                       markup=True, size_hint=(1, 0.1), pos=(0, 0))
+                                                  markup=True, size_hint=(1, 0.1), pos=(0, 0))
 
     def display_connection_error_label(self):
         self.current_screen_instance.add_widget(self.connection_error_label)
