@@ -6,10 +6,11 @@
 from time import sleep
 import cx_Oracle
 from common_database.ErrorHandlers import *
+from db_config.config import config as db_config
 
 
 class DatabaseConnection(object):
-    def __init__(self, url='teter/fx0507@127.0.0.1/Grafiki'):
+    def __init__(self, url='{db_user}/{db_password}@{db_server_ip}/{db_sid}'.format(**db_config)):
         super(DatabaseConnection, self).__init__()
         self.url = url
         self.connection = None
