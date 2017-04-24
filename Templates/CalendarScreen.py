@@ -4,11 +4,11 @@
     copyright: 5517 Company
 """
 from kivy.app import App
-from common_widgets.Screens import CustomScreen
+from common_widgets.Screens import BackgroundAdjustableScreen
 from common_widgets.TimeWidgets import CommonCalendar
 
 
-class CalendarScreen(CustomScreen):
+class CalendarScreen(BackgroundAdjustableScreen):
     def __init__(self, *args, **kwargs):
         super(CalendarScreen, self).__init__(*args, **kwargs)
         self.add_widget(MyCalendar())

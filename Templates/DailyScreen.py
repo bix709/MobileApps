@@ -6,8 +6,8 @@
 from kivy.app import App
 from Templates.Callbacks import GetDailyGraph, schedule_task
 from Templates.Lessons import LessonPopup
-from common_widgets.FittingLabels import CustomButton
-from common_widgets.FittingLabels import CustomLabel
+from common_widgets.FittingLabels import FontFittingButton
+from common_widgets.FittingLabels import FontFittingLabel
 from common_widgets.Screens import ScrollableScreen
 from time import gmtime
 
@@ -19,12 +19,12 @@ class DailyScreen(ScrollableScreen):
 
     def setup_widgets(self):
         today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
-        self.main_layout.add_widget(CustomLabel(text='Grafik z dnia {}'.format(self.day), height=45,
-                                                size_hint_y=None))
-        self.main_layout.add_widget(CustomButton(text='Refresh', height=45, size_hint_y=None,
-                                                 on_press=lambda a: self.refresh(self.day)))
-        self.main_layout.add_widget(CustomButton(text='Pokaz dzisiejszy', height=45, size_hint_y=None,
-                                                 on_press=lambda a: self.refresh(today)))
+        self.main_layout.add_widget(FontFittingLabel(text='Grafik z dnia {}'.format(self.day), height=45,
+                                                     size_hint_y=None))
+        self.main_layout.add_widget(FontFittingButton(text='Refresh', height=45, size_hint_y=None,
+                                                      on_press=lambda a: self.refresh(self.day)))
+        self.main_layout.add_widget(FontFittingButton(text='Pokaz dzisiejszy', height=45, size_hint_y=None,
+                                                      on_press=lambda a: self.refresh(today)))
         self.get_day_schedule()
 
     def get_day_schedule(self):
@@ -49,9 +49,9 @@ class DailyScreen(ScrollableScreen):
                 lesson_id = "0"
                 color = (0, 1, 0, 1)
             finally:
-                self.main_layout.add_widget(CustomButton(text='{}'.format(lesson_info), id="{}".format(lesson_id),
-                                                         height=45, on_press=lambda a: self.show_lesson_details(a),
-                                                         size_hint_y=None, background_color=color))
+                self.main_layout.add_widget(FontFittingButton(text='{}'.format(lesson_info), id="{}".format(lesson_id),
+                                                              height=45, on_press=lambda a: self.show_lesson_details(a),
+                                                              size_hint_y=None, background_color=color))
 
     def show_lesson_details(self, button_instance):
         lesson_info = self.get_lesson_info(button_instance)

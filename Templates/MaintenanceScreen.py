@@ -5,7 +5,7 @@
 """
 from kivy.app import App
 from common_widgets.CommonPopups import PasswordChanger, UserAddingPopup, UserRemovingPopup, PermissionChanger
-from common_widgets.FittingLabels import CustomButton
+from common_widgets.FittingLabels import FontFittingButton
 from common_widgets.Screens import ScrollableScreen
 
 
@@ -15,14 +15,14 @@ class MaintenanceScreen(ScrollableScreen):
         self.main_layout.size_hint_y = 1
 
     def setup_widgets(self):
-        self.main_layout.add_widget(CustomButton(text='Wyloguj',
-                                                 on_release=lambda a: App.get_running_app().root.logout()))
-        self.main_layout.add_widget(CustomButton(text='Zmien haslo',
-                                                 on_release=lambda a: PasswordChanger().open()))
+        self.main_layout.add_widget(FontFittingButton(text='Wyloguj',
+                                                      on_release=lambda a: App.get_running_app().root.logout()))
+        self.main_layout.add_widget(FontFittingButton(text='Zmien haslo',
+                                                      on_release=lambda a: PasswordChanger().open()))
         if App.get_running_app().root.logged_user.privileges == 'Admin':
-            self.main_layout.add_widget(CustomButton(text='Dodaj uzytkownika',
-                                                     on_release=lambda a: UserAddingPopup().open()))
-            self.main_layout.add_widget(CustomButton(text='Usun uzytkownika',
-                                                     on_release=lambda a: UserRemovingPopup().open()))
-            self.main_layout.add_widget(CustomButton(text='Zmien uprawnienia',
-                                                     on_release=lambda a: PermissionChanger().open()))
+            self.main_layout.add_widget(FontFittingButton(text='Dodaj uzytkownika',
+                                                          on_release=lambda a: UserAddingPopup().open()))
+            self.main_layout.add_widget(FontFittingButton(text='Usun uzytkownika',
+                                                          on_release=lambda a: UserRemovingPopup().open()))
+            self.main_layout.add_widget(FontFittingButton(text='Zmien uprawnienia',
+                                                          on_release=lambda a: PermissionChanger().open()))

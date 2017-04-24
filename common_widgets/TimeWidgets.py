@@ -12,7 +12,7 @@ from kivy.uix.label import Label
 from calendar import Calendar
 from kivy.clock import Clock
 
-from common_widgets.FittingLabels import CustomLabel, CustomButton
+from common_widgets.FittingLabels import FontFittingLabel, FontFittingButton
 
 months_of_the_year = {1: "Styczeń", 2: "Luty", 3: "Marzec", 4: "Kwiecień", 5: "Maj", 6: "Czerwiec", 7: "Lipiec",
                       8: "Sierpień", 9: "Wrzesień", 10: "Październik", 11: "Listopad", 12: "Grudzień"}
@@ -37,14 +37,14 @@ class CommonCalendar(BoxLayout):
             for day_object in week_object:
                 intensivity = 1 if day_object.month == month else 0.75
                 complete_date = (day_object.year, day_object.month, day_object.day)
-                self.month_layout.add_widget(CustomButton(id='{}/{}/{}'.format(*complete_date),
-                                                          text="{}".format(day_object.day),
-                                                          background_color=(1, 1, 1, intensivity),
-                                                          on_release=lambda instance: self.on_choose(instance)))
+                self.month_layout.add_widget(Button(id='{}/{}/{}'.format(*complete_date),
+                                                    text="{}".format(day_object.day),
+                                                    background_color=(1, 1, 1, intensivity),
+                                                    on_release=lambda instance: self.on_choose(instance)))
 
     def add_days_headers(self):
         self.month_layout.clear_widgets()
-        for x in ["Mon", "Tu", "Wed", "Th", "Fri", "Sat", "Sun"]:
+        for x in ["Pon", "Wt", "Sr", "Czw", "Pt", "Sob", "Nd"]:
             self.month_layout.add_widget(Label(text=x))
 
     def next_month(self):
@@ -65,10 +65,10 @@ class CommonCalendar(BoxLayout):
     def create_month_chooser(self):
         month_chooser = BoxLayout(orientation="horizontal", size_hint=(1, None), height=33)
         displayed_year = self.currently_displayed_month
-        month_chooser.add_widget(CustomButton(text="Previous", on_release=lambda a: self.previous_month()))
+        month_chooser.add_widget(FontFittingButton(text="Poprzedni", on_release=lambda a: self.previous_month()))
         month_chooser.add_widget(
-            CustomLabel(text="{}\n{}".format(months_of_the_year[displayed_year[1]], displayed_year[0])))
-        month_chooser.add_widget(CustomButton(text="Next", on_release=lambda a: self.next_month()))
+            FontFittingLabel(text="{}\n{}".format(months_of_the_year[displayed_year[1]], displayed_year[0])))
+        month_chooser.add_widget(FontFittingButton(text="Nastepny", on_release=lambda a: self.next_month()))
         return month_chooser
 
     def on_choose(self, instance):

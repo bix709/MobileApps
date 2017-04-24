@@ -14,7 +14,7 @@ from kivy.uix.textinput import TextInput
 from Templates.Callbacks import GetEarnings
 from Templates.UserChooser import UserChooser
 from common_callbacks.Callbacks import schedule_task
-from common_widgets.FittingLabels import CustomButton, CustomLabel
+from common_widgets.FittingLabels import FontFittingButton, FontFittingLabel
 from time import gmtime
 from common_widgets.Screens import ScrollableScreen
 from datetime import datetime, timedelta
@@ -52,20 +52,20 @@ class EarningsScreen(ScrollableScreen):  # TODO issue with Dropdown not opening 
     def setup_period_chooser(self):
         period_chooser = DropDown()
         for x in self.dates:
-            period_chooser.add_widget(CustomButton(text="{}".format(x), size_hint_y=None, height=33,
-                                                   on_release=lambda a: period_chooser.select(a.text)))
-        self.choosen = CustomButton(text="Dzis", size_hint=(1, 1))
+            period_chooser.add_widget(Button(text="{}".format(x), size_hint_y=None, height=33,
+                                             on_release=lambda a: period_chooser.select(a.text)))
+        self.choosen = FontFittingButton(text="Dzis", size_hint=(1, 1))
         self.choosen.bind(on_release=lambda a: period_chooser.open(self.choosen))
         period_chooser.bind(on_select=lambda instance, z: setattr(self.choosen, 'text', z))
-        self.main_layout.add_widget(CustomLabel(text="Wybierz okres rozliczeniowy:", size_hint=(1, 1)))
+        self.main_layout.add_widget(FontFittingLabel(text="Wybierz okres rozliczeniowy:", size_hint=(1, 1)))
         self.main_layout.add_widget(self.choosen)
-        self.main_layout.add_widget(CustomButton(text="Wybierz inny dzień", size_hint=(1, 1),
-                                                 on_press=lambda a: self.choose_other_date()))
-        self.main_layout.add_widget(CustomButton(text="Wyswietl", size_hint=(1, 1),
-                                                 on_press=lambda a: self.display_choosen()))
+        self.main_layout.add_widget(FontFittingButton(text="Wybierz inny dzień", size_hint=(1, 1),
+                                                      on_press=lambda a: self.choose_other_date()))
+        self.main_layout.add_widget(FontFittingButton(text="Wyswietl", size_hint=(1, 1),
+                                                      on_press=lambda a: self.display_choosen()))
         if App.get_running_app().root.logged_user.privileges == 'Admin':
-            self.main_layout.add_widget(CustomButton(text="Wyswietl łączne zarobki", size_hint=(1, 1),
-                                                     on_press=lambda a: self.display_choosen(all_users=True)))
+            self.main_layout.add_widget(FontFittingButton(text="Wyswietl łączne zarobki", size_hint=(1, 1),
+                                                          on_press=lambda a: self.display_choosen(all_users=True)))
 
     def choose_other_date(self):
         OtherDatePopup(caller=self).open()
@@ -84,13 +84,13 @@ class EarningsScreen(ScrollableScreen):  # TODO issue with Dropdown not opening 
         self.setup_widgets()
         if total_earns is None:
             total_earns = 0
-        self.main_layout.add_widget(CustomLabel(text="Zarobione łącznie: {}".format(total_earns)))
-        self.main_layout.add_widget(CustomLabel(text="Na czysto: {}".format(total_earns / 2)))
+        self.main_layout.add_widget(FontFittingLabel(text="Zarobione łącznie: {}".format(total_earns)))
+        self.main_layout.add_widget(FontFittingLabel(text="Na czysto: {}".format(total_earns / 2)))
 
     def display_error(self, msg):
         self.main_layout.clear_widgets()
-        self.main_layout.add_widget(CustomLabel(text="[b][color=FF0000]{}[/color][/b]".format(msg),
-                                                markup=True))
+        self.main_layout.add_widget(FontFittingLabel(text="[b][color=FF0000]{}[/color][/b]".format(msg),
+                                                     markup=True))
         self.setup_widgets()
 
 
@@ -104,8 +104,8 @@ class OtherDatePopup(Popup):
                                on_text_validate=lambda a: self.display_choosen())
         self.input.focus = True
         main_layout.add_widget(self.input)
-        main_layout.add_widget(CustomButton(text="Wyswietl", size_hint=(1, 1),
-                                            on_press=lambda a: self.display_choosen()))
+        main_layout.add_widget(FontFittingButton(text="Wyswietl", size_hint=(1, 1),
+                                                 on_press=lambda a: self.display_choosen()))
         self.add_widget(main_layout)
 
     def display_choosen(self):

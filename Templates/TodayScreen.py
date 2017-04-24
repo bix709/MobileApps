@@ -15,8 +15,8 @@ from Templates.DailyScreen import DailyScreen
 from Templates.Lessons import LessonPopup
 from Templates.Users import UserButton
 from common_callbacks.Callbacks import schedule_task
-from common_widgets.FittingLabels import CustomButton
-from common_widgets.Screens import CustomScreen, ScrollableScreen
+from common_widgets.FittingLabels import FontFittingButton
+from common_widgets.Screens import BackgroundAdjustableScreen, ScrollableScreen
 from time import gmtime
 
 
@@ -29,10 +29,10 @@ class TodayScreen(ScrollableScreen):
     def setup_widgets(self):
         for hour in range(9, 21):
             if hour > time.gmtime().tm_hour:
-                self.main_layout.add_widget(CustomButton(text="{}.00 - {}.50".format(hour, hour),
-                                                         id="{}".format(hour),
-                                                         size_hint_y=None, height=45,
-                                                         on_press=lambda a: self.display_unoccupied(a)))
+                self.main_layout.add_widget(FontFittingButton(text="{}.00 - {}.50".format(hour, hour),
+                                                              id="{}".format(hour),
+                                                              size_hint_y=None, height=45,
+                                                              on_press=lambda a: self.display_unoccupied(a)))
 
     def display_unoccupied(self, instance):
         db_kwargs = {

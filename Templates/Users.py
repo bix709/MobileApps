@@ -5,7 +5,7 @@
 """
 from kivy.uix.actionbar import ActionButton
 
-from common_widgets.FittingLabels import CustomButton
+from common_widgets.FittingLabels import FontFittingButton
 
 
 class User(object):
@@ -19,13 +19,13 @@ class User(object):
         return "#{id} {name} {lastname} ({privileges})".format(**self.__dict__)
 
 
-class UserButton(CustomButton):
+class UserButton(FontFittingButton):
     def __init__(self, user, **kwargs):
         super(UserButton, self).__init__(**kwargs)
         self.user = user
 
 
-class ActionUserButton(ActionButton, CustomButton):
+class ActionUserButton(ActionButton, FontFittingButton):
     def __init__(self, user, **kwargs):
         super(ActionUserButton, self).__init__(**kwargs)
         self.user = user
