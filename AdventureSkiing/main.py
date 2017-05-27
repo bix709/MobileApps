@@ -5,7 +5,8 @@
 """
 from kivy.app import App
 from kivy.core.window import Window
-from Templates.MyLoginManager import MyLoginManager
+
+from AdventureSkiing.Widgets.MyLoginManager import MyLoginManager
 
 
 class ExampleApp(App):

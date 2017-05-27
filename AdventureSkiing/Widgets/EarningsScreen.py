@@ -3,6 +3,9 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+from datetime import datetime, timedelta
+from time import gmtime
+
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
@@ -11,13 +14,10 @@ from kivy.uix.dropdown import DropDown
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 
-from Templates.Callbacks import GetEarnings
-from Templates.UserChooser import UserChooser
+from AdventureSkiing.Database.Callbacks import GetEarnings
 from common_callbacks.Callbacks import schedule_task
 from common_widgets.FittingLabels import FontFittingButton, FontFittingLabel
-from time import gmtime
 from common_widgets.Screens import ScrollableScreen
-from datetime import datetime, timedelta
 
 
 class EarningsScreen(ScrollableScreen):  # TODO issue with Dropdown not opening after choosed once

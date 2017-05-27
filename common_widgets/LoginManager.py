@@ -4,14 +4,10 @@
     copyright : 5517 Company
 """
 
-from Queue import Queue
-
-from kivy.clock import Clock
 from kivy.uix.screenmanager import FadeTransition
 from kivy.uix.screenmanager import ScreenManager
 
-from Templates.Callbacks import LoginCallback
-from common_callbacks.CallbackExecutor import BackgroundCallbackExecutor
+from AdventureSkiing.Database.Callbacks import LoginCallback
 from common_callbacks.Callbacks import schedule_task
 from common_widgets.RootWidget import RootWidget
 from common_widgets.Screens import BackgroundAdjustableScreen, LoginScreen
@@ -22,12 +18,12 @@ class LoginManager(ScreenManager, RootWidget):
         """ This widget is supposed to be root of application! """
         super(LoginManager, self).__init__(id="LoginManager", transition=FadeTransition(), **kwargs)
         self.logged_user = None
-        self.add_widget(LoginScreen(background_img='../graphics/tlo2.jpg'))
+        self.add_widget(LoginScreen(background_img='../Graphics/tlo2.jpg'))
         self.setup_screens()
 
     def setup_screens(self):
         """ Override this method to set up screens to be displayed after correct_login. """
-        self.add_widget(BackgroundAdjustableScreen(background_img='../graphics/tlo2.jpg', name='First Screen'))
+        self.add_widget(BackgroundAdjustableScreen(background_img='../Graphics/tlo2.jpg', name='First Screen'))
 
     def handle_login(self, username, password):
         args = db_args = ()

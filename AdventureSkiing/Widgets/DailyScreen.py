@@ -3,13 +3,15 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+from time import gmtime
+
 from kivy.app import App
-from Templates.Callbacks import GetDailyGraph, schedule_task
-from Templates.Lessons import LessonPopup
+
+from AdventureSkiing.Database.Callbacks import GetDailyGraph, schedule_task
+from AdventureSkiing.Widgets.LessonsPopup import LessonPopup
 from common_widgets.FittingLabels import FontFittingButton
 from common_widgets.FittingLabels import FontFittingLabel
 from common_widgets.Screens import ScrollableScreen
-from time import gmtime
 
 
 class DailyScreen(ScrollableScreen):

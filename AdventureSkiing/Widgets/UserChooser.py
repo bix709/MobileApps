@@ -5,12 +5,12 @@
 """
 from kivy.app import App
 from kivy.uix.actionbar import ActionGroup
-from Templates.Callbacks import UsersToChoose, schedule_task
-from Templates.Users import ActionUserButton
+
+from AdventureSkiing.Database.Callbacks import UsersToChoose, schedule_task
+from AdventureSkiing.Utils.Users import ActionUserButton
 
 
-class UserChooser(
-    ActionGroup):  # TODO fix size issues ( not opening spinner ) and resizing exception issue, close dropdown!
+class UserChooser(ActionGroup):  # TODO fix size issues ( not opening spinner ) and resizing exception issue, close dropdown!
     def __init__(self, **kwargs):
         super(UserChooser, self).__init__(**kwargs)
         self.size_hint = (None, 1)

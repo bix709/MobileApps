@@ -4,9 +4,11 @@
     copyright : 5517 Company
 """
 from time import sleep
+
 import cx_Oracle
+
+from AdventureSkiing.Database.db_config import config as db_config
 from common_database.ErrorHandlers import *
-from db_config.config import config as db_config
 
 
 class DatabaseConnection(object):

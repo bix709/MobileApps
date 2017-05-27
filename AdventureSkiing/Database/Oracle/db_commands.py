@@ -5,11 +5,11 @@
 """
 from contextlib import contextmanager
 
-from Templates.SqlCmdChoosers import EarningsCmdChooser
-from Templates.cennik import cennik
-from Templates.Users import User
-from Templates.config import privileges
-from common_database.DatabaseConnection import DatabaseConnection, sys
+from AdventureSkiing.Config.config import privileges
+from AdventureSkiing.Database.Oracle.SqlCmdChoosers import EarningsCmdChooser
+from AdventureSkiing.Utils.Users import User
+from AdventureSkiing.Utils.cennik import cennik
+from common_database.OracleConnection import DatabaseConnection, sys
 from common_tools.ThreadSynchronization import mark_task_as_done
 
 
@@ -24,7 +24,7 @@ def ignored(exc):
 
 
 class SqlCommands(object):
-    """Class storing database commands as static methods. """
+    """Class storing Database commands as static methods. """
 
     @staticmethod
     @mark_task_as_done
@@ -112,7 +112,7 @@ class SqlCommands(object):
             if kwargs['lesson_id'] != "0":
                 DatabaseConnection().execute_command("delete from lekcja where id = {}".format(kwargs['lesson_id']))
         except:
-            print "Couldnt remove lesson from database {}".format(sys.exc_info()[0])
+            print "Couldnt remove lesson from Database {}".format(sys.exc_info()[0])
 
     @staticmethod
     @mark_task_as_done

@@ -4,20 +4,17 @@
     copyright : 5517 Company
 """
 import time
-from kivy.app import App
-from kivy.core.window import Window
-from kivy.uix.dropdown import DropDown
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.scrollview import ScrollView
+from time import gmtime
 
-from Templates.Callbacks import GetUnoccupied
-from Templates.DailyScreen import DailyScreen
-from Templates.Lessons import LessonPopup
-from Templates.Users import UserButton
+from kivy.app import App
+from kivy.uix.dropdown import DropDown
+
+from AdventureSkiing.Database.Callbacks import GetUnoccupied
+from AdventureSkiing.Utils.Users import UserButton
+from AdventureSkiing.Widgets.LessonsPopup import LessonPopup
 from common_callbacks.Callbacks import schedule_task
 from common_widgets.FittingLabels import FontFittingButton
-from common_widgets.Screens import BackgroundAdjustableScreen, ScrollableScreen
-from time import gmtime
+from common_widgets.Screens import ScrollableScreen
 
 
 class TodayScreen(ScrollableScreen):
