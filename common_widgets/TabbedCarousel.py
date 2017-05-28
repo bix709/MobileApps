@@ -43,7 +43,7 @@ class CarouselWithActionBar(Screen):
         self.initialize()
 
     def initialize(self):
-        self.actionBar = CustomActionBar(id='actionBar', background_image='../Graphics/jzielony.png',
+        self.actionBar = CustomActionBar(id='actionBar', background_image='../AdventureSkiing/graphics/jzielony.png',
                                          pos_hint={'x': 0, 'y': 0.9}, size_hint_y=0.1)
         self.carousel = CustomCarousel(id='carousel')
         self.add_widget(self.carousel)
@@ -58,7 +58,7 @@ class CarouselWithActionBar(Screen):
         action_view = self.actionBar.action_view
         # action_view.add_widget(ActionSeparator())  # TODO handle separators. ( throwing exception after resize )
         action_button = ActionButton(id=str(index), size_hint=(None, 1), state=button_state,
-                                     background_down='../Graphics/b5.png', color=(0, 0, 0, 1), text=screen.name,
+                                     background_down='../AdventureSkiing/graphics/b5.png', color=(0, 0, 0, 1), text=screen.name,
                                      on_press=lambda a: self.carousel.load_slide(self.carousel.slides[int(a.id)]))
         self.action_buttons.append(action_button)
         action_view.add_widget(action_button)

@@ -6,7 +6,7 @@
 from kivy.app import App
 from kivy.clock import Clock
 
-from AdventureSkiing.Database.Oracle.db_commands import SqlCommands
+from AdventureSkiing.Database.MySQL.db_commands import SqlCommands
 from AdventureSkiing.Utils.Users import User
 from common_callbacks.Callbacks import CommonCallback, wait_for_future_result
 

@@ -3,11 +3,11 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
-from Templates.CalendarScreen import CalendarScreen
-from Templates.DailyScreen import DailyScreen
-from Templates.EarningsScreen import EarningsScreen
-from Templates.TodayScreen import TodayScreen
-from Templates.UserChooser import UserChooser
+from AdventureSkiing.Widgets.CalendarScreen import CalendarScreen
+from AdventureSkiing.Widgets.DailyScreen import DailyScreen
+from AdventureSkiing.Widgets.EarningsScreen import EarningsScreen
+from AdventureSkiing.Widgets.TodayScreen import TodayScreen
+from AdventureSkiing.Widgets.UserChooser import UserChooser
 
 from AdventureSkiing.Widgets.MaintenanceScreen import MaintenanceScreen
 from common_widgets.LoginManager import LoginManager
@@ -32,11 +32,11 @@ class MyLoginManager(LoginManager):
         if self.logged_user.privileges == "Admin":
             self.user_chooser = UserChooser()
             caro.actionBar.action_view.add_widget(self.user_chooser)
-        caro.add_screen(CalendarScreen(background_img='../Graphics/b3.png', name='Calendar'))
-        caro.add_screen(DailyScreen(background_img='../Graphics/b4.png', name='DailyScreen'))
-        caro.add_screen(TodayScreen(background_img='../Graphics/b5.png', name='Today'))
-        caro.add_screen(EarningsScreen(background_img='../Graphics/tlo1.jpg', name='Earnings'))
-        caro.add_screen(MaintenanceScreen(background_img='../Graphics/tlo2.jpg', name='Options'))
+        caro.add_screen(CalendarScreen(background_img='../AdventureSkiing/graphics/b3.png', name='Calendar'))
+        caro.add_screen(DailyScreen(background_img='../AdventureSkiing/graphics/b4.png', name='DailyScreen'))
+        caro.add_screen(TodayScreen(background_img='../AdventureSkiing/graphics/b5.png', name='Today'))
+        caro.add_screen(EarningsScreen(background_img='../AdventureSkiing/graphics/tlo1.jpg', name='Earnings'))
+        caro.add_screen(MaintenanceScreen(background_img='../AdventureSkiing/graphics/tlo2.jpg', name='Options'))
 
     def logout(self):
         super(MyLoginManager, self).logout()

@@ -7,7 +7,8 @@ from time import gmtime
 
 from kivy.app import App
 
-from AdventureSkiing.Database.Callbacks import GetDailyGraph, schedule_task
+from common_callbacks.Callbacks import schedule_task
+from AdventureSkiing.Database.Callbacks import GetDailyGraph
 from AdventureSkiing.Widgets.LessonsPopup import LessonPopup
 from common_widgets.FittingLabels import FontFittingButton
 from common_widgets.FittingLabels import FontFittingLabel

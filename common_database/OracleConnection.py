@@ -35,10 +35,10 @@ class DatabaseConnection(object):
 
     def connection_error(self):
         issue = ConnectionError()
-        issue.display_connection_error_label()
+        issue.display_error()
         while not self.connected():
             sleep(1)
-        issue.hide_connection_error_label()
+        issue.hide_error()
 
     def connected(self):
         try:

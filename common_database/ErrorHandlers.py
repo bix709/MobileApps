@@ -43,8 +43,8 @@ class ConnectionError(object):
                                                             "You will be reconnected automatically.[/b][/color]",
                                                        markup=True, size_hint=(1, 0.1), pos=(0, 0))
 
-    def display_connection_error_label(self):
+    def display_error(self):
         self.current_screen_instance.add_widget(self.connection_error_label)
 
-    def hide_connection_error_label(self):
+    def hide_error(self):
         self.current_screen_instance.remove_widget(self.connection_error_label)

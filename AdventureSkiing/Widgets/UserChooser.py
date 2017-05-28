@@ -6,7 +6,8 @@
 from kivy.app import App
 from kivy.uix.actionbar import ActionGroup
 
-from AdventureSkiing.Database.Callbacks import UsersToChoose, schedule_task
+from AdventureSkiing.Database.Callbacks import UsersToChoose
+from common_callbacks.Callbacks import schedule_task
 from AdventureSkiing.Utils.Users import ActionUserButton
 
 
