@@ -3,6 +3,7 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+from kivy.app import App
 from kivy.core.window import Window
 from kivy.graphics import *
 from kivy.uix.boxlayout import BoxLayout
@@ -69,8 +70,8 @@ class LoginScreen(BackgroundAdjustableScreen):
                                                      text="Password:"))
         self.main_layout.add_widget(self.__password_input)
         self.main_layout.add_widget(
-            FontFittingButton(background_normal="../AdventureSkiing/graphics/b3.png", text="Zaloguj!", color=(1, 1, 1, 1),
-                              size_hint_y=0.30, font_size=30,
+            FontFittingButton(background_normal="{}/graphics/b3.png".format(App.get_running_app().name),
+                              text="Zaloguj!", color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30,
                               on_press=lambda a: self.parent.handle_login(
                                                           self.__username_input.text,
                                                           self.__password)))

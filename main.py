@@ -9,7 +9,7 @@ from kivy.core.window import Window
 from AdventureSkiing.Widgets.MyLoginManager import MyLoginManager
 
 
-class ExampleApp(App):
+class AdventureSkiing(App):
     # TODO export errorcodes , create class performing notification about error
     # TODO export all messages to file with dict ( languages ).
     # TODO add new feature - setting instructors availability
@@ -19,4 +19,4 @@ class ExampleApp(App):
 
 
 if __name__ == '__main__':
-    ExampleApp().run()
+    AdventureSkiing().run()
