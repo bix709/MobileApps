@@ -5,13 +5,13 @@
 """
 from kivy.app import App
 
-from AdventureSkiing.Widgets.CalendarScreen import CalendarScreen
-from AdventureSkiing.Widgets.DailyScreen import DailyScreen
-from AdventureSkiing.Widgets.EarningsScreen import EarningsScreen
-from AdventureSkiing.Widgets.TodayScreen import TodayScreen
-from AdventureSkiing.Widgets.UserChooser import UserChooser
+from adventureskiing.Widgets.CalendarScreen import CalendarScreen
+from adventureskiing.Widgets.DailyScreen import DailyScreen
+from adventureskiing.Widgets.EarningsScreen import EarningsScreen
+from adventureskiing.Widgets.TodayScreen import TodayScreen
+from adventureskiing.Widgets.UserChooser import UserChooser
 
-from AdventureSkiing.Widgets.MaintenanceScreen import MaintenanceScreen
+from adventureskiing.Widgets.MaintenanceScreen import MaintenanceScreen
 from common_widgets.LoginManager import LoginManager
 from common_widgets.TabbedCarousel import CarouselWithActionBar
 

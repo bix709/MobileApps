@@ -6,7 +6,7 @@
 
 from time import sleep
 import mysql.connector
-from AdventureSkiing.Database.db_config.config import mysql_config as db_config
+from adventureskiing.Database.db_config.config import mysql_config as db_config
 from common_database.ErrorHandlers import *
 
 

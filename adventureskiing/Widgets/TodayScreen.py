@@ -9,9 +9,9 @@ from time import gmtime
 from kivy.app import App
 from kivy.uix.dropdown import DropDown
 
-from AdventureSkiing.Database.Callbacks import GetUnoccupied
-from AdventureSkiing.Utils.Users import UserButton
-from AdventureSkiing.Widgets.LessonsPopup import LessonPopup
+from adventureskiing.Database.Callbacks import GetUnoccupied
+from adventureskiing.Utils.Users import UserButton
+from adventureskiing.Widgets.LessonsPopup import LessonPopup
 from common_callbacks.Callbacks import schedule_task
 from common_widgets.FittingLabels import FontFittingButton
 from common_widgets.Screens import ScrollableScreen

@@ -9,9 +9,9 @@ from kivy.uix.dropdown import DropDown
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 
-from AdventureSkiing.Config.config import privileges
-from AdventureSkiing.Database.Callbacks import PasswordChange, CreateUser, UsersToChoose, RemoveUser, ChangePermissions
-from AdventureSkiing.Utils.Users import UserButton
+from adventureskiing.Config.config import privileges
+from adventureskiing.Database.Callbacks import PasswordChange, CreateUser, UsersToChoose, RemoveUser, ChangePermissions
+from adventureskiing.Utils.Users import UserButton
 from common_callbacks.Callbacks import schedule_task
 from common_widgets.FittingLabels import FontFittingButton, FontFittingLabel
 

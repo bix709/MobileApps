@@ -8,7 +8,7 @@ from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.uix.textinput import TextInput
 
-from AdventureSkiing.Database.Callbacks import InsertNewLesson, RemoveLesson
+from adventureskiing.Database.Callbacks import InsertNewLesson, RemoveLesson
 from common_callbacks.Callbacks import schedule_task
 from common_widgets.CommonPopups import CommonPopup
 from common_widgets.FittingLabels import FontFittingButton, FontFittingLabel

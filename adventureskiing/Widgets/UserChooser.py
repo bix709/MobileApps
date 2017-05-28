@@ -6,9 +6,9 @@
 from kivy.app import App
 from kivy.uix.actionbar import ActionGroup
 
-from AdventureSkiing.Database.Callbacks import UsersToChoose
+from adventureskiing.Database.Callbacks import UsersToChoose
 from common_callbacks.Callbacks import schedule_task
-from AdventureSkiing.Utils.Users import ActionUserButton
+from adventureskiing.Utils.Users import ActionUserButton
 
 
 class UserChooser(ActionGroup):  # TODO fix size issues ( not opening spinner ) and resizing exception issue, close dropdown!

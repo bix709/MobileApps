@@ -7,7 +7,7 @@ from kivy.app import App
 from kivy.uix.screenmanager import FadeTransition
 from kivy.uix.screenmanager import ScreenManager
 
-from AdventureSkiing.Database.Callbacks import LoginCallback
+from adventureskiing.Database.Callbacks import LoginCallback
 from common_callbacks.Callbacks import schedule_task
 from common_widgets.RootWidget import RootWidget
 from common_widgets.Screens import BackgroundAdjustableScreen, LoginScreen

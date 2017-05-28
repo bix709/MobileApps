@@ -6,7 +6,7 @@
 from kivy.app import App
 from kivy.core.window import Window
 
-from AdventureSkiing.Widgets.MyLoginManager import MyLoginManager
+from adventureskiing.Widgets.MyLoginManager import MyLoginManager
 
 
 class AdventureSkiing(App):
@@ -14,7 +14,6 @@ class AdventureSkiing(App):
     # TODO export all messages to file with dict ( languages ).
     # TODO add new feature - setting instructors availability
     def build(self):
-        Window.size = (230, 365)
         return MyLoginManager()
 
 

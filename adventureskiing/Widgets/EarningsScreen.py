@@ -14,7 +14,7 @@ from kivy.uix.dropdown import DropDown
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 
-from AdventureSkiing.Database.Callbacks import GetEarnings
+from adventureskiing.Database.Callbacks import GetEarnings
 from common_callbacks.Callbacks import schedule_task
 from common_widgets.FittingLabels import FontFittingButton, FontFittingLabel
 from common_widgets.Screens import ScrollableScreen

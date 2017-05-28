@@ -5,11 +5,11 @@
 """
 from contextlib import contextmanager
 
-from AdventureSkiing.Config.config import privileges
-from AdventureSkiing.Database.MySQL.SqlCmdChoosers import EarningsCmdChooser
-from AdventureSkiing.Utils.Users import User
-from AdventureSkiing.Utils.cennik import cennik
-from common_database.MySqlConnection import DatabaseConnection, sys
+from adventureskiing.Config.config import privileges
+from adventureskiing.Database.Oracle.SqlCmdChoosers import EarningsCmdChooser
+from adventureskiing.Utils.Users import User
+from adventureskiing.Utils.cennik import cennik
+from common_database.OracleConnection import DatabaseConnection, sys
 from common_tools.ThreadSynchronization import mark_task_as_done
 
 
@@ -35,7 +35,7 @@ class SqlCommands(object):
         try:
             query = DatabaseConnection().fetch_query(
                 "select imie, nazwisko, id, uprawnienia "
-                "from instruktorzy "
+                "from Instruktorzy "
                 "where login = '{}' and password = '{}'".format(username, password))
             if query:
                 return [result for result in query][0]
@@ -50,7 +50,7 @@ class SqlCommands(object):
             query = DatabaseConnection().fetch_query("select godzina, imie, wiek, ilosc_osob, id "
                                                      "from lekcja "
                                                      "where id_instruktora = {} "
-                                                     "and data = STR_TO_DATE('{}', '%Y/%m/%d')".format(user.id, day))
+                                                     "and data = TO_DATE('{}', 'yyyy/mm/dd')".format(user.id, day))
             if query:
                 for result in query:
                     busy_hours[result[0]] = ("{}.00 | {}, {}lat. #{}os.".format(*result[:-1]), result[-1])
@@ -74,25 +74,32 @@ class SqlCommands(object):
 
     @staticmethod
     @mark_task_as_done
-    def insert_new_lesson(number_of_people, *args, **kwargs): # TODO bezsensu, refactoring !!
+    def insert_new_lesson(number_of_people, *args, **kwargs):
         try:
             cmd = "Select id from lekcja where id_instruktora = {instructor} and " \
                   "godzina = {godzina} and " \
-                  "data = STR_TO_DATE('{data}', '%Y/%m/%d')".format(instructor=kwargs['user'].id,
-                                                                    godzina=kwargs['hour'], data=kwargs['date'])
+                  "data = TO_DATE('{data}', 'yyyy/mm/dd')".format(instructor=kwargs['user'].id,
+                                                                  godzina=kwargs['hour'], data=kwargs['date'])
             query = DatabaseConnection().fetch_query(cmd)
-            if len(query) != 0: return False
+            if query:
+                if len([result for result in query]) != 0:
+                    return False
             if kwargs.get('name').isalpha() and kwargs.get('age').isdigit():
-                if not kwargs['lesson_id'] == "0":
+                if kwargs['lesson_id'] == "0":
+                    query = DatabaseConnection().fetch_query("select lesson_id_seq.nextval from dual")
+                    if query:
+                        kwargs['lesson_id'] = [result for result in query][0][0]
+                else:
                     DatabaseConnection().execute_command("delete from lekcja where id = {}".format(kwargs['lesson_id']))
 
                 DatabaseConnection().execute_command("insert into lekcja "
-                                                     "(imie, godzina, data, ilosc_osob, koszt, id_instruktora, wiek) "
-                                                     "values ('{imie}', {godzina}, STR_TO_DATE('{data}', '%Y/%m/%d'), "
-                                                     "{ilosc_osob}, {koszt}, {id_instruktora}, {wiek})"
+                                                     "(imie, godzina, data, ilosc_osob, koszt, id, id_instruktora, wiek) "
+                                                     "values ('{imie}', {godzina}, TO_DATE('{data}', 'yyyy/mm/dd'), "
+                                                     "{ilosc_osob}, {koszt}, {lesson_id}, {id_instruktora}, {wiek})"
                                                      .format(imie=kwargs['name'], godzina=kwargs['hour'],
                                                              data=kwargs['date'], ilosc_osob=number_of_people,
                                                              koszt=cennik.get(int(number_of_people), 0),
+                                                             lesson_id=kwargs['lesson_id'],
                                                              id_instruktora=kwargs['user'].id, wiek=kwargs['age']))
                 return True
         except:
@@ -114,12 +121,15 @@ class SqlCommands(object):
         try:
             all_instructors = busy_instructors = {}
             query = DatabaseConnection().fetch_query("select imie, nazwisko, id from instruktorzy")
-            all_instructors = set([result for result in query])
+
+            if query:
+                all_instructors = set([result for result in query])
             query = DatabaseConnection().fetch_query("select instruktorzy.imie, instruktorzy.nazwisko, "
                                                      "instruktorzy.id from instruktorzy join "
                                                      "lekcja on instruktorzy.id = lekcja.id_instruktora where data = "
-                                                     "STR_TO_DATE('{}', '%Y/%m/%d') and godzina = {}".format(date, hour))
-            busy_instructors = set([result for result in query])
+                                                     "TO_DATE('{}', 'yyyy/mm/dd') and godzina = {}".format(date, hour))
+            if query:
+                busy_instructors = set([result for result in query])
             for instructor in list(all_instructors - busy_instructors):
                 unoccupied_instructors.append(User(name=instructor[0], user_id=instructor[2],
                                                    permission="User", lastname=instructor[1]))
@@ -158,11 +168,12 @@ class SqlCommands(object):
                     with ignored(IndexError):
                         if [result for result in query][0][0] == login:
                             return False
-                cmd = "Insert into instruktorzy (login, password, imie, nazwisko, uprawnienia) values " \
-                      "('{login}', '{password}', '{firstname}', '{lastname}', 'User')".format(firstname=firstname,
-                                                                                              lastname=lastname,
-                                                                                              login=login,
-                                                                                              password=hash(login))
+                cmd = "Insert into instruktorzy (id, login, password, imie, nazwisko, uprawnienia) values " \
+                      "(instruktorzy_id_seq.nextval, " \
+                      "'{login}', '{password}', '{firstname}', '{lastname}', 'User')".format(firstname=firstname,
+                                                                                             lastname=lastname,
+                                                                                             login=login,
+                                                                                             password=hash(login))
                 DatabaseConnection().execute_command(cmd)
                 query = DatabaseConnection().fetch_query(
                     "Select login from instruktorzy where login='{}'".format(login))
