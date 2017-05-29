@@ -21,14 +21,14 @@ class BackgroundAdjustableScreen(Screen):
         self.background_img = background_img
         self.background_instruction = InstructionGroup()
         self.set_up_background_image()
-        Window.bind(on_resize=self.fit_to_window, on_rotate=self.fit_to_window)
+        self.bind(size=self.fit_to_window)
 
     def set_up_background_image(self):
         if self.background_img:
             self.background_instruction.add(Rectangle(pos=self.pos, size=Window.size, source=self.background_img))
             self.canvas.add(self.background_instruction)
 
-    def fit_to_window(self, window, width, height):
+    def fit_to_window(self, *args):
         rectangle = (Rectangle(pos=self.pos, size=Window.size, source=self.background_img))
         self.background_instruction.clear()
         self.background_instruction.add(rectangle)
