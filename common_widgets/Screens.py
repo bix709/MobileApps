@@ -21,7 +21,7 @@ class BackgroundAdjustableScreen(Screen):
         self.background_img = background_img
         self.background_instruction = InstructionGroup()
         self.set_up_background_image()
-        Window.bind(on_resize=self.fit_to_window)
+        Window.bind(on_resize=self.fit_to_window, on_rotate=self.fit_to_window)
 
     def set_up_background_image(self):
         if self.background_img:

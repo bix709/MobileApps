@@ -13,6 +13,9 @@ class AdventureSkiing(App):
     # TODO export errorcodes , create class performing notification about error
     # TODO export all messages to file with dict ( languages ).
     # TODO add new feature - setting instructors availability
+    # TODO dailsyscreen stays on previous day when after 0.00 (probably to 1:00 ) - check time
+    # TODO - resize on rotation
+    # TODO - resize user panel ( when portrait rotation should be wrapped to group button )
     def build(self):
         return MyLoginManager()
 
