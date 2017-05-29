@@ -25,17 +25,13 @@ class BackgroundAdjustableScreen(Screen):
 
     def set_up_background_image(self):
         if self.background_img:
-            self.background_instruction.add(Rectangle(pos=self.pos, size=self.size, source=self.background_img))
+            self.background_instruction.add(Rectangle(pos=self.pos, size=Window.size, source=self.background_img))
             self.canvas.add(self.background_instruction)
 
     def fit_to_window(self, window, width, height):
-        rectangle = (Rectangle(pos=self.pos, size=(width, height), source=self.background_img))
-        self.canvas_background.clear()
-        self.canvas_background.add(rectangle)
-
-    @property
-    def canvas_background(self):
-        return list(filter(lambda a: a == self.background_instruction, self.canvas.children))[0]
+        rectangle = (Rectangle(pos=self.pos, size=Window.size, source=self.background_img))
+        self.background_instruction.clear()
+        self.background_instruction.add(rectangle)
 
 
 class LoginScreen(BackgroundAdjustableScreen):
