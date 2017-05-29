@@ -9,6 +9,8 @@ from kivy.uix.actionbar import *
 from kivy.uix.screenmanager import Screen
 from kivy.uix.carousel import Carousel
 
+from common_widgets.Screens import BackgroundAdjustableScreen, Rectangle
+
 
 class CustomCarousel(Carousel):
 
@@ -17,6 +19,7 @@ class CustomCarousel(Carousel):
         current_tab = str(self.slides.index(self.current_slide))
         self.set_tab_states_to_normal()
         self.set_tab_down(current_tab)
+        self.adjust_background()
 
     def set_tab_down(self, current_tab):
         try:
@@ -29,6 +32,10 @@ class CustomCarousel(Carousel):
         for tab in self.parent.action_buttons:
             tab.state = 'normal'
 
+    def adjust_background(self):
+        self.parent.canvas.before.add(
+            Rectangle(pos=self.pos, size=Window.size, source=self._curr_slide().background_img))
+
 
 class CustomActionBar(ActionBar):  # TODO Action previous action - getting back to prev screen
     def __init__(self, **kwargs):
@@ -37,7 +44,7 @@ class CustomActionBar(ActionBar):  # TODO Action previous action - getting back 
         self.action_view.add_widget(ActionPrevious())
 
 
-class CarouselWithActionBar(Screen):
+class CarouselWithActionBar(BackgroundAdjustableScreen):
     def __init__(self, **kwargs):
         self.actionBar = self.action_buttons = self.carousel = None
         super(CarouselWithActionBar, self).__init__(name='CarouselWithActionBar', **kwargs)
