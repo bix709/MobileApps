@@ -34,11 +34,11 @@ class MyLoginManager(LoginManager):
         if self.logged_user.privileges == "Admin":
             self.user_chooser = UserChooser()
             caro.actionBar.action_view.add_widget(self.user_chooser)
-        caro.add_screen(CalendarScreen(background_img='{}/graphics/b3.png'.format(App.get_running_app().name), name='Calendar'))
-        caro.add_screen(DailyScreen(background_img='{}/graphics/b4.png'.format(App.get_running_app().name), name='DailyScreen'))
-        caro.add_screen(TodayScreen(background_img='{}/graphics/b5.png'.format(App.get_running_app().name), name='Today'))
-        caro.add_screen(EarningsScreen(background_img='{}/graphics/tlo1.jpg'.format(App.get_running_app().name), name='Earnings'))
-        caro.add_screen(MaintenanceScreen(background_img='{}/graphics/tlo2.jpg'.format(App.get_running_app().name), name='Options'))
+        caro.add_screen(CalendarScreen(background_img='{}/graphics/bg.jpg'.format(App.get_running_app().name), name='Calendar'))
+        caro.add_screen(DailyScreen(background_img='{}/graphics/bg.jpg'.format(App.get_running_app().name), name='DailyScreen'))
+        caro.add_screen(TodayScreen(background_img='{}/graphics/bg.jpg'.format(App.get_running_app().name), name='Today'))
+        caro.add_screen(EarningsScreen(background_img='{}/graphics/bg.jpg'.format(App.get_running_app().name), name='Earnings'))
+        caro.add_screen(MaintenanceScreen(background_img='{}/graphics/bg.jpg'.format(App.get_running_app().name), name='Options'))
 
     def logout(self):
         super(MyLoginManager, self).logout()

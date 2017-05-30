@@ -18,6 +18,7 @@ class AdventureSkiing(App):
     # TODO refactoring - remove redundant IFs in db_commands, remove  redundant iterations , when casting to tuples/lists
     # TODO dailsyscreen stays on previous day when after 0.00 (probably to 1:00 ) - check time
     # TODO zmiana hasla wywala apke !
+    # TODO refactoring - no communication via returning none, true, false in db_commands. do it via exceptions.
     def build(self):
         return MyLoginManager()
 

@@ -18,12 +18,12 @@ class LoginManager(ScreenManager, RootWidget):
         """ This widget is supposed to be root of application! """
         super(LoginManager, self).__init__(id="LoginManager", transition=FadeTransition(), **kwargs)
         self.logged_user = None
-        self.add_widget(LoginScreen(background_img='{}/graphics/LoginScreen.jpg'.format(App.get_running_app().name)))
+        self.add_widget(LoginScreen(background_img='{}/graphics/bg.jpg'.format(App.get_running_app().name)))
         self.setup_screens()
 
     def setup_screens(self):
         """ Override this method to set up screens to be displayed after correct_login. """
-        self.add_widget(BackgroundAdjustableScreen(background_img='{}/graphics/tlo2.jpg'.format(App.get_running_app().name),
+        self.add_widget(BackgroundAdjustableScreen(background_img='{}/graphics/bg.jpg'.format(App.get_running_app().name),
                                                    name='First Screen'))
 
     def handle_login(self, username, password):
