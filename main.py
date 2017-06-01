@@ -20,6 +20,7 @@ class AdventureSkiing(App):
     # TODO zmiana hasla wywala apke !
     # TODO refactoring - no communication via returning none, true, false in db_commands. do it via exceptions.
     def build(self):
+        self.icon = "{}/graphics/logo.png".format(self.name)
         return MyLoginManager()
 
 
