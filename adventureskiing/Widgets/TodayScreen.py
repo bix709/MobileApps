@@ -27,8 +27,7 @@ class TodayScreen(ScrollableScreen):
         for hour in range(9, 21):
             if hour > time.gmtime().tm_hour:
                 self.main_layout.add_widget(FontFittingButton(text="{}.00 - {}.50".format(hour, hour),
-                                                              id="{}".format(hour),
-                                                              size_hint_y=None, height=45,
+                                                              id="{}".format(hour), size_hint_y=None,
                                                               on_press=lambda a: self.display_unoccupied(a)))
 
     def display_unoccupied(self, instance):
@@ -45,7 +44,7 @@ class TodayScreen(ScrollableScreen):
         if unoccupied_instructors is not None:
             for instructor in unoccupied_instructors:
                 self.unoccupied_users.add_widget(UserButton(text="{}".format(instructor.name), user=instructor,
-                                                            size_hint_y=None, height=40,
+                                                            size_hint_y=None,
                                                             on_press=lambda a: self.add_lesson(a, instance)))
             self.unoccupied_users.open(instance)
 

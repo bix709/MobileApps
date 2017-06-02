@@ -22,11 +22,10 @@ class DailyScreen(ScrollableScreen):
 
     def setup_widgets(self):
         today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
-        self.main_layout.add_widget(FontFittingLabel(text='Grafik z dnia {}'.format(self.day), height=45,
-                                                     size_hint_y=None))
-        self.main_layout.add_widget(FontFittingButton(text='Refresh', height=45, size_hint_y=None,
+        self.main_layout.add_widget(FontFittingLabel(text='Grafik z dnia {}'.format(self.day), size_hint_y=None))
+        self.main_layout.add_widget(FontFittingButton(text='Refresh', size_hint_y=None,
                                                       on_press=lambda a: self.refresh(self.day)))
-        self.main_layout.add_widget(FontFittingButton(text='Pokaz dzisiejszy', height=45, size_hint_y=None,
+        self.main_layout.add_widget(FontFittingButton(text='Pokaz dzisiejszy', size_hint_y=None,
                                                       on_press=lambda a: self.refresh(today)))
         self.get_day_schedule()
 
@@ -53,7 +52,7 @@ class DailyScreen(ScrollableScreen):
                 color = (0, 1, 0, 1)
             finally:
                 self.main_layout.add_widget(FontFittingButton(text='{}'.format(lesson_info), id="{}".format(lesson_id),
-                                                              height=45, on_press=lambda a: self.show_lesson_details(a),
+                                                              on_press=lambda a: self.show_lesson_details(a),
                                                               size_hint_y=None, background_color=color))
 
     def show_lesson_details(self, button_instance):
