@@ -66,7 +66,7 @@ class LoginScreen(BackgroundAdjustableScreen):
                                                      text="Password:"))
         self.main_layout.add_widget(self.__password_input)
         self.main_layout.add_widget(
-            FontFittingButton(background_normal="{}/graphics/LoginButton.png".format(App.get_running_app().name),
+            FontFittingButton(background_normal="{}/graphics/loginbutton.png".format(App.get_running_app().name),
                               text="Zaloguj!", color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30,
                               on_press=lambda a: self.parent.handle_login(
                                                           self.__username_input.text,
