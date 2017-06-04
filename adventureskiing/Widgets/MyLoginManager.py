@@ -45,7 +45,7 @@ class MyLoginManager(LoginManager):
         caro.add_screen(EarningsScreen(**earningscreen_properties))
         caro.add_screen(MaintenanceScreen(**maintenancescreen_properties))
 
-    def logout(self):
+    def logout(self, *args, **kwargs):
         super(MyLoginManager, self).logout()
         self.choosen_user = None
         self.get_screen("CarouselWithActionBar").reinitialize()
