@@ -7,10 +7,15 @@ from kivy.core.window import Window
 from kivy.uix.actionbar import *
 from kivy.uix.carousel import Carousel
 
+from adventureskiing.Database.MySQL.db_commands import ignored
 from common_widgets.Screens import BackgroundAdjustableScreen, Rectangle
 
 
 class CustomCarousel(Carousel):
+
+    def __init__(self, **kwargs):
+        super(CustomCarousel, self).__init__(**kwargs)
+        self.bind(size=self.adjust_background)
 
     def on_index(self, *args):
         super(CustomCarousel, self).on_index(*args)
@@ -30,9 +35,10 @@ class CustomCarousel(Carousel):
         for tab in self.parent.action_buttons:
             tab.state = 'normal'
 
-    def adjust_background(self):
-        self.parent.canvas.before.add(
-            Rectangle(pos=self.pos, size=Window.size, source=self._curr_slide().background_img))
+    def adjust_background(self, *args, **kwargs):
+        with ignored(Exception):
+            self.parent.canvas.before.add(
+                Rectangle(pos=self.pos, size=Window.size, source=self._curr_slide().background_img))
 
 
 class CustomActionBar(ActionBar):  # TODO Action previous action - getting back to prev screen
@@ -54,7 +60,7 @@ class CarouselWithActionBar(BackgroundAdjustableScreen):
     def initialize(self):
         self.actionBar = CustomActionBar(id='actionBar',
                                          **self.action_bar_properties)
-        self.carousel = CustomCarousel(id='carousel')
+        self.carousel = CustomCarousel(id='carousel', size_hint_y=0.9)
         self.add_widget(self.carousel)
         self.add_widget(self.actionBar)
         self.action_buttons = []

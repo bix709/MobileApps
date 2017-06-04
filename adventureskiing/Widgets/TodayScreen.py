@@ -21,6 +21,7 @@ class TodayScreen(ScrollableScreen):
     def __init__(self, **kwargs):
         self.unoccupied_users = DropDown()
         self.today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
+        self.button_properties = kwargs.pop('buttons_properties', dict())
         super(TodayScreen, self).__init__(**kwargs)
 
     def setup_widgets(self):
@@ -28,7 +29,8 @@ class TodayScreen(ScrollableScreen):
             if hour > time.gmtime().tm_hour:
                 self.main_layout.add_widget(FontFittingButton(text="{}.00 - {}.50".format(hour, hour),
                                                               id="{}".format(hour), size_hint_y=None,
-                                                              on_press=lambda a: self.display_unoccupied(a)))
+                                                              on_press=lambda a: self.display_unoccupied(a),
+                                                              **self.button_properties))
 
     def display_unoccupied(self, instance):
         db_kwargs = {

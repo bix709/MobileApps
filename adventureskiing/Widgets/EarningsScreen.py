@@ -24,6 +24,7 @@ class EarningsScreen(ScrollableScreen):  # TODO issue with Dropdown not opening 
     def __init__(self, **kwargs):
         self.today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
         self.header_font_color = kwargs.pop('header_font_color', (1, 1, 1, 1))
+        self.button_properties = kwargs.pop('buttons_properties', dict())
         super(EarningsScreen, self).__init__(**kwargs)
         self.main_layout.height = Window.height * 0.9
 
@@ -54,20 +55,24 @@ class EarningsScreen(ScrollableScreen):  # TODO issue with Dropdown not opening 
         period_chooser = DropDown()
         for x in self.dates:
             period_chooser.add_widget(Button(text="{}".format(x), size_hint_y=None, height=33,
-                                             on_release=lambda a: period_chooser.select(a.text)))
-        self.choosen = FontFittingButton(text="Dzis", size_hint=(1, 1))
+                                             on_release=lambda a: period_chooser.select(a.text),
+                                             **self.button_properties))
+        self.choosen = FontFittingButton(text="Dzis", size_hint=(1, 1), **self.button_properties)
         self.choosen.bind(on_release=lambda a: period_chooser.open(self.choosen))
         period_chooser.bind(on_select=lambda instance, z: setattr(self.choosen, 'text', z))
         self.main_layout.add_widget(FontFittingLabel(text="Wybierz okres rozliczeniowy:", size_hint=(1, 1),
                                                      color=self.header_font_color))
         self.main_layout.add_widget(self.choosen)
         self.main_layout.add_widget(FontFittingButton(text="Wybierz inny dzień", size_hint=(1, 1),
-                                                      on_press=lambda a: self.choose_other_date()))
+                                                      on_press=lambda a: self.choose_other_date(),
+                                                      **self.button_properties))
         self.main_layout.add_widget(FontFittingButton(text="Wyswietl", size_hint=(1, 1),
-                                                      on_press=lambda a: self.display_choosen()))
+                                                      on_press=lambda a: self.display_choosen(),
+                                                      **self.button_properties))
         if App.get_running_app().root.logged_user.privileges == 'Admin':
             self.main_layout.add_widget(FontFittingButton(text="Wyswietl łączne zarobki", size_hint=(1, 1),
-                                                          on_press=lambda a: self.display_choosen(all_users=True)))
+                                                          on_press=lambda a: self.display_choosen(all_users=True),
+                                                          **self.button_properties))
 
     def choose_other_date(self):
         OtherDatePopup(caller=self).open()

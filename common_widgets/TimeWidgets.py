@@ -20,7 +20,7 @@ months_of_the_year = {1: "Styczeń", 2: "Luty", 3: "Marzec", 4: "Kwiecień", 5: 
 
 class CommonCalendar(BoxLayout):
     def __init__(self, **kwargs):
-        super(CommonCalendar, self).__init__(size_hint_y=0.9, **kwargs)
+        super(CommonCalendar, self).__init__(**kwargs)
         self.month_header_font_color = kwargs.get('month_header_font_color', (1, 1, 1, 1))
         self.days_header_font_color = kwargs.get('days_header_font_color', (1, 1, 1, 1))
         self.days_button_color = kwargs.get('days_button_color', (1, 1, 1, 1))

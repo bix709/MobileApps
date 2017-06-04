@@ -20,10 +20,10 @@ class AdventureSkiing(App):
     # TODO dailsyscreen stays on previous day when after 0.00 (probably to 1:00 ) - check time
     # TODO zmiana hasla wywala apke !
     # TODO refactoring - no communication via returning none, true, false in db_commands. do it via exceptions.
+    # TODO Changing state of already down action button on click
     icon = 'adventureskiing/graphics/logo.png'
 
     def build(self):
-        Window.size = (250, 450)
         Window.icon = 'adventureskiing/graphics/logo.png'
         return MyLoginManager()
 

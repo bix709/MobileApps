@@ -18,6 +18,8 @@ from common_widgets.Screens import ScrollableScreen
 class DailyScreen(ScrollableScreen):
     def __init__(self, *args, **kwargs):
         self.day = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
+        self.busy_buttons_properties = kwargs.pop('busy_buttons_properties', dict())
+        self.configuration_buttons_properties = kwargs.pop('configuration_buttons_properties', dict())
         self.header_font_color = kwargs.pop('header_font_color', (1, 1, 1, 1))
         super(DailyScreen, self).__init__(id='DailyScreen', *args, **kwargs)
 
@@ -26,9 +28,11 @@ class DailyScreen(ScrollableScreen):
         self.main_layout.add_widget(FontFittingLabel(text='Grafik z dnia {}'.format(self.day),
                                                      color=self.header_font_color, size_hint_y=None))
         self.main_layout.add_widget(FontFittingButton(text='Odśwież', size_hint_y=None,
-                                                      on_press=lambda a: self.refresh(self.day)))
+                                                      on_press=lambda a: self.refresh(self.day),
+                                                      **self.configuration_buttons_properties))
         self.main_layout.add_widget(FontFittingButton(text='Pokaz dzisiejszy', size_hint_y=None,
-                                                      on_press=lambda a: self.refresh(today)))
+                                                      on_press=lambda a: self.refresh(today),
+                                                      **self.configuration_buttons_properties))
         self.get_day_schedule()
 
     def get_day_schedule(self):
@@ -47,15 +51,15 @@ class DailyScreen(ScrollableScreen):
         for hour in range(9, 21):
             try:
                 lesson_info, lesson_id = busy_hours[hour]
-                color = (1, 0, 0, 1)
+                properties = self.busy_buttons_properties
             except KeyError:
                 lesson_info = '{}.00 - {}.50'.format(hour, hour)
                 lesson_id = "0"
-                color = (0, 1, 0, 1)
+                properties = {'background_color': (0, 1, 0, 1)}
             finally:
                 self.main_layout.add_widget(FontFittingButton(text='{}'.format(lesson_info), id="{}".format(lesson_id),
                                                               on_press=lambda a: self.show_lesson_details(a),
-                                                              size_hint_y=None, background_color=color))
+                                                              size_hint_y=None, **properties))
 
     def show_lesson_details(self, button_instance):
         lesson_info = self.get_lesson_info(button_instance)
