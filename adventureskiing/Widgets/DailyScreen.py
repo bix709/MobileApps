@@ -18,12 +18,14 @@ from common_widgets.Screens import ScrollableScreen
 class DailyScreen(ScrollableScreen):
     def __init__(self, *args, **kwargs):
         self.day = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
-        super(DailyScreen, self).__init__(*args, **kwargs)
+        self.header_font_color = kwargs.pop('header_font_color', (1, 1, 1, 1))
+        super(DailyScreen, self).__init__(id='DailyScreen', *args, **kwargs)
 
     def setup_widgets(self):
         today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
-        self.main_layout.add_widget(FontFittingLabel(text='Grafik z dnia {}'.format(self.day), size_hint_y=None))
-        self.main_layout.add_widget(FontFittingButton(text='Refresh', size_hint_y=None,
+        self.main_layout.add_widget(FontFittingLabel(text='Grafik z dnia {}'.format(self.day),
+                                                     color=self.header_font_color, size_hint_y=None))
+        self.main_layout.add_widget(FontFittingButton(text='Odśwież', size_hint_y=None,
                                                       on_press=lambda a: self.refresh(self.day)))
         self.main_layout.add_widget(FontFittingButton(text='Pokaz dzisiejszy', size_hint_y=None,
                                                       on_press=lambda a: self.refresh(today)))

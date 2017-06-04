@@ -3,10 +3,8 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
-from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.actionbar import *
-from kivy.uix.screenmanager import Screen
 from kivy.uix.carousel import Carousel
 
 from common_widgets.Screens import BackgroundAdjustableScreen, Rectangle
@@ -39,21 +37,23 @@ class CustomCarousel(Carousel):
 
 class CustomActionBar(ActionBar):  # TODO Action previous action - getting back to prev screen
     def __init__(self, **kwargs):
+        action_prev_properties = kwargs.pop('action_prev_properties')
         super(CustomActionBar, self).__init__(**kwargs)
         self.add_widget(ActionView())
-        self.action_view.add_widget(ActionPrevious())
+        self.action_view.add_widget(ActionPrevious(**action_prev_properties))
 
 
 class CarouselWithActionBar(BackgroundAdjustableScreen):
     def __init__(self, **kwargs):
+        self.action_bar_properties = kwargs.pop('action_bar_properties', dict())
+        self.action_button_properties = kwargs.pop('action_button_properties', dict())
         self.actionBar = self.action_buttons = self.carousel = None
         super(CarouselWithActionBar, self).__init__(name='CarouselWithActionBar', **kwargs)
         self.initialize()
 
     def initialize(self):
         self.actionBar = CustomActionBar(id='actionBar',
-                                         background_image='{}/graphics/jzielony.png'.format(App.get_running_app().name),
-                                         pos_hint={'x': 0, 'y': 0.9}, size_hint_y=0.1)
+                                         **self.action_bar_properties)
         self.carousel = CustomCarousel(id='carousel')
         self.add_widget(self.carousel)
         self.add_widget(self.actionBar)
@@ -66,10 +66,9 @@ class CarouselWithActionBar(BackgroundAdjustableScreen):
         button_state = 'down' if index == 0 else 'normal'
         action_view = self.actionBar.action_view
         # action_view.add_widget(ActionSeparator())  # TODO handle separators. ( throwing exception after resize )
-        action_button = ActionButton(id=str(index), size_hint=(None, 1), state=button_state,
-                                     background_down='{}/graphics/b5.png'.format(App.get_running_app().name),
-                                     color=(0, 0, 0, 1), text=screen.name,
-                                     on_press=lambda a: self.carousel.load_slide(self.carousel.slides[int(a.id)]))
+        action_button = ActionButton(id=str(index), size_hint=(None, 1), state=button_state, text=screen.name,
+                                     on_press=lambda a: self.carousel.load_slide(self.carousel.slides[int(a.id)]),
+                                     **self.action_button_properties)
         self.action_buttons.append(action_button)
         action_view.add_widget(action_button)
 

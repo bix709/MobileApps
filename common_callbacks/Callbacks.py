@@ -8,6 +8,8 @@ from functools import wraps
 
 from kivy.app import App
 
+from common_tools.ThreadSynchronization import mark_task_as_done
+
 
 def wait_for_future_result(function):
     @wraps(function)
@@ -39,7 +41,7 @@ class CommonCallback(object):
         """ Override this method only if you know what you're doing! """
         with ThreadPoolExecutor(max_workers=2) as executor:
             executor.submit(self.perform_callback, *args, **kwargs)
-            self.database_query = executor.submit(self.sql_command, *self.database_args, **self.database_kwargs)
+            self.database_query = executor.submit(mark_task_as_done(self.sql_command), *self.database_args, **self.database_kwargs)
 
     def get_caller(self, **kwargs):
         """ Returns caller's screen. """

@@ -10,8 +10,8 @@ oracle_config = {
     'db_sid': 'AS'
 }
 mysql_config = {
-    'user': 'sql11176942',
-    'password': 'b1mUFdL5ru',
-    'host': 'sql11.freemysqlhosting.net',
-    'database': 'sql11176942'
+    'user': 'bix709_teter',
+    'password': 'fx0507',
+    'host': 'johnny.heliohost.org',
+    'database': 'bix709_adventureskiing'
 }

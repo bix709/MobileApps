@@ -23,7 +23,7 @@ class ConnectionErrorPopup(Popup):
     def create_main_layout(self):
         layout = BoxLayout(orientation='vertical', size_hint=(0.8, 0.8))
         layout.add_widget(FontFittingLabel(text=self.error_msg, text_size=self.size))
-        layout.add_widget(FontFittingButton(text="Exit", text_size=self.size,
+        layout.add_widget(FontFittingButton(text="X", text_size=self.size,
                                             on_press=lambda a: self.exit()))
         return layout
 
@@ -39,8 +39,8 @@ class ConnectionError(object):
         super(ConnectionError, self).__init__()
         self.current_screen = App.get_running_app().root.current
         self.current_screen_instance = App.get_running_app().root.get_screen(self.current_screen)
-        self.connection_error_label = FontFittingLabel(text="[color=FF0000][b]Connection error."
-                                                            "You will be reconnected automatically.[/b][/color]",
+        self.connection_error_label = FontFittingLabel(text="[color=FF0000][b]Błąd połączenia."
+                                                            "Sprawdź dostęp do internetu.[/b][/color]",
                                                        markup=True, size_hint=(1, 0.1), pos=(0, 0))
 
     def display_error(self):

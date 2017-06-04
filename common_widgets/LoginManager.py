@@ -14,17 +14,18 @@ from common_widgets.Screens import BackgroundAdjustableScreen, LoginScreen
 
 
 class LoginManager(ScreenManager, RootWidget):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, loginbutton_properties, credential_label_properties, loginscreen_properties, *args, **kwargs):
         """ This widget is supposed to be root of application! """
         super(LoginManager, self).__init__(id="LoginManager", transition=FadeTransition(), **kwargs)
         self.logged_user = None
-        self.add_widget(LoginScreen(background_img='{}/graphics/bg.jpg'.format(App.get_running_app().name)))
+        self.add_widget(LoginScreen(loginbutton_properties=loginbutton_properties,
+                                    credential_label_properties=credential_label_properties,
+                                    **loginscreen_properties))
         self.setup_screens()
 
     def setup_screens(self):
         """ Override this method to set up screens to be displayed after correct_login. """
-        self.add_widget(BackgroundAdjustableScreen(background_img='{}/graphics/bg.jpg'.format(App.get_running_app().name),
-                                                   name='First Screen'))
+        pass
 
     def handle_login(self, username, password):
         args = db_args = ()

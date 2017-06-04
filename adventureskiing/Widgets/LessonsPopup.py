@@ -3,15 +3,14 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
-from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.uix.textinput import TextInput
 
 from adventureskiing.Database.Callbacks import InsertNewLesson, RemoveLesson
-from common_callbacks.Callbacks import schedule_task
 from common_widgets.CommonPopups import CommonPopup
 from common_widgets.FittingLabels import FontFittingButton, FontFittingLabel
+from adventureskiing.Widgets.DailyScreen import *
 
 
 class LessonPopup(CommonPopup):  # TODO refactoring ( focusing inputs etc. )
@@ -32,7 +31,7 @@ class LessonPopup(CommonPopup):  # TODO refactoring ( focusing inputs etc. )
         self.setup_input_fields()
         self.setup_number_chooser()
         self.main_layout.add_widget(FontFittingButton(text="Zatwierdz", on_press=lambda a: self.confirm()))
-        self.main_layout.add_widget(FontFittingButton(text="Anuluj", on_press=lambda a: self.cancel_lesson()))
+        self.main_layout.add_widget(FontFittingButton(text="Usuń lekcję", on_press=lambda a: self.cancel_lesson()))
 
     def setup_input_fields(self):
         self.main_layout.add_widget(FontFittingLabel(text="Imie:"))
@@ -77,13 +76,13 @@ class LessonPopup(CommonPopup):  # TODO refactoring ( focusing inputs etc. )
     def on_successful_execution(self, added_successfully, **kwargs):
         if added_successfully:
             caro = App.get_running_app().root.get_screen("CarouselWithActionBar").carousel
-            daily_graph = list(filter(lambda a: a.name == "DailyScreen", caro.slides))[0]
+            daily_graph = list(filter(lambda a: a.id == 'DailyScreen', caro.slides))[0]
             daily_graph.refresh(self.date)
             self.dismiss()
         elif added_successfully is False:
-            self.display_error('Lesson already exists! Refresh your calendar.')
+            self.display_error('Lekcja juz istnieje! Odśwież swój grafik!')
         else:
-            self.display_error('Please fill in fields with correct data.')
+            self.display_error('Wypełnij pola poprawnymi danymi!')
 
     def display_error(self, error_msg):
         self.main_layout.clear_widgets()

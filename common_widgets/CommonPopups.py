@@ -25,7 +25,7 @@ class CommonPopup(Popup):
 
     def setup_widgets(self):
         esc_layout = BoxLayout(size_hint_x=0.2, pos_hint={"x": 0.8})
-        esc_layout.add_widget(FontFittingButton(text="Esc", on_press=lambda a: self.dismiss()))
+        esc_layout.add_widget(FontFittingButton(text="X", on_press=lambda a: self.dismiss()))
         self.main_layout.add_widget(esc_layout)
 
     def focus_input(self, input_id):
@@ -64,7 +64,7 @@ class UserModifyingPopup(CommonPopup):
             user_chooser.add_widget(UserButton(text="{}".format(users[user].__str__()), user=users[user],
                                                size_hint_y=None, height=33,
                                                on_release=lambda a: user_chooser.select(a)))
-        self.choosen = UserButton(id='chooser', text="Choose user", size_hint=(1, 1), user=None)
+        self.choosen = UserButton(id='chooser', text="Wybierz uzytkownika", size_hint=(1, 1), user=None)
         self.choosen.bind(on_release=lambda a: user_chooser.open(self.choosen))
         user_chooser.bind(on_select=lambda instance, pressed_button: self.update_user_chooser(self.choosen,
                                                                                               pressed_button))
@@ -142,7 +142,7 @@ class PasswordChanger(CommonPopup):
 
 class UserAddingPopup(CommonPopup):
     def __init__(self, **kwargs):
-        super(UserAddingPopup, self).__init__(title='Create account', **kwargs)
+        super(UserAddingPopup, self).__init__(title='Utwórz konto', **kwargs)
 
     @property
     def user_adding_callback(self):
@@ -176,9 +176,9 @@ class UserAddingPopup(CommonPopup):
         self.unfocus_all_inputs()
         self.main_layout.clear_widgets()
         messages = {
-            None: ('Could not create account. Please fill all fields correctly', 'FF0000'),
-            False: ('User already exists', 'FF0000'),
-            True: ('Account created successfully', '00FF00')
+            None: ('Nie można utworzyć konta. Wprowadź poprawne dane!', 'FF0000'),
+            False: ('Użytkownik juz istnieje.', 'FF0000'),
+            True: ('Konto zostało założone poprawnie!', '00FF00')
         }
         message, color = messages[created_successfully]
         self.main_layout.add_widget(FontFittingLabel(text="[b][color={}]{}![/color][/b]".format(color, message),
@@ -193,7 +193,7 @@ class UserAddingPopup(CommonPopup):
 
 class UserRemovingPopup(UserModifyingPopup):
     def __init__(self, **kwargs):
-        super(UserRemovingPopup, self).__init__(title='Delete account', **kwargs)
+        super(UserRemovingPopup, self).__init__(title='Usuń konto', **kwargs)
 
     @property
     def user_removing_callback(self):
@@ -205,9 +205,9 @@ class UserRemovingPopup(UserModifyingPopup):
         return RemoveUser, tuple(), {'instance': self}
 
     def assign_users(self, users):
-        self.main_layout.add_widget(FontFittingLabel(text='Choose user to remove:'))
+        self.main_layout.add_widget(FontFittingLabel(text='Wybierz użytkownika:'))
         super(UserRemovingPopup, self).assign_users(users)
-        self.confirm_button = FontFittingButton(text="Delete account.", size_hint=(1, 1),
+        self.confirm_button = FontFittingButton(text="Usuń konto", size_hint=(1, 1),
                                                 on_press=lambda a:
                                                 ConfirmationPopup(confirmed_function=self.remove_choosen,
                                                                   func_args=tuple([self.choosen])).open())
@@ -218,15 +218,15 @@ class UserRemovingPopup(UserModifyingPopup):
                       cb_args=self.user_removing_callback[1], cb_kwargs=self.user_removing_callback[2])
 
     def display_results(self, removed_successfully, *args):
-        failure_msg = 'Couldnt remove account' if removed_successfully is False else 'Please choose correct user'
+        failure_msg = 'Nie udało się usunąć konta' if removed_successfully is False else 'Wybierz odpowiedniego uzytkownika'
         super(UserRemovingPopup, self).display_results(success=removed_successfully,
-                                                       success_msg='Account removed successfully',
+                                                       success_msg='Konto zostało usunięte',
                                                        failure_msg=failure_msg)
 
 
 class PermissionChanger(UserModifyingPopup):
     def __init__(self, **kwargs):
-        super(PermissionChanger, self).__init__(title='Change permissions', **kwargs)
+        super(PermissionChanger, self).__init__(title='Zmień uprawnienia', **kwargs)
         self.choosen_privilege = None
 
     @property
@@ -234,7 +234,7 @@ class PermissionChanger(UserModifyingPopup):
         return ChangePermissions(self.choosen.user, self.choosen_privilege.text), tuple(), {'instance': self}
 
     def assign_users(self, users):
-        self.main_layout.add_widget(FontFittingLabel(text='Choose user and permissions to grant:'))
+        self.main_layout.add_widget(FontFittingLabel(text='Wybierz uzytkownika i uprawnienia'))
         super(PermissionChanger, self).assign_users(users)
         self.assign_permissions()
 
@@ -244,12 +244,12 @@ class PermissionChanger(UserModifyingPopup):
             privilege_chooser.add_widget(FontFittingButton(text="{}".format(privilege),
                                                            size_hint_y=None, height=33,
                                                            on_release=lambda a: privilege_chooser.select(a.text)))
-        self.choosen_privilege = FontFittingButton(id='privilege_chooser', text="Choose privilege", size_hint=(1, 1),
+        self.choosen_privilege = FontFittingButton(id='privilege_chooser', text="Wybierz uprawnienia", size_hint=(1, 1),
                                                    user=None)
         self.choosen_privilege.bind(on_release=lambda a: privilege_chooser.open(self.choosen_privilege))
         privilege_chooser.bind(on_select=lambda instance, choosen: setattr(self.choosen_privilege, 'text', choosen))
         self.main_layout.add_widget(self.choosen_privilege)
-        self.confirm_button = FontFittingButton(text="Change permissions.", size_hint=(1, 1),
+        self.confirm_button = FontFittingButton(text="Zmień uprawnienia", size_hint=(1, 1),
                                                 on_press=lambda a:
                                                 ConfirmationPopup(
                                                     confirmed_function=schedule_task,
@@ -257,10 +257,10 @@ class PermissionChanger(UserModifyingPopup):
         self.main_layout.add_widget(self.confirm_button)
 
     def display_results(self, changed_successfully, *args):
-        msg = 'Please choose user and permissions correctly.' if changed_successfully is None \
-            else 'Couldnt change permissions'
+        msg = 'Wybierz odpowiednie uprawnienia i uzytkownika' if changed_successfully is None \
+            else 'Nie udało się zmienić uprawnień'
         super(PermissionChanger, self).display_results(success=changed_successfully,
-                                                       success_msg='Permissions changed successfully',
+                                                       success_msg='Uprawnienia zostały zmienione',
                                                        failure_msg=msg)
 
 
@@ -273,9 +273,9 @@ class ConfirmationPopup(CommonPopup):
 
     def setup_widgets(self):
         super(ConfirmationPopup, self).setup_widgets()
-        self.main_layout.add_widget(FontFittingLabel(text='Are you sure?'))
-        self.main_layout.add_widget(FontFittingButton(text='Yes', on_press=lambda a: self.confirm()))
-        self.main_layout.add_widget(FontFittingButton(text='No', on_press=lambda a: self.dismiss()))
+        self.main_layout.add_widget(FontFittingLabel(text='Jestes pewien?'))
+        self.main_layout.add_widget(FontFittingButton(text='Tak', on_press=lambda a: self.confirm()))
+        self.main_layout.add_widget(FontFittingButton(text='Nie', on_press=lambda a: self.dismiss()))
 
     def confirm(self):
         self.dismiss()

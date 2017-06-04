@@ -23,6 +23,7 @@ from common_widgets.Screens import ScrollableScreen
 class EarningsScreen(ScrollableScreen):  # TODO issue with Dropdown not opening after choosed once
     def __init__(self, **kwargs):
         self.today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
+        self.header_font_color = kwargs.pop('header_font_color', (1, 1, 1, 1))
         super(EarningsScreen, self).__init__(**kwargs)
         self.main_layout.height = Window.height * 0.9
 
@@ -57,7 +58,8 @@ class EarningsScreen(ScrollableScreen):  # TODO issue with Dropdown not opening 
         self.choosen = FontFittingButton(text="Dzis", size_hint=(1, 1))
         self.choosen.bind(on_release=lambda a: period_chooser.open(self.choosen))
         period_chooser.bind(on_select=lambda instance, z: setattr(self.choosen, 'text', z))
-        self.main_layout.add_widget(FontFittingLabel(text="Wybierz okres rozliczeniowy:", size_hint=(1, 1)))
+        self.main_layout.add_widget(FontFittingLabel(text="Wybierz okres rozliczeniowy:", size_hint=(1, 1),
+                                                     color=self.header_font_color))
         self.main_layout.add_widget(self.choosen)
         self.main_layout.add_widget(FontFittingButton(text="Wybierz inny dzień", size_hint=(1, 1),
                                                       on_press=lambda a: self.choose_other_date()))
@@ -80,12 +82,17 @@ class EarningsScreen(ScrollableScreen):  # TODO issue with Dropdown not opening 
         schedule_task(callback=GetEarnings(**db_kwargs), cb_args=tuple(), cb_kwargs={'instance': self})
 
     def show_earnings(self, total_earns):
+        period = self.choosen.text
         self.main_layout.clear_widgets()
         self.setup_widgets()
         if total_earns is None:
             total_earns = 0
-        self.main_layout.add_widget(FontFittingLabel(text="Zarobione łącznie: {}".format(total_earns)))
-        self.main_layout.add_widget(FontFittingLabel(text="Na czysto: {}".format(total_earns / 2)))
+
+        self.main_layout.add_widget(FontFittingLabel(text="Okres: {}".format(period), color=self.header_font_color))
+        self.main_layout.add_widget(FontFittingLabel(text="Zarobione łącznie: {}".format(total_earns),
+                                                     color=self.header_font_color))
+        self.main_layout.add_widget(FontFittingLabel(text="Na czysto: {}".format(total_earns / 2),
+                                                     color=self.header_font_color))
 
     def display_error(self, msg):
         self.main_layout.clear_widgets()

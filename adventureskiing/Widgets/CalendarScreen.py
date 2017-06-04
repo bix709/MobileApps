@@ -4,19 +4,21 @@
     copyright: 5517 Company
 """
 from kivy.app import App
+
+from adventureskiing.Widgets.DailyScreen import DailyScreen
 from common_widgets.Screens import BackgroundAdjustableScreen
 from common_widgets.TimeWidgets import CommonCalendar
 
 
 class CalendarScreen(BackgroundAdjustableScreen):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, calendar_properties, *args, **kwargs):
         super(CalendarScreen, self).__init__(*args, **kwargs)
-        self.add_widget(MyCalendar())
+        self.add_widget(MyCalendar(**calendar_properties))
 
     @property
     def daily_screen(self):
         caro = App.get_running_app().root.get_screen("CarouselWithActionBar").carousel
-        return list(filter(lambda a: a.name == "DailyScreen", caro.slides))[0]
+        return list(filter(lambda a: isinstance(a, DailyScreen), caro.slides))[0]
 
 
 class MyCalendar(CommonCalendar):

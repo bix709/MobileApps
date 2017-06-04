@@ -16,9 +16,9 @@ from common_widgets.FittingLabels import FontFittingLabel, FontFittingButton
 
 
 class BackgroundAdjustableScreen(Screen):
-    def __init__(self, background_img=None, size=Window.size, **kwargs):
+    def __init__(self, size=Window.size, **kwargs):
+        self.background_img = kwargs.pop('background_image', None)
         super(BackgroundAdjustableScreen, self).__init__(size=size, **kwargs)
-        self.background_img = background_img
         self.background_instruction = InstructionGroup()
         self.set_up_background_image()
         self.bind(size=self.fit_to_window)
@@ -35,8 +35,11 @@ class BackgroundAdjustableScreen(Screen):
 
 
 class LoginScreen(BackgroundAdjustableScreen):
-    def __init__(self, background_img=None, **kwargs):
-        super(LoginScreen, self).__init__(name='Login Screen', background_img=background_img, **kwargs)
+    def __init__(self, loginbutton_properties, credential_label_properties, **kwargs):
+        super(LoginScreen, self).__init__(name='Login Screen', **kwargs)
+        self.loginbutton_properties = loginbutton_properties
+        self.credential_label_properties = credential_label_properties
+        self.font_color = kwargs.get('font_color', (0, 0, 0, 1))
         self.__username_input = self.__password_input = None
         self.main_layout = BoxLayout(id='MainLayout', orientation='vertical', size_hint_x=0.8,
                                      size_hint_y=0.8, pos_hint={"x": 0.1, "y": 0.15})
@@ -51,7 +54,7 @@ class LoginScreen(BackgroundAdjustableScreen):
         if wrong_login:
             self.main_layout.add_widget(
                 FontFittingLabel(markup=True, color=(1, 1, 1, 1), font_size=18, size_hint_y=0.20,
-                                 text="[b][color=FF0000]Wrong username or password ![/color][/b]"))
+                                 text="[b][color=FF0000]Zły login lub hasło![/color][/b]"))
         self.__username_input = TextInput(multiline=False, id='Username', focus=False, size_hint_y=0.20,
                                           on_text_validate=lambda a: self.focus_password())
         self.__password_input = TextInput(multiline=False, id='Password', focus=False, size_hint_y=0.20,
@@ -59,18 +62,15 @@ class LoginScreen(BackgroundAdjustableScreen):
                                           on_text_validate=lambda a: self.parent.handle_login(
                                               self.__username_input.text,
                                               str(hash(a.text))))
-        self.main_layout.add_widget(FontFittingLabel(color=(0, 0, 0, 1), size_hint_y=0.30, font_size=30,
-                                                     text="Username:"))
+        self.main_layout.add_widget(FontFittingLabel(text="Login:", **self.credential_label_properties))
         self.main_layout.add_widget(self.__username_input)
-        self.main_layout.add_widget(FontFittingLabel(color=(0, 0, 0, 1), size_hint_y=0.30, font_size=30,
-                                                     text="Password:"))
+        self.main_layout.add_widget(FontFittingLabel(text="Hasło:", **self.credential_label_properties))
         self.main_layout.add_widget(self.__password_input)
         self.main_layout.add_widget(
-            FontFittingButton(background_normal="{}/graphics/loginbutton.png".format(App.get_running_app().name),
-                              text="Zaloguj!", color=(1, 1, 1, 1), size_hint_y=0.30, font_size=30,
-                              on_press=lambda a: self.parent.handle_login(
+            FontFittingButton(on_press=lambda a: self.parent.handle_login(
                                                           self.__username_input.text,
-                                                          self.__password)))
+                                                          self.__password),
+                              **self.loginbutton_properties))
         self.__password_input.text = self.__username_input.text = ''
 
     @property
