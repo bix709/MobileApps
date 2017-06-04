@@ -10,7 +10,6 @@ from adventureskiing.Database.MySQL.SqlCmdChoosers import EarningsCmdChooser
 from adventureskiing.Utils.Users import User
 from adventureskiing.Utils.cennik import cennik
 from common_database.MySqlConnection import DatabaseConnection, sys
-from common_tools.ThreadSynchronization import mark_task_as_done
 
 
 # TODO refactoring kwargs to params!!!!
@@ -27,11 +26,9 @@ class SqlCommands(object):
     """Class storing Database commands as static methods. """
 
     @staticmethod
-    @mark_task_as_done
     def fetch_logins(username, password, *args, **kwargs):
         """ Template method to execute sql commands,
-            methods needs to get *args, **kwargs, and
-            to be decorated with @update_bag_with_result """
+            methods needs to get *args, **kwargs """
         try:
             query = DatabaseConnection().fetch_query(
                 "select imie, nazwisko, id, uprawnienia "
@@ -43,7 +40,6 @@ class SqlCommands(object):
             return None
 
     @staticmethod
-    @mark_task_as_done
     def get_daily_graph(day, user, *args, **kwargs):
         busy_hours = {}
         try:
@@ -60,7 +56,6 @@ class SqlCommands(object):
             return busy_hours
 
     @staticmethod
-    @mark_task_as_done
     def get_all_users(*args, **kwargs):
         users = {}
         try:
@@ -73,7 +68,6 @@ class SqlCommands(object):
             return users
 
     @staticmethod
-    @mark_task_as_done
     def insert_new_lesson(number_of_people, *args, **kwargs): # TODO bezsensu, refactoring !!
         try:
             cmd = "Select id from lekcja where id_instruktora = {instructor} and " \
@@ -99,7 +93,6 @@ class SqlCommands(object):
             print "Couldnt add lesson {}".format(sys.exc_info()[0])
 
     @staticmethod
-    @mark_task_as_done
     def remove_lesson(*args, **kwargs):
         try:
             if kwargs['lesson_id'] != "0":
@@ -108,7 +101,6 @@ class SqlCommands(object):
             print "Couldnt remove lesson from Database {}".format(sys.exc_info()[0])
 
     @staticmethod
-    @mark_task_as_done
     def get_unoccupied(date, hour, *args, **kwargs):
         unoccupied_instructors = []
         try:
@@ -128,7 +120,6 @@ class SqlCommands(object):
             print "Error loading unoccupied instructors {}".format(sys.exc_info()[0])
 
     @staticmethod
-    @mark_task_as_done
     def get_earnings(period, user, *args, **kwargs):
         with ignored(Exception):
             cmd = EarningsCmdChooser().get_earnings_cmd_from[period[0]](period, user)
@@ -137,7 +128,6 @@ class SqlCommands(object):
                 return [result for result in query][0][0]
 
     @staticmethod
-    @mark_task_as_done
     def password_update(old_pw, new_pw, user, *args, **kwargs):
         cmd = "Update instruktorzy set password = '{}' where id = {} and password = '{}'".format(new_pw,
                                                                                                  user.id,
@@ -148,7 +138,6 @@ class SqlCommands(object):
             return True if [result for result in query][0][0] == str(new_pw) else False
 
     @staticmethod
-    @mark_task_as_done
     def create_user(firstname, lastname, login, *args, **kwargs):
         try:
             if firstname.isalpha() and login.isalnum():
@@ -173,7 +162,6 @@ class SqlCommands(object):
             return None
 
     @staticmethod
-    @mark_task_as_done
     def remove_user(user, *args, **kwargs):
         with ignored(Exception):
             DatabaseConnection().execute_command('Delete from instruktorzy where id={}'.format(user.id))
@@ -184,7 +172,6 @@ class SqlCommands(object):
             return True
 
     @staticmethod
-    @mark_task_as_done
     def change_permissions(*args, **kwargs):
         with ignored(Exception):
             user_button, permission_button = args
