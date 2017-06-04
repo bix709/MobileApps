@@ -34,37 +34,29 @@ class SqlCommands(object):
                 "select imie, nazwisko, id, uprawnienia "
                 "from instruktorzy "
                 "where login = '{}' and password = '{}'".format(username, password))
-            return [result for result in query][0]
+            return query[0]
         except:
             return None
 
     @staticmethod
     def get_daily_graph(day, user, *args, **kwargs):
-        busy_hours = {}
         try:
             query = DatabaseConnection().fetch_query("select godzina, imie, wiek, ilosc_osob, id "
                                                      "from lekcja "
                                                      "where id_instruktora = {} "
                                                      "and data = STR_TO_DATE('{}', '%Y/%m/%d')".format(user.id, day))
-            if query:
-                for result in query:
-                    busy_hours[result[0]] = ("{}.00 | {}, {}lat. #{}os.".format(*result[:-1]), result[-1])
+            return {result[0]: ("{}.00 | {}, {}lat. #{}os.".format(*result[:-1]), result[-1]) for result in query}
         except:
             print "Couldnt read daily graph {}".format(sys.exc_info()[0])
-        finally:
-            return busy_hours
 
     @staticmethod
     def get_all_users(*args, **kwargs):
-        users = {}
         try:
             query = DatabaseConnection().fetch_query("select imie, nazwisko, id, uprawnienia from instruktorzy")
-            if query:
-                for output in query:
-                    name, lastname, user_id, privileges = output
-                    users[name] = User(user_id=user_id, permission=privileges, name=name, lastname=lastname)
-        finally:
-            return users
+            return {name: User(user_id=user_id, permission=privileges, name=name, lastname=lastname)
+                    for name, lastname, user_id, privileges in query}
+        except:
+            print 'Couldnt get all users'
 
     @staticmethod
     def insert_new_lesson(number_of_people, *args, **kwargs): # TODO bezsensu, refactoring !!
@@ -101,20 +93,16 @@ class SqlCommands(object):
 
     @staticmethod
     def get_unoccupied(date, hour, *args, **kwargs):
-        unoccupied_instructors = []
         try:
-            all_instructors = busy_instructors = {}
             query = DatabaseConnection().fetch_query("select imie, nazwisko, id from instruktorzy")
-            all_instructors = set([result for result in query])
+            all_instructors = set(query)
             query = DatabaseConnection().fetch_query("select instruktorzy.imie, instruktorzy.nazwisko, "
                                                      "instruktorzy.id from instruktorzy join "
                                                      "lekcja on instruktorzy.id = lekcja.id_instruktora where data = "
                                                      "STR_TO_DATE('{}', '%Y/%m/%d') and godzina = {}".format(date, hour))
-            busy_instructors = set([result for result in query])
-            for instructor in list(all_instructors - busy_instructors):
-                unoccupied_instructors.append(User(name=instructor[0], user_id=instructor[2],
-                                                   permission="User", lastname=instructor[1]))
-            return unoccupied_instructors
+            busy_instructors = set(query)
+            return [User(name=imie, lastname=nazwisko, user_id=id, permission='User')
+                    for imie, nazwisko, id in list(all_instructors - busy_instructors)]
         except:
             print "Error loading unoccupied instructors {}".format(sys.exc_info()[0])
 
@@ -123,8 +111,7 @@ class SqlCommands(object):
         with ignored(Exception):
             cmd = EarningsCmdChooser().get_earnings_cmd_from[period[0]](period, user)
             query = DatabaseConnection().fetch_query(cmd)
-            if query:
-                return [result for result in query][0][0]
+            return query[0][0]
 
     @staticmethod
     def password_update(old_pw, new_pw, user, *args, **kwargs):
@@ -133,8 +120,7 @@ class SqlCommands(object):
                                                                                                  old_pw)
         DatabaseConnection().execute_command(cmd)
         query = DatabaseConnection().fetch_query("Select password from instruktorzy where id = '{}'".format(user.id))
-        if query:
-            return True if [result for result in query][0][0] == str(new_pw) else False
+        return True if query[0][0] == str(new_pw) else False
 
     @staticmethod
     def create_user(firstname, lastname, login, *args, **kwargs):
@@ -142,10 +128,8 @@ class SqlCommands(object):
             if firstname.isalpha() and login.isalnum():
                 query = DatabaseConnection().fetch_query(
                     "Select login from instruktorzy where login='{}'".format(login))
-                if query:
-                    with ignored(IndexError):
-                        if [result for result in query][0][0] == login:
-                            return False
+                with ignored(IndexError):
+                    if query[0][0] == login: return False
                 cmd = "Insert into instruktorzy (login, password, imie, nazwisko, uprawnienia) values " \
                       "('{login}', '{password}', '{firstname}', '{lastname}', 'User')".format(firstname=firstname,
                                                                                               lastname=lastname,
@@ -154,9 +138,7 @@ class SqlCommands(object):
                 DatabaseConnection().execute_command(cmd)
                 query = DatabaseConnection().fetch_query(
                     "Select login from instruktorzy where login='{}'".format(login))
-                if query:
-                    if [result for result in query][0][0] == login:
-                        return True
+                if query[0][0] == login: return True
         except:
             return None
 
@@ -165,9 +147,7 @@ class SqlCommands(object):
         with ignored(Exception):
             DatabaseConnection().execute_command('Delete from instruktorzy where id={}'.format(user.id))
             query = DatabaseConnection().fetch_query('Select id from instruktorzy where id={}'.format(user.id))
-            if query:
-                if len([result for result in query]) > 0:
-                    return False
+            if len(query) > 0: return False
             return True
 
     @staticmethod
@@ -180,5 +160,4 @@ class SqlCommands(object):
                                                                                       user_button.id))
                 query = DatabaseConnection().fetch_query(
                     'Select uprawnienia from instruktorzy where id = {}'.format(user_button.id))
-                if query:
-                    return True if [result for result in query][0][0] == permission_button else False
+                return True if query[0][0] == permission_button else False
