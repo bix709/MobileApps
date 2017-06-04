@@ -34,8 +34,7 @@ class SqlCommands(object):
                 "select imie, nazwisko, id, uprawnienia "
                 "from instruktorzy "
                 "where login = '{}' and password = '{}'".format(username, password))
-            if query:
-                return [result for result in query][0]
+            return [result for result in query][0]
         except:
             return None
 
