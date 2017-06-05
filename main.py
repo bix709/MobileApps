@@ -21,6 +21,10 @@ class AdventureSkiing(App):
     # TODO zmiana hasla wywala apke !
     # TODO refactoring - no communication via returning none, true, false in db_commands. do it via exceptions.
     # TODO Changing state of already down action button on click
+    # TODO new feature - resume where left - resume, back, on android not closing app
+    # TODO remember session - logged in users after restart app
+    # TODO android notifications
+
     icon = 'adventureskiing/graphics/logo.png'
 
     def build(self):
