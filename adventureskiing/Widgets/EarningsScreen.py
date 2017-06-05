@@ -25,6 +25,7 @@ class EarningsScreen(ScrollableScreen):  # TODO issue with Dropdown not opening 
         self.today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
         self.header_font_color = kwargs.pop('header_font_color', (1, 1, 1, 1))
         self.button_properties = kwargs.pop('buttons_properties', dict())
+        self.dropdown_buttons_properties = kwargs.pop('dropdown_buttons_properties', dict())
         super(EarningsScreen, self).__init__(**kwargs)
         self.main_layout.height = Window.height * 0.9
 
@@ -54,9 +55,9 @@ class EarningsScreen(ScrollableScreen):  # TODO issue with Dropdown not opening 
     def setup_period_chooser(self):
         period_chooser = DropDown()
         for x in self.dates:
-            period_chooser.add_widget(Button(text="{}".format(x), size_hint_y=None, height=33,
-                                             on_release=lambda a: period_chooser.select(a.text),
-                                             **self.button_properties))
+            period_chooser.add_widget(FontFittingButton(text="{}".format(x), size_hint_y=None, height=self.main_layout.height,
+                                                        on_release=lambda a: period_chooser.select(a.text),
+                                                        **self.dropdown_buttons_properties))
         self.choosen = FontFittingButton(text="Dzis", size_hint=(1, 1), **self.button_properties)
         self.choosen.bind(on_release=lambda a: period_chooser.open(self.choosen))
         period_chooser.bind(on_select=lambda instance, z: setattr(self.choosen, 'text', z))

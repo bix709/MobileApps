@@ -25,7 +25,11 @@ action_button_properties = {
 }
 action_prev_properties = {
     'app_icon': 'adventureskiing/graphics/red_normal.png',
-    'app_icon_width': 1
+    'app_icon_width': 0.1,
+    'size_hint_x': None,
+    'width': 0,
+    'with_previous': False
+
 }
 
 action_bar_properties = {
@@ -38,7 +42,8 @@ action_bar_properties = {
 todayscreen_properties = {
     'background_image': 'adventureskiing/graphics/bg.jpg',
     'name': 'Dzis',
-    'buttons_properties': {'background_normal': 'adventureskiing/graphics/blue_snow.png'}
+    'buttons_properties': {'background_normal': 'adventureskiing/graphics/blue_snow.png'},
+    'dropdown_buttons_properties': {'background_normal': 'adventureskiing/graphics/yellow_snow.png'}
 }
 
 calendarscreen_properties = {
@@ -67,7 +72,8 @@ earningscreen_properties = {
     'background_image': 'adventureskiing/graphics/loginscreen.jpg',
     'name': 'Zarobki',
     'header_font_color': (0, 0, 0, 1),
-    'buttons_properties': {'background_normal': 'adventureskiing/graphics/yellow_snow.png'}
+    'buttons_properties': {'background_normal': 'adventureskiing/graphics/yellow_snow.png'},
+    'dropdown_buttons_properties': {'background_normal': 'adventureskiing/graphics/blue_snow.png'}
 }
 carousel_with_actionbar_properties = {
     'action_button_properties': action_button_properties,

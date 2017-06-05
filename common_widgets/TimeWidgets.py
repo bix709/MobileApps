@@ -4,13 +4,13 @@
     copyright : 5517 Company
 """
 
+from calendar import Calendar
+from time import *
+
+from kivy.clock import Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
-from time import *
-from kivy.uix.button import Button
 from kivy.uix.label import Label
-from calendar import Calendar
-from kivy.clock import Clock
 
 from common_widgets.FittingLabels import FontFittingLabel, FontFittingButton
 
@@ -40,11 +40,11 @@ class CommonCalendar(BoxLayout):
             for day_object in week_object:
                 intensivity = 1 if day_object.month == month else 0.75
                 complete_date = (day_object.year, day_object.month, day_object.day)
-                self.month_layout.add_widget(Button(id='{}/{}/{}'.format(*complete_date),
-                                                    text="{}".format(day_object.day),
-                                                    color=self.days_button_color,
-                                                    background_color=(1, 1, 1, intensivity),
-                                                    on_release=lambda instance: self.on_choose(instance)))
+                self.month_layout.add_widget(FontFittingButton(id='{}/{}/{}'.format(*complete_date),
+                                                               text="{}".format(day_object.day),
+                                                               color=self.days_button_color,
+                                                               background_color=(1, 1, 1, intensivity),
+                                                               on_release=lambda instance: self.on_choose(instance)))
 
     def add_days_headers(self):
         self.month_layout.clear_widgets()
@@ -67,7 +67,7 @@ class CommonCalendar(BoxLayout):
         self.add_widget(self.month_layout)
 
     def create_month_chooser(self):
-        month_chooser = BoxLayout(orientation="horizontal", size_hint=(1, None), height=33)
+        month_chooser = BoxLayout(orientation="horizontal", size_hint=(1, 0.1))
         displayed_year = self.currently_displayed_month
         month_chooser.add_widget(FontFittingButton(text="Poprzedni", on_release=lambda a: self.previous_month()))
         month_chooser.add_widget(

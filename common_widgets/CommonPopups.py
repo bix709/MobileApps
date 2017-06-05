@@ -62,7 +62,7 @@ class UserModifyingPopup(CommonPopup):
         user_chooser = DropDown()
         for user in users:
             user_chooser.add_widget(UserButton(text="{}".format(users[user].__str__()), user=users[user],
-                                               size_hint_y=None, height=33,
+                                               size_hint_y=None, height=user_chooser.height,
                                                on_release=lambda a: user_chooser.select(a)))
         self.choosen = UserButton(id='chooser', text="Wybierz uzytkownika", size_hint=(1, 1), user=None)
         self.choosen.bind(on_release=lambda a: user_chooser.open(self.choosen))
@@ -242,7 +242,7 @@ class PermissionChanger(UserModifyingPopup):
         privilege_chooser = DropDown()
         for privilege in privileges:
             privilege_chooser.add_widget(FontFittingButton(text="{}".format(privilege),
-                                                           size_hint_y=None, height=33,
+                                                           size_hint_y=None, height=privilege_chooser.height,
                                                            on_release=lambda a: privilege_chooser.select(a.text)))
         self.choosen_privilege = FontFittingButton(id='privilege_chooser', text="Wybierz uprawnienia", size_hint=(1, 1),
                                                    user=None)

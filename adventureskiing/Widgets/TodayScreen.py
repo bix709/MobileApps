@@ -22,6 +22,7 @@ class TodayScreen(ScrollableScreen):
         self.unoccupied_users = DropDown()
         self.today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
         self.button_properties = kwargs.pop('buttons_properties', dict())
+        self.dropdown_buttons_properties = kwargs.pop('dropdown_buttons_properties', dict())
         super(TodayScreen, self).__init__(**kwargs)
 
     def setup_widgets(self):
@@ -47,7 +48,8 @@ class TodayScreen(ScrollableScreen):
             for instructor in unoccupied_instructors:
                 self.unoccupied_users.add_widget(UserButton(text="{}".format(instructor.name), user=instructor,
                                                             size_hint_y=None,
-                                                            on_press=lambda a: self.add_lesson(a, instance)))
+                                                            on_press=lambda a: self.add_lesson(a, instance),
+                                                            **self.dropdown_buttons_properties))
             self.unoccupied_users.open(instance)
 
     def add_lesson(self, instance, button):

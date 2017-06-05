@@ -10,14 +10,20 @@ from kivy.uix.label import Label
 class FontFittingButton(Button):
     def __init__(self, **kwargs):
         super(FontFittingButton, self).__init__(**kwargs)
-        self.text_size = self.width * 1.7, self.height
         self.valign = 'middle'
         self.halign = 'center'
+        self.bind(size=self.set_text_size)
+
+    def set_text_size(self, *args, **kwargs):
+        self.text_size = self.size
 
 
 class FontFittingLabel(Label):
     def __init__(self, **kwargs):
         super(FontFittingLabel, self).__init__(**kwargs)
-        self.text_size = self.width * 1.7, self.height
         self.valign = 'middle'
         self.halign = 'center'
+        self.bind(size=self.set_text_size)
+
+    def set_text_size(self, *args, **kwargs):
+        self.text_size = self.size

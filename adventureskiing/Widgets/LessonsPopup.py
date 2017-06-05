@@ -51,8 +51,8 @@ class LessonPopup(CommonPopup):  # TODO refactoring ( focusing inputs etc. )
     def setup_number_chooser(self):
         number_chooser = DropDown()
         for x in range(6):
-            number_chooser.add_widget(Button(text="%s" % x, size_hint_y=None, height=33,
-                                             on_release=lambda a: number_chooser.select(a.text)))
+            number_chooser.add_widget(FontFittingButton(text="%s" % x, size_hint_y=None, height=number_chooser.height,
+                                                        on_release=lambda a: number_chooser.select(a.text)))
         ilosc_osob = self.lesson_info.get('ilosc_osob', "0")
         self.choosen = FontFittingButton(text="{}".format(ilosc_osob), size_hint=(1, 1))
         self.choosen.bind(on_release=lambda a: number_chooser.open(self.choosen))
