@@ -19,6 +19,7 @@ class DailyScreen(ScrollableScreen):
     def __init__(self, *args, **kwargs):
         self.day = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
         self.busy_buttons_properties = kwargs.pop('busy_buttons_properties', dict())
+        self.free_buttons_properties = kwargs.pop('free_buttons_properties', dict())
         self.configuration_buttons_properties = kwargs.pop('configuration_buttons_properties', dict())
         self.header_font_color = kwargs.pop('header_font_color', (1, 1, 1, 1))
         super(DailyScreen, self).__init__(id='DailyScreen', *args, **kwargs)
@@ -55,9 +56,10 @@ class DailyScreen(ScrollableScreen):
             except KeyError:
                 lesson_info = '{}.00 - {}.50'.format(hour, hour)
                 lesson_id = "0"
-                properties = {'background_color': (0, 1, 0, 1)}
+                properties = self.free_buttons_properties
             finally:
-                self.main_layout.add_widget(FontFittingButton(text='{}'.format(lesson_info), id="{}".format(lesson_id),
+                self.main_layout.add_widget(FontFittingButton(text='{}'.format(lesson_info),
+                                                              id="{}".format(lesson_id),
                                                               on_press=lambda a: self.show_lesson_details(a),
                                                               size_hint_y=None, **properties))
 
