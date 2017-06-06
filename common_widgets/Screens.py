@@ -100,6 +100,7 @@ class ScrollableScreen(BackgroundAdjustableScreen):
         scroll.add_widget(self.main_layout)
         self.add_widget(scroll)
         self.setup_widgets()
+        self.main_layout.height = Window.height * 0.9
 
     def setup_widgets(self):
         pass

@@ -71,7 +71,7 @@ class CommonCalendar(BoxLayout):
         displayed_year = self.currently_displayed_month
         month_chooser.add_widget(FontFittingButton(text="Poprzedni", on_release=lambda a: self.previous_month()))
         month_chooser.add_widget(
-            FontFittingLabel(text="{}\n{}".format(months_of_the_year[displayed_year[1]], displayed_year[0]),
+            FontFittingLabel(text="{} {}".format(months_of_the_year[displayed_year[1]], displayed_year[0]),
                              color=self.month_header_font_color))
         month_chooser.add_widget(FontFittingButton(text="Nastepny", on_release=lambda a: self.next_month()))
         return month_chooser

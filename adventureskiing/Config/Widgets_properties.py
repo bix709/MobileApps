@@ -10,13 +10,11 @@ loginbutton_properties = {
     'background_normal': "adventureskiing/graphics/blue_snow.png",
     'text': "Zaloguj",
     'color': (0, 0, 0, 0.4),
-    'size_hint_y': 0.30,
-    'font_size': 25
+    'size_hint_y': 0.30
 }
 credential_label_properties = {
     'color': (0, 0, 0, 1),
-    'size_hint_y': 0.30,
-    'font_size': 30
+    'size_hint_y': 0.30
 }
 
 action_button_properties = {

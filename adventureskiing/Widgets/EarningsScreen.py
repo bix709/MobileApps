@@ -27,7 +27,6 @@ class EarningsScreen(ScrollableScreen):  # TODO issue with Dropdown not opening 
         self.button_properties = kwargs.pop('buttons_properties', dict())
         self.dropdown_buttons_properties = kwargs.pop('dropdown_buttons_properties', dict())
         super(EarningsScreen, self).__init__(**kwargs)
-        self.main_layout.height = Window.height * 0.9
 
     @property
     def dates(self):

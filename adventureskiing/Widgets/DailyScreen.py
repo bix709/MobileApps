@@ -6,6 +6,7 @@
 from time import gmtime
 
 from kivy.app import App
+from kivy.core.window import Window
 
 from common_callbacks.Callbacks import schedule_task
 from adventureskiing.Database.Callbacks import GetDailyGraph
