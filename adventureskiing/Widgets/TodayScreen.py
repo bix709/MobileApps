@@ -47,7 +47,7 @@ class TodayScreen(ScrollableScreen):
         if unoccupied_instructors is not None:
             for instructor in unoccupied_instructors:
                 self.unoccupied_users.add_widget(UserButton(text="{}".format(instructor.name), user=instructor,
-                                                            size_hint_y=None, height=self.unoccupied_users.height,
+                                                            size_hint_y=None, height=self.main_layout.height / 10,
                                                             on_press=lambda a: self.add_lesson(a, instance),
                                                             **self.dropdown_buttons_properties))
             self.unoccupied_users.open(instance)
