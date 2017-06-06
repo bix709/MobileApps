@@ -27,12 +27,15 @@ class DailyScreen(ScrollableScreen):
 
     def setup_widgets(self):
         today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
-        self.main_layout.add_widget(FontFittingLabel(text='Grafik z dnia {}'.format(self.day),
-                                                     color=self.header_font_color, size_hint_y=None))
+        self.main_layout.add_widget(FontFittingLabel(text='Grafik z dnia {}'.format(self.day), size_hint_y=None,
+                                                     height=self.main_layout.height / 7,
+                                                     color=self.header_font_color))
         self.main_layout.add_widget(FontFittingButton(text='Odśwież', size_hint_y=None,
+                                                      height=self.main_layout.height / 7,
                                                       on_press=lambda a: self.refresh(self.day),
                                                       **self.configuration_buttons_properties))
         self.main_layout.add_widget(FontFittingButton(text='Pokaz dzisiejszy', size_hint_y=None,
+                                                      height=self.main_layout.height / 7,
                                                       on_press=lambda a: self.refresh(today),
                                                       **self.configuration_buttons_properties))
         self.get_day_schedule()
@@ -60,7 +63,8 @@ class DailyScreen(ScrollableScreen):
                 self.main_layout.add_widget(FontFittingButton(text='{}'.format(lesson_info),
                                                               id="{}".format(lesson_id),
                                                               on_press=lambda a: self.show_lesson_details(a),
-                                                              size_hint_y=None, **properties))
+                                                              size_hint_y=None, height=self.main_layout.height/5,
+                                                              **properties))
 
     def show_lesson_details(self, button_instance):
         lesson_info = self.get_lesson_info(button_instance)

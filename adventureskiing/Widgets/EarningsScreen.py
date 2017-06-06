@@ -54,7 +54,8 @@ class EarningsScreen(ScrollableScreen):  # TODO issue with Dropdown not opening 
     def setup_period_chooser(self):
         period_chooser = DropDown()
         for x in self.dates:
-            period_chooser.add_widget(FontFittingButton(text="{}".format(x), size_hint_y=None, height=self.main_layout.height,
+            period_chooser.add_widget(FontFittingButton(text="{}".format(x), size_hint_y=None,
+                                                        height=period_chooser.height,
                                                         on_release=lambda a: period_chooser.select(a.text),
                                                         **self.dropdown_buttons_properties))
         self.choosen = FontFittingButton(text="Dzis", size_hint=(1, 1), **self.button_properties)
