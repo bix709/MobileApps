@@ -71,7 +71,7 @@ class LessonPopup(CommonPopup):  # TODO refactoring ( focusing inputs etc. )
             'hour': self.hour,
             'lesson_id': lesson_id
         }
-        schedule_task(callback=InsertNewLesson(**db_kwargs), cb_args=(), cb_kwargs={'instance': self})
+        schedule_task(callback=InsertNewLesson(**db_kwargs), instance=self)
 
     def on_successful_execution(self, added_successfully, **kwargs):
         if added_successfully:
@@ -96,4 +96,4 @@ class LessonPopup(CommonPopup):  # TODO refactoring ( focusing inputs etc. )
         db_kwargs = {
             'lesson_id': lesson_id
         }
-        schedule_task(callback=RemoveLesson(**db_kwargs), cb_args=(), cb_kwargs={'instance': self})
+        schedule_task(callback=RemoveLesson(**db_kwargs), instance=self)

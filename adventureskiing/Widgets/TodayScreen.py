@@ -38,8 +38,7 @@ class TodayScreen(ScrollableScreen):
             'date': self.today,
             'hour': instance.id
         }
-        schedule_task(callback=GetUnoccupied(**db_kwargs), cb_args=tuple(), cb_kwargs={'instance': self,
-                                                                                       'button_instance': instance})
+        schedule_task(callback=GetUnoccupied(**db_kwargs), instance=self, button_instance=instance)
 
     def set_unoccupied(self, unoccupied_instructors, instance):
         self.unoccupied_users.dismiss()

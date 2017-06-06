@@ -45,18 +45,9 @@ class UserModifyingPopup(CommonPopup):
         self.choosen = None
         self.confirm_button = None
 
-    @property
-    def user_fetching_callback(self):
-        """ returns tuple of callback, callback_args, callback_kwargs
-
-            Callback must call self.assign_users with dictionary of users
-            key: user.name , value: user object
-        """
-        return UsersToChoose(), tuple(), {'instance': self}
-
     def setup_widgets(self):
         super(UserModifyingPopup, self).setup_widgets()
-        schedule_task(*self.user_fetching_callback)
+        schedule_task(UsersToChoose(), instance=self)
 
     def assign_users(self, users):
         user_chooser = DropDown()
@@ -96,12 +87,6 @@ class PasswordChanger(CommonPopup):
     def __init__(self, **kwargs):
         super(PasswordChanger, self).__init__(title="Zmien haslo", **kwargs)
 
-    @property
-    def password_changing_callback(self):
-        return PasswordChange(old_pw=hash(self.get_child('old').text),
-                              new_pw=hash(self.get_child('new').text),
-                              user=App.get_running_app().root.logged_user), tuple(), {'instance': self}
-
     def setup_widgets(self):
         super(PasswordChanger, self).setup_widgets()
         self.setup_input_fields()
@@ -124,7 +109,9 @@ class PasswordChanger(CommonPopup):
         if not self.get_child('new').text == self.get_child('repeated').text:
             self.on_wrong_attempt()
         else:
-            schedule_task(*self.password_changing_callback)
+            schedule_task(PasswordChange(old_pw=hash(self.get_child('old').text),
+                              new_pw=hash(self.get_child('new').text),
+                              user=App.get_running_app().root.logged_user), instance=self)
 
     def on_successful_change(self):
         self.main_layout.clear_widgets()
@@ -144,21 +131,15 @@ class UserAddingPopup(CommonPopup):
     def __init__(self, **kwargs):
         super(UserAddingPopup, self).__init__(title='Utwórz konto', **kwargs)
 
-    @property
-    def user_adding_callback(self):
-        """ Callback creating user.
-
-        It must call self.display_results with arguments :
-        bool created_succesfully - specifies if account was created succesfully"""
-        return CreateUser(firstname=self.get_child('firstname').text,
-                          lastname=self.get_child('lastname').text,
-                          login=self.get_child('login').text), tuple(), {'instance': self}
-
     def setup_widgets(self):
         super(UserAddingPopup, self).setup_widgets()
         self.setup_input_fields()
         self.main_layout.add_widget(FontFittingButton(text="Zatwierdz",
-                                                      on_press=lambda a: schedule_task(*self.user_adding_callback)))
+                                                      on_press=lambda a: schedule_task(
+                                                          CreateUser(firstname=self.get_child('firstname').text,
+                                                                     lastname=self.get_child('lastname').text,
+                                                                     login=self.get_child('login').text),
+                                                          instance=self)))
 
     def setup_input_fields(self):
         self.main_layout.add_widget(FontFittingLabel(text="Login:"))
@@ -170,7 +151,11 @@ class UserAddingPopup(CommonPopup):
                                               on_text_validate=lambda a: self.focus_input('lastname')))
         self.main_layout.add_widget(FontFittingLabel(text="Nazwisko:"))
         self.main_layout.add_widget(TextInput(id='lastname', focus=False, multiline=False,
-                                              on_text_validate=lambda a: schedule_task(*self.user_adding_callback)))
+                                              on_text_validate=lambda a: schedule_task(schedule_task(
+                                                  CreateUser(firstname=self.get_child('firstname').text,
+                                                             lastname=self.get_child('lastname').text,
+                                                             login=self.get_child('login').text),
+                                                  instance=self))))
 
     def display_results(self, created_successfully):
         self.unfocus_all_inputs()
@@ -195,15 +180,6 @@ class UserRemovingPopup(UserModifyingPopup):
     def __init__(self, **kwargs):
         super(UserRemovingPopup, self).__init__(title='Usuń konto', **kwargs)
 
-    @property
-    def user_removing_callback(self):
-        """ returns tuple of callback class, callback_args, callback_kwargs
-            first arg is a class not object instance , it needs to be created.
-
-            Callback must call display_results with bool arg that specifies if account was removed succesfully
-        """
-        return RemoveUser, tuple(), {'instance': self}
-
     def assign_users(self, users):
         self.main_layout.add_widget(FontFittingLabel(text='Wybierz użytkownika:'))
         super(UserRemovingPopup, self).assign_users(users)
@@ -214,8 +190,7 @@ class UserRemovingPopup(UserModifyingPopup):
         self.main_layout.add_widget(self.confirm_button)
 
     def remove_choosen(self, choosen_user_button):
-        schedule_task(callback=self.user_removing_callback[0](choosen_user_button.user),
-                      cb_args=self.user_removing_callback[1], cb_kwargs=self.user_removing_callback[2])
+        schedule_task(callback=RemoveUser(choosen_user_button.user), instance=self)
 
     def display_results(self, removed_successfully, *args):
         failure_msg = 'Nie udało się usunąć konta' if removed_successfully is False else 'Wybierz odpowiedniego uzytkownika'
@@ -228,10 +203,6 @@ class PermissionChanger(UserModifyingPopup):
     def __init__(self, **kwargs):
         super(PermissionChanger, self).__init__(title='Zmień uprawnienia', **kwargs)
         self.choosen_privilege = None
-
-    @property
-    def permission_changing_callback(self):
-        return ChangePermissions(self.choosen.user, self.choosen_privilege.text), tuple(), {'instance': self}
 
     def assign_users(self, users):
         self.main_layout.add_widget(FontFittingLabel(text='Wybierz uzytkownika i uprawnienia'))
@@ -253,7 +224,9 @@ class PermissionChanger(UserModifyingPopup):
                                                 on_press=lambda a:
                                                 ConfirmationPopup(
                                                     confirmed_function=schedule_task,
-                                                    func_args=self.permission_changing_callback).open())
+                                                    func_args=ChangePermissions(self.choosen.user,
+                                                                                self.choosen_privilege.text),
+                                                    func_kwargs={'instance': self}).open())
         self.main_layout.add_widget(self.confirm_button)
 
     def display_results(self, changed_successfully, *args):

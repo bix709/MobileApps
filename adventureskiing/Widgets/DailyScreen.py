@@ -39,10 +39,8 @@ class DailyScreen(ScrollableScreen):
 
     def get_day_schedule(self):
         user = App.get_running_app().root.choosen_user
-        db_args = args = ()
         db_kwargs = {'day': self.day, 'user': user}
-        kwargs = {'instance': self}
-        schedule_task(callback=GetDailyGraph(*db_args, **db_kwargs), cb_args=args, cb_kwargs=kwargs)
+        schedule_task(callback=GetDailyGraph(**db_kwargs), instance=self)
 
     def refresh(self, day):
         self.day = day

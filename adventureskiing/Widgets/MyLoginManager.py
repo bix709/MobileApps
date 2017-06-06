@@ -3,7 +3,8 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
-from kivy.app import App
+from kivy.core.window import Window
+from kivy.uix.actionbar import ActionSeparator
 
 from adventureskiing.Config.Widgets_properties import *
 from adventureskiing.Widgets.CalendarScreen import CalendarScreen
@@ -35,15 +36,22 @@ class MyLoginManager(LoginManager):
 
     def setup_carousel_widgets(self):
         caro = self.get_screen("CarouselWithActionBar")
+        self.setup_carousels_screens(caro)
         if self.logged_user.privileges == "Admin":
-            self.user_chooser = UserChooser()
-            caro.actionBar.action_view.add_widget(self.user_chooser)
-        caro.add_screen(CalendarScreen(**calendarscreen_properties))
+            self.setup_user_chooser(caro)
 
+    def setup_carousels_screens(self, caro):
+        caro.add_screen(CalendarScreen(**calendarscreen_properties))
         caro.add_screen(DailyScreen(**dailyscreen_properties))
         caro.add_screen(TodayScreen(**todayscreen_properties))
         caro.add_screen(EarningsScreen(**earningscreen_properties))
         caro.add_screen(MaintenanceScreen(**maintenancescreen_properties))
+
+    def setup_user_chooser(self, caro):
+        self.user_chooser = UserChooser(**user_chooser_properties)
+        caro.actionBar.action_view.add_widget(ActionSeparator(**separators_properties))
+        caro.actionBar.action_view.add_widget(self.user_chooser)
+        caro.actionBar.action_view._layout_all()
 
     def logout(self, *args, **kwargs):
         super(MyLoginManager, self).logout()

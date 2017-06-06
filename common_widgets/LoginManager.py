@@ -28,10 +28,8 @@ class LoginManager(ScreenManager, RootWidget):
         pass
 
     def handle_login(self, username, password):
-        args = db_args = ()
         db_kwargs = {'username': username, 'password': password}
-        kwargs = {'instance': self}
-        schedule_task(callback=LoginCallback(*db_args, **db_kwargs), cb_args=args, cb_kwargs=kwargs)
+        schedule_task(callback=LoginCallback(**db_kwargs), instance=self)
 
     def correct_login(self, *args, **kwargs):
         """ Override this method to navigate to first widget after successfull login. """

@@ -84,7 +84,7 @@ class EarningsScreen(ScrollableScreen):  # TODO issue with Dropdown not opening 
             'period': period,
             'user': App.get_running_app().root.choosen_user if not all_users else None
         }
-        schedule_task(callback=GetEarnings(**db_kwargs), cb_args=tuple(), cb_kwargs={'instance': self})
+        schedule_task(callback=GetEarnings(**db_kwargs), instance=self)
 
     def show_earnings(self, total_earns):
         period = self.choosen.text

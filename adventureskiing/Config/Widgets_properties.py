@@ -57,7 +57,7 @@ dailyscreen_properties = {
     'name': 'Grafik',
     'header_font_color': (0, 0, 0, 1),
     'busy_buttons_properties': {'background_normal': 'adventureskiing/graphics/red_snow.png'},
-    'free_buttons_properties': {'background_normal': 'adventureskiing/graphics/green_snow.png', 'color':(0, 0, 0, 1)},
+    'free_buttons_properties': {'background_normal': 'adventureskiing/graphics/green_snow.png', 'color': (0, 0, 0, 1)},
     'configuration_buttons_properties': {'background_normal': 'adventureskiing/graphics/yellow_snow.png'}
 }
 
@@ -77,4 +77,11 @@ earningscreen_properties = {
 carousel_with_actionbar_properties = {
     'action_button_properties': action_button_properties,
     'action_bar_properties': action_bar_properties
+}
+
+user_chooser_properties = {
+    'background_color': (101, 3, 66, 1)
+}
+separators_properties = {
+    'background_image': 'adventureskiing/graphics/bialy.png'
 }

@@ -24,7 +24,7 @@ def wait_for_future_result(function):
     return wrapped
 
 
-def schedule_task(callback, cb_args, cb_kwargs):
+def schedule_task(callback, *cb_args, **cb_kwargs):
     App.get_running_app().root.task_queue.put((callback, cb_args, cb_kwargs))
 
 
@@ -37,7 +37,7 @@ class CommonCallback(object):
         self.database_kwargs = database_kwargs
         super(CommonCallback, self).__init__()
 
-    def __call__(self, args, kwargs):
+    def __call__(self, *args, **kwargs):
         """ Override this method only if you know what you're doing! """
         with ThreadPoolExecutor(max_workers=2) as executor:
             executor.submit(self.perform_callback, *args, **kwargs)

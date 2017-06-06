@@ -21,7 +21,7 @@ class BackgroundCallbackExecutor(Thread):
                 if self.queue.empty() is False:
                     callback, args, kwargs = self.queue.get()
                     self.queue.unfinished_tasks += 1
-                    callback.__call__(args, kwargs)
+                    callback.__call__(*args, **kwargs)
             except:
                 print "Task queue exception {}".format(sys.exc_info()[0])
                 self.queue.task_done()

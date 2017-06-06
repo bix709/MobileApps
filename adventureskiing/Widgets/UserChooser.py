@@ -7,6 +7,7 @@ from kivy.app import App
 from kivy.uix.actionbar import ActionGroup
 
 from adventureskiing.Database.Callbacks import UsersToChoose
+from adventureskiing.Database.MySQL.db_commands import SqlCommands
 from common_callbacks.Callbacks import schedule_task
 from adventureskiing.Utils.Users import ActionUserButton
 
@@ -14,11 +15,15 @@ from adventureskiing.Utils.Users import ActionUserButton
 class UserChooser(ActionGroup):  # TODO fix size issues ( not opening spinner ) and resizing exception issue, close dropdown!
     def __init__(self, **kwargs):
         super(UserChooser, self).__init__(**kwargs)
-        self.size_hint = (None, 1)
-        self.size = (100, 20)
+        self.size_hint = (1, 1)
+        # self.size = (100, 20)
         self.text = App.get_running_app().root.logged_user.name
         self.mode = 'spinner'
-        schedule_task(callback=UsersToChoose(), cb_args=tuple(), cb_kwargs={'instance': self})
+        self.fetch_users()
+
+    def fetch_users(self):
+        """ Cannot be a background task, to set it in action view properly!! """
+        self.assign_users(SqlCommands.get_all_users())
 
     def assign_users(self, users):
         for user in users:
