@@ -49,6 +49,7 @@ class MyLoginManager(LoginManager):
 
     def setup_user_chooser(self, caro):
         self.user_chooser = UserChooser(**user_chooser_properties)
+        caro.actionBar.action_view._layout_all()
         caro.actionBar.action_view.add_widget(ActionSeparator(**separators_properties))
         caro.actionBar.action_view.add_widget(self.user_chooser)
         caro.actionBar.action_view._layout_all()

@@ -28,11 +28,16 @@ class AdventureSkiing(App):
     icon = 'adventureskiing/graphics/logo.png'
 
     def build(self):
+        Window.size = (250, 450)
+        Window.bind(on_keyboard=self.handle_go_back_button)
         Window.icon = 'adventureskiing/graphics/logo.png'
         return MyLoginManager()
 
     def on_pause(self):
         return True
+
+    def handle_go_back_button(self, window, keycode1, keycode2, text, modifiers):
+        return True if keycode1 in [27, 1001] else False
 
 
 if __name__ == '__main__':
