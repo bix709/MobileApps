@@ -23,19 +23,20 @@ class DailyScreen(ScrollableScreen):
         self.free_buttons_properties = kwargs.pop('free_buttons_properties', dict())
         self.configuration_buttons_properties = kwargs.pop('configuration_buttons_properties', dict())
         self.header_font_color = kwargs.pop('header_font_color', (1, 1, 1, 1))
+        self.buttons_height = Window.height / 7 if Window.height > Window.width else Window.width / 7
         super(DailyScreen, self).__init__(id='DailyScreen', *args, **kwargs)
 
     def setup_widgets(self):
         today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
         self.main_layout.add_widget(FontFittingLabel(text='Grafik z dnia {}'.format(self.day), size_hint_y=None,
-                                                     height=Window.height / 7,
+                                                     height=self.buttons_height,
                                                      color=self.header_font_color))
         self.main_layout.add_widget(FontFittingButton(text='Odśwież', size_hint_y=None,
-                                                      height=Window.height / 7,
+                                                      height=self.buttons_height,
                                                       on_press=lambda a: self.refresh(self.day),
                                                       **self.configuration_buttons_properties))
         self.main_layout.add_widget(FontFittingButton(text='Pokaz dzisiejszy', size_hint_y=None,
-                                                      height=Window.height / 7,
+                                                      height=self.buttons_height,
                                                       on_press=lambda a: self.refresh(today),
                                                       **self.configuration_buttons_properties))
         self.get_day_schedule()
@@ -63,7 +64,8 @@ class DailyScreen(ScrollableScreen):
                 self.main_layout.add_widget(FontFittingButton(text='{}'.format(lesson_info),
                                                               id="{}".format(lesson_id),
                                                               on_press=lambda a: self.show_lesson_details(a),
-                                                              size_hint_y=None, height=self.main_layout.height/5,
+                                                              size_hint_y=None,
+                                                              height=self.buttons_height,
                                                               **properties))
 
     def show_lesson_details(self, button_instance):

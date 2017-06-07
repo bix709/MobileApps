@@ -24,6 +24,7 @@ class TodayScreen(ScrollableScreen):
         self.today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
         self.button_properties = kwargs.pop('buttons_properties', dict())
         self.dropdown_buttons_properties = kwargs.pop('dropdown_buttons_properties', dict())
+        self.dropdown_height = Window.height / 7 if Window.height > Window.width else Window.width / 7
         super(TodayScreen, self).__init__(**kwargs)
 
     def setup_widgets(self):
@@ -31,7 +32,7 @@ class TodayScreen(ScrollableScreen):
             if hour > time.gmtime().tm_hour:
                 self.main_layout.add_widget(FontFittingButton(text="{}.00 - {}.50".format(hour, hour),
                                                               id="{}".format(hour), size_hint_y=None,
-                                                              height=Window.height / 7,
+                                                              height=self.dropdown_height,
                                                               on_press=lambda a: self.display_unoccupied(a),
                                                               **self.button_properties))
 
@@ -48,7 +49,8 @@ class TodayScreen(ScrollableScreen):
         if unoccupied_instructors is not None:
             for instructor in unoccupied_instructors:
                 self.unoccupied_users.add_widget(UserButton(text="{}".format(instructor.name), user=instructor,
-                                                            size_hint_y=None, height=Window.height / 10,
+                                                            size_hint_y=None,
+                                                            height=self.dropdown_height/1.5,
                                                             on_press=lambda a: self.add_lesson(a, instance),
                                                             **self.dropdown_buttons_properties))
             self.unoccupied_users.open(instance)

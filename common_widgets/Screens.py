@@ -95,12 +95,15 @@ class ScrollableScreen(BackgroundAdjustableScreen):
         super(ScrollableScreen, self).__init__(*args, **kwargs)
         self.main_layout = GridLayout(cols=1, size_hint_y=None, height=Window.height)
         self.main_layout.bind(minimum_height=self.main_layout.setter('height'))
-
         scroll = ScrollView(size_hint=(1, 1))
         scroll.add_widget(self.main_layout)
         self.add_widget(scroll)
         self.setup_widgets()
         self.main_layout.height = Window.height * 0.9
+        Window.bind(on_resize=self.adjust_widgets_height)
 
     def setup_widgets(self):
+        pass
+
+    def adjust_widgets_height(self, *args):
         pass
