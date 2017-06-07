@@ -7,6 +7,7 @@ import time
 from time import gmtime
 
 from kivy.app import App
+from kivy.core.window import Window
 from kivy.uix.dropdown import DropDown
 
 from adventureskiing.Database.Callbacks import GetUnoccupied
@@ -30,7 +31,7 @@ class TodayScreen(ScrollableScreen):
             if hour > time.gmtime().tm_hour:
                 self.main_layout.add_widget(FontFittingButton(text="{}.00 - {}.50".format(hour, hour),
                                                               id="{}".format(hour), size_hint_y=None,
-                                                              height=self.main_layout.height / 7,
+                                                              height=Window.height / 7,
                                                               on_press=lambda a: self.display_unoccupied(a),
                                                               **self.button_properties))
 
@@ -47,7 +48,7 @@ class TodayScreen(ScrollableScreen):
         if unoccupied_instructors is not None:
             for instructor in unoccupied_instructors:
                 self.unoccupied_users.add_widget(UserButton(text="{}".format(instructor.name), user=instructor,
-                                                            size_hint_y=None, height=self.main_layout.height / 10,
+                                                            size_hint_y=None, height=Window.height / 10,
                                                             on_press=lambda a: self.add_lesson(a, instance),
                                                             **self.dropdown_buttons_properties))
             self.unoccupied_users.open(instance)

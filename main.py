@@ -24,6 +24,7 @@ class AdventureSkiing(App):
     # TODO new feature - resume where left - resume, back, on android not closing app
     # TODO remember session - logged in users after restart app
     # TODO android notifications
+    # TODO BIND BUTTONS SIZE TO MAINLAYOUT SIZE !!!!!!!!
 
     icon = 'adventureskiing/graphics/logo.png'
 

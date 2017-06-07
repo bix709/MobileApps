@@ -28,14 +28,14 @@ class DailyScreen(ScrollableScreen):
     def setup_widgets(self):
         today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
         self.main_layout.add_widget(FontFittingLabel(text='Grafik z dnia {}'.format(self.day), size_hint_y=None,
-                                                     height=self.main_layout.height / 7,
+                                                     height=Window.height / 7,
                                                      color=self.header_font_color))
         self.main_layout.add_widget(FontFittingButton(text='Odśwież', size_hint_y=None,
-                                                      height=self.main_layout.height / 7,
+                                                      height=Window.height / 7,
                                                       on_press=lambda a: self.refresh(self.day),
                                                       **self.configuration_buttons_properties))
         self.main_layout.add_widget(FontFittingButton(text='Pokaz dzisiejszy', size_hint_y=None,
-                                                      height=self.main_layout.height / 7,
+                                                      height=Window.height / 7,
                                                       on_press=lambda a: self.refresh(today),
                                                       **self.configuration_buttons_properties))
         self.get_day_schedule()
