@@ -4,6 +4,7 @@
     copyright : 5517 Company
 """
 from kivy.core.window import Window
+from kivy.graphics.instructions import InstructionGroup
 from kivy.uix.actionbar import *
 from kivy.uix.carousel import Carousel
 
@@ -15,7 +16,11 @@ class CustomCarousel(Carousel):
 
     def __init__(self, **kwargs):
         super(CustomCarousel, self).__init__(**kwargs)
+        self.background_instruction = InstructionGroup()
         self.bind(size=self.adjust_background)
+
+    def setup_background(self):
+        self.parent.canvas.before.add(self.background_instruction)
 
     def on_index(self, *args):
         super(CustomCarousel, self).on_index(*args)
@@ -37,8 +42,8 @@ class CustomCarousel(Carousel):
 
     def adjust_background(self, *args, **kwargs):
         with ignored(Exception):
-            self.parent.canvas.after.clear()
-            self.parent.canvas.before.add(
+            self.background_instruction.clear()
+            self.background_instruction.add(
                 Rectangle(pos=self.pos, size=Window.size, source=self._curr_slide().background_img))
 
 
@@ -63,6 +68,7 @@ class CarouselWithActionBar(BackgroundAdjustableScreen):
                                          **self.action_bar_properties)
         self.carousel = CustomCarousel(id='carousel', size_hint_y=0.9)
         self.add_widget(self.carousel)
+        self.carousel.setup_background()
         self.add_widget(self.actionBar)
         self.action_buttons = []
 
