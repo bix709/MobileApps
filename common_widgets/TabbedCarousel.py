@@ -37,6 +37,7 @@ class CustomCarousel(Carousel):
 
     def adjust_background(self, *args, **kwargs):
         with ignored(Exception):
+            self.parent.canvas.after.clear()
             self.parent.canvas.before.add(
                 Rectangle(pos=self.pos, size=Window.size, source=self._curr_slide().background_img))
 
