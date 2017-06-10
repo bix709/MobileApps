@@ -85,7 +85,6 @@ class Zegarek(Label):
         super(Zegarek, self).__init__(**kwargs)
         self.pos = (200, 200)
         self.size = (500, 500)
-        self.font_size = 25
         self.text = asctime()
         Clock.schedule_interval(self.refresh, 1)
 

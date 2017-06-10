@@ -53,7 +53,7 @@ class LoginScreen(BackgroundAdjustableScreen):
     def create_main_layout(self, wrong_login=False):
         if wrong_login:
             self.main_layout.add_widget(
-                FontFittingLabel(markup=True, color=(1, 1, 1, 1), font_size=18, size_hint_y=0.20,
+                FontFittingLabel(markup=True, color=(1, 1, 1, 1), size_hint_y=0.20,
                                  text="[b][color=FF0000]Zły login lub hasło![/color][/b]"))
         self.__username_input = TextInput(multiline=False, id='Username', focus=False, size_hint_y=0.20,
                                           on_text_validate=lambda a: self.focus_password())
