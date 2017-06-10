@@ -27,31 +27,20 @@ class DailyScreen(ScrollableScreen):
         super(DailyScreen, self).__init__(id='DailyScreen', *args, **kwargs)
 
     def setup_widgets(self):
-        today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
-        self.main_layout.add_widget(FontFittingLabel(text='Grafik z dnia {}'.format(self.day), size_hint_y=None,
-                                                     height=self.buttons_height,
-                                                     color=self.header_font_color))
-        self.main_layout.add_widget(FontFittingButton(text='Odśwież', size_hint_y=None,
-                                                      height=self.buttons_height,
-                                                      on_press=lambda a: self.refresh(self.day),
-                                                      **self.configuration_buttons_properties))
-        self.main_layout.add_widget(FontFittingButton(text='Pokaz dzisiejszy', size_hint_y=None,
-                                                      height=self.buttons_height,
-                                                      on_press=lambda a: self.refresh(today),
-                                                      **self.configuration_buttons_properties))
-        self.get_day_schedule()
-
-    def get_day_schedule(self):
         user = App.get_running_app().root.choosen_user
         db_kwargs = {'day': self.day, 'user': user}
         schedule_task(callback=GetDailyGraph(**db_kwargs), instance=self)
 
     def refresh(self, day):
         self.day = day
-        self.main_layout.clear_widgets()
         self.setup_widgets()
 
     def add_hours(self, busy_hours):
+        self.main_layout.clear_widgets()
+        self.setup_option_buttons()
+        self.setup_lessons_buttons(busy_hours)
+
+    def setup_lessons_buttons(self, busy_hours):
         for hour in range(9, 21):
             try:
                 lesson_info, lesson_id = busy_hours[hour]
@@ -67,6 +56,20 @@ class DailyScreen(ScrollableScreen):
                                                               size_hint_y=None,
                                                               height=self.buttons_height,
                                                               **properties))
+
+    def setup_option_buttons(self):
+        today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
+        self.main_layout.add_widget(FontFittingLabel(text='Grafik z dnia {}'.format(self.day), size_hint_y=None,
+                                                     height=self.buttons_height,
+                                                     color=self.header_font_color))
+        self.main_layout.add_widget(FontFittingButton(text='Odśwież', size_hint_y=None,
+                                                      height=self.buttons_height,
+                                                      on_press=lambda a: self.refresh(self.day),
+                                                      **self.configuration_buttons_properties))
+        self.main_layout.add_widget(FontFittingButton(text='Pokaz dzisiejszy', size_hint_y=None,
+                                                      height=self.buttons_height,
+                                                      on_press=lambda a: self.refresh(today),
+                                                      **self.configuration_buttons_properties))
 
     def show_lesson_details(self, button_instance):
         lesson_info = self.get_lesson_info(button_instance)
