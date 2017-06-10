@@ -4,6 +4,7 @@
     copyright : 5517 Company
 """
 from kivy.app import App
+
 from common_widgets.CommonPopups import PasswordChanger, UserAddingPopup, UserRemovingPopup, PermissionChanger
 from common_widgets.FittingLabels import FontFittingButton
 from common_widgets.Screens import ScrollableScreen

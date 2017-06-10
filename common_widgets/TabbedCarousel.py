@@ -3,12 +3,13 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+from kivy.app import App
 from kivy.core.window import Window
 from kivy.graphics.instructions import InstructionGroup
 from kivy.uix.actionbar import *
 from kivy.uix.carousel import Carousel
 
-from adventureskiing.Database.MySQL.db_commands import ignored
+from common_utilities.Utilities import ignored
 from common_widgets.Screens import BackgroundAdjustableScreen, Rectangle
 
 
@@ -28,6 +29,7 @@ class CustomCarousel(Carousel):
         self.set_tab_states_to_normal()
         self.set_tab_down(current_tab)
         self.adjust_background()
+        App.get_running_app().root.commands_stack.append(self.current_slide)
 
     def set_tab_down(self, current_tab):
         try:
@@ -44,7 +46,7 @@ class CustomCarousel(Carousel):
         with ignored(Exception):
             self.background_instruction.clear()
             self.background_instruction.add(
-                Rectangle(pos=self.pos, size=Window.size, source=self._curr_slide().background_img))
+                Rectangle(pos=self.pos, size=Window.size, source=self.parent.get_proper_background_image()))
 
 
 class CustomActionBar(ActionBar):  # TODO Action previous action - getting back to prev screen
@@ -88,3 +90,8 @@ class CarouselWithActionBar(BackgroundAdjustableScreen):
     def reinitialize(self):
         self.clear_widgets()
         self.initialize()
+
+    def get_proper_background_image(self):
+        """ This method must return background that will be refreshed every carousel swip and resize. """
+        return self.carousel._curr_slide().background_img
+

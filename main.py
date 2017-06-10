@@ -32,7 +32,7 @@ class AdventureSkiing(App):
         return True
 
     def handle_go_back_button(self, window, keycode1, keycode2, text, modifiers):
-        return True if keycode1 in [27, 1001] else False
+        return self.root.go_back() if keycode1 in [27, 1001] else False
 
 
 if __name__ == '__main__':

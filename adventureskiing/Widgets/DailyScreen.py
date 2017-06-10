@@ -8,23 +8,23 @@ from time import gmtime
 from kivy.app import App
 from kivy.core.window import Window
 
-from common_callbacks.Callbacks import schedule_task
 from adventureskiing.Database.Callbacks import GetDailyGraph
 from adventureskiing.Widgets.LessonsPopup import LessonPopup
+from common_callbacks.Callbacks import schedule_task
 from common_widgets.FittingLabels import FontFittingButton
 from common_widgets.FittingLabels import FontFittingLabel
 from common_widgets.Screens import ScrollableScreen
 
 
 class DailyScreen(ScrollableScreen):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         self.day = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
         self.busy_buttons_properties = kwargs.pop('busy_buttons_properties', dict())
         self.free_buttons_properties = kwargs.pop('free_buttons_properties', dict())
         self.configuration_buttons_properties = kwargs.pop('configuration_buttons_properties', dict())
         self.header_font_color = kwargs.pop('header_font_color', (1, 1, 1, 1))
         self.buttons_height = Window.height / 7 if Window.height > Window.width else Window.width / 7
-        super(DailyScreen, self).__init__(id='DailyScreen', *args, **kwargs)
+        super(DailyScreen, self).__init__(id='DailyScreen', **kwargs)
 
     def setup_widgets(self):
         user = App.get_running_app().root.choosen_user

@@ -3,7 +3,6 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
-from contextlib import contextmanager
 
 from adventureskiing.Config.config import privileges
 from adventureskiing.Database.MySQL.SqlCmdChoosers import EarningsCmdChooser
@@ -13,13 +12,7 @@ from common_database.MySqlConnection import DatabaseConnection, sys
 
 
 # TODO refactoring kwargs to params!!!!
-
-@contextmanager
-def ignored(exc):
-    try:
-        yield
-    except exc:
-        pass
+from common_utilities.Utilities import ignored
 
 
 class SqlCommands(object):

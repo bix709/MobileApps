@@ -90,9 +90,9 @@ class LoginScreen(BackgroundAdjustableScreen):
         self.initialize()
 
 
-class ScrollableScreen(BackgroundAdjustableScreen):
-    def __init__(self, *args, **kwargs):
-        super(ScrollableScreen, self).__init__(*args, **kwargs)
+class ScrollableScreen(Screen):
+    def __init__(self, **kwargs):
+        super(ScrollableScreen, self).__init__(**kwargs)
         self.main_layout = GridLayout(cols=1, size_hint_y=None, height=Window.height)
         self.main_layout.bind(minimum_height=self.main_layout.setter('height'))
         scroll = ScrollView(size_hint=(1, 1))
@@ -100,10 +100,6 @@ class ScrollableScreen(BackgroundAdjustableScreen):
         self.add_widget(scroll)
         self.setup_widgets()
         self.main_layout.height = Window.height * 0.9
-        Window.bind(on_resize=self.adjust_widgets_height)
 
     def setup_widgets(self):
-        pass
-
-    def adjust_widgets_height(self, *args):
         pass

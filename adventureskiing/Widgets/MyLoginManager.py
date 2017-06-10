@@ -3,19 +3,18 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
-from kivy.core.window import Window
 from kivy.uix.actionbar import ActionSeparator
 
 from adventureskiing.Config.Widgets_properties import *
 from adventureskiing.Widgets.CalendarScreen import CalendarScreen
 from adventureskiing.Widgets.DailyScreen import DailyScreen
 from adventureskiing.Widgets.EarningsScreen import EarningsScreen
+from adventureskiing.Widgets.MaintenanceScreen import MaintenanceScreen
+from adventureskiing.Widgets.ScreenCarousel import ScreenCarousel
 from adventureskiing.Widgets.TodayScreen import TodayScreen
 from adventureskiing.Widgets.UserChooser import UserChooser
-
-from adventureskiing.Widgets.MaintenanceScreen import MaintenanceScreen
+from common_utilities.Utilities import ignored
 from common_widgets.LoginManager import LoginManager
-from common_widgets.TabbedCarousel import CarouselWithActionBar
 
 
 class MyLoginManager(LoginManager):
@@ -28,7 +27,7 @@ class MyLoginManager(LoginManager):
         self.user_chooser = None
 
     def setup_screens(self):
-        self.add_widget(CarouselWithActionBar(**carousel_with_actionbar_properties))
+        self.add_widget(ScreenCarousel(**carousel_with_actionbar_properties))
 
     def correct_login(self, *args, **kwargs):
         self.setup_carousel_widgets()
@@ -65,3 +64,10 @@ class MyLoginManager(LoginManager):
         caro.reinitialize()
         self.setup_carousel_widgets()
         caro.carousel.load_slide(caro.carousel.slides[int(current_slide_index)])
+
+    def go_back(self):
+        carousel = self.get_screen("CarouselWithActionBar").carousel
+        with ignored(IndexError):
+            self.commands_stack.pop()
+            carousel.load_slide(self.commands_stack.pop())
+        return True

@@ -38,14 +38,14 @@ action_bar_properties = {
 }
 
 todayscreen_properties = {
-    'background_image': 'adventureskiing/graphics/bg.jpg',
+    # 'background_image': 'adventureskiing/graphics/bg.jpg',
     'name': 'Dzis',
     'buttons_properties': {'background_normal': 'adventureskiing/graphics/blue_snow.png'},
     'dropdown_buttons_properties': {'background_normal': 'adventureskiing/graphics/yellow_snow.png'}
 }
 
 calendarscreen_properties = {
-    'background_image': 'adventureskiing/graphics/bg.jpg',
+    # 'background_image': 'adventureskiing/graphics/bg.jpg',
     'name': 'Kalendarz',
     'calendar_properties': {'month_header_font_color': (0, 0, 0, 1),
                             'days_header_font_color': (0, 0, 0, 1),
@@ -53,7 +53,7 @@ calendarscreen_properties = {
 }
 
 dailyscreen_properties = {
-    'background_image': 'adventureskiing/graphics/bg.jpg',
+    # 'background_image': 'adventureskiing/graphics/bg.jpg',
     'name': 'Grafik',
     'header_font_color': (0, 0, 0, 1),
     'busy_buttons_properties': {'background_normal': 'adventureskiing/graphics/red_snow.png'},
@@ -62,19 +62,20 @@ dailyscreen_properties = {
 }
 
 maintenancescreen_properties = {
-    'background_image': 'adventureskiing/graphics/bg.jpg',
+    # 'background_image': 'adventureskiing/graphics/bg.jpg',
     'name': 'Opcje',
     'buttons_properties': {'background_normal': 'adventureskiing/graphics/yellow_snow.png'}
 }
 
 earningscreen_properties = {
-    'background_image': 'adventureskiing/graphics/loginscreen.jpg',
+    # 'background_image': 'adventureskiing/graphics/loginscreen.jpg',
     'name': 'Zarobki',
     'header_font_color': (0, 0, 0, 1),
     'buttons_properties': {'background_normal': 'adventureskiing/graphics/yellow_snow.png'},
     'dropdown_buttons_properties': {'background_normal': 'adventureskiing/graphics/blue_snow.png'}
 }
 carousel_with_actionbar_properties = {
+    'background_image': 'adventureskiing/graphics/bg.jpg',
     'action_button_properties': action_button_properties,
     'action_bar_properties': action_bar_properties
 }

@@ -4,15 +4,16 @@
     copyright: 5517 Company
 """
 from kivy.app import App
+from kivy.uix.screenmanager import Screen
 
 from adventureskiing.Widgets.DailyScreen import DailyScreen
 from common_widgets.Screens import BackgroundAdjustableScreen
 from common_widgets.TimeWidgets import CommonCalendar
 
 
-class CalendarScreen(BackgroundAdjustableScreen):
-    def __init__(self, calendar_properties, *args, **kwargs):
-        super(CalendarScreen, self).__init__(*args, **kwargs)
+class CalendarScreen(Screen):
+    def __init__(self, calendar_properties, **kwargs):
+        super(CalendarScreen, self).__init__(**kwargs)
         self.add_widget(MyCalendar(**calendar_properties))
 
     @property
