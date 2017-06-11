@@ -3,14 +3,15 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
-from kivy.uix.button import Button
+from kivy.app import App
 from kivy.uix.dropdown import DropDown
 from kivy.uix.textinput import TextInput
 
 from adventureskiing.Database.Callbacks import InsertNewLesson, RemoveLesson
+
+from common_callbacks.Callbacks import schedule_task
 from common_widgets.CommonPopups import CommonPopup
 from common_widgets.FittingLabels import FontFittingButton, FontFittingLabel
-from adventureskiing.Widgets.DailyScreen import *
 
 
 class LessonPopup(CommonPopup):  # TODO refactoring ( focusing inputs etc. )

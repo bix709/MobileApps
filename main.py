@@ -20,7 +20,6 @@ class AdventureSkiing(App):
     # TODO Changing state of already down action button on click
     # TODO remember session - logged in users after restart app
     # TODO android notifications
-    # TODO performing tasks twice on doubleclikc - defect !!
     icon = 'adventureskiing/graphics/logo.png'
 
     def build(self):

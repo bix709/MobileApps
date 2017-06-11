@@ -86,6 +86,7 @@ class CarouselWithActionBar(BackgroundAdjustableScreen):
                                      **self.action_button_properties)
         self.action_buttons.append(action_button)
         action_view.add_widget(action_button)
+        action_view._layout_all()
 
     def reinitialize(self):
         self.clear_widgets()
