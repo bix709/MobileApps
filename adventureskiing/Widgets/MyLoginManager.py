@@ -35,9 +35,9 @@ class MyLoginManager(LoginManager):
 
     def setup_carousel_widgets(self):
         caro = self.get_screen("CarouselWithActionBar")
-        self.setup_carousels_screens(caro)
         if self.logged_user.privileges == "Admin":
             self.setup_user_chooser(caro)
+        self.setup_carousels_screens(caro)
 
     def setup_carousels_screens(self, caro):
         caro.add_screen(CalendarScreen(**calendarscreen_properties))
