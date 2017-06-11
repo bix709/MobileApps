@@ -82,7 +82,7 @@ class CarouselWithActionBar(BackgroundAdjustableScreen):
         button_state = 'down' if index == 0 else 'normal'
         action_view = self.actionBar.action_view
         # action_view.add_widget(ActionSeparator())  # TODO handle separators. ( throwing exception after resize )
-        action_button = ActionButton(id=str(index), size_hint=(None, 1), state=button_state, text=screen.name,
+        action_button = ActionButton(id=str(index), size_hint=(1, 1), state=button_state, text=screen.name,
                                      on_press=lambda a: self.carousel.load_slide(self.carousel.slides[int(a.id)]),
                                      **self.action_button_properties)
         self.action_buttons.append(action_button)
