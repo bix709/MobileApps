@@ -53,7 +53,7 @@ class CustomActionBar(ActionBar):  # TODO Action previous action - getting back 
     def __init__(self, **kwargs):
         action_prev_properties = kwargs.pop('action_prev_properties')
         super(CustomActionBar, self).__init__(**kwargs)
-        self.add_widget(ActionView(size_hint_x=0.9))
+        self.add_widget(ActionView())
         self.action_view.add_widget(ActionPrevious(**action_prev_properties))
 
 
