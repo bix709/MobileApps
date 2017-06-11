@@ -39,6 +39,7 @@ class MyLoginManager(LoginManager):
         if self.logged_user.privileges == "Admin":
             self.setup_user_chooser(caro)
         self.setup_carousels_screens(caro)
+        caro.actionBar.action_view._layout_random()
 
     def setup_carousels_screens(self, caro):
         caro.add_screen(CalendarScreen(**calendarscreen_properties))
