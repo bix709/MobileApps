@@ -26,6 +26,7 @@ action_prev_properties = {
     'app_icon_width': 0.1,
     'size_hint_x': None,
     'width': 0,
+    'minimum_width': 0,
     'with_previous': False
 
 }

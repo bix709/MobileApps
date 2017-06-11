@@ -55,6 +55,7 @@ class CustomActionBar(ActionBar):  # TODO Action previous action - getting back 
         super(CustomActionBar, self).__init__(**kwargs)
         self.add_widget(ActionView())
         self.action_view.add_widget(ActionPrevious(**action_prev_properties))
+        self.action_view.add_widget(ActionOverflow(width=0))
 
 
 class CarouselWithActionBar(BackgroundAdjustableScreen):
