@@ -20,9 +20,11 @@ class AdventureSkiing(App):
     # TODO Changing state of already down action button on click
     # TODO remember session - logged in users after restart app
     # TODO android notifications
+    # TODO refactoring - private methods
     icon = 'adventureskiing/graphics/logo.png'
 
     def build(self):
+        Window.size = (250, 450)
         Window.bind(on_keyboard=self.handle_go_back_button)
         Window.icon = 'adventureskiing/graphics/logo.png'
         return MyLoginManager()
