@@ -4,6 +4,7 @@
     copyright : 5517 Company
 """
 from kivy.app import App
+from kivy.core.window import Window
 from kivy.uix.actionbar import ActionGroup
 
 from adventureskiing.Database.Callbacks import UsersToChoose
@@ -15,8 +16,8 @@ from adventureskiing.Utils.Users import ActionUserButton
 class UserChooser(ActionGroup):  # TODO fix size issues ( not opening spinner ) and resizing exception issue, close dropdown!
     def __init__(self, **kwargs):
         super(UserChooser, self).__init__(**kwargs)
-        self.size_hint = (1, 1)
-        # self.size = (100, 20)
+        self.size_hint = (None, 1)
+        self.width = Window.width / 3
         self.text = App.get_running_app().root.logged_user.name
         self.mode = 'spinner'
         self.fetch_users()
