@@ -86,6 +86,7 @@ class LoginScreen(BackgroundAdjustableScreen):
         self.__username_input.focus = True
 
     def reinitialize(self):
+        self.manager = None
         self.main_layout.clear_widgets()
         self.initialize()
 

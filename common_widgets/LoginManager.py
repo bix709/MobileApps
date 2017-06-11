@@ -3,29 +3,28 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
-from kivy.app import App
 from kivy.uix.screenmanager import FadeTransition
 from kivy.uix.screenmanager import ScreenManager
 
 from adventureskiing.Database.Callbacks import LoginCallback
 from common_callbacks.Callbacks import schedule_task
 from common_widgets.RootWidget import RootWidget
-from common_widgets.Screens import BackgroundAdjustableScreen, LoginScreen
+from common_widgets.Screens import LoginScreen
 
 
 class LoginManager(ScreenManager, RootWidget):
     def __init__(self, loginbutton_properties, credential_label_properties, loginscreen_properties, *args, **kwargs):
         """ This widget is supposed to be root of application! """
+        self.login_screen = LoginScreen(loginbutton_properties=loginbutton_properties,
+                                        credential_label_properties=credential_label_properties,
+                                        **loginscreen_properties)
         super(LoginManager, self).__init__(id="LoginManager", transition=FadeTransition(), **kwargs)
         self.logged_user = None
-        self.add_widget(LoginScreen(loginbutton_properties=loginbutton_properties,
-                                    credential_label_properties=credential_label_properties,
-                                    **loginscreen_properties))
         self.setup_screens()
 
     def setup_screens(self):
         """ Override this method to set up screens to be displayed after correct_login. """
-        pass
+        self.add_widget(self.login_screen)
 
     def handle_login(self, username, password):
         db_kwargs = {'username': username, 'password': password}
@@ -37,10 +36,7 @@ class LoginManager(ScreenManager, RootWidget):
         self.go_to(screen.name)
 
     def wrong_login(self, *args, **kwargs):
-        try:
-            self.get_screen("Login Screen").wrong_login_attempt()
-        except:
-            print "Wrong Login Screen attached."
+        self.login_screen.wrong_login_attempt()
 
     def go_to(self, name):
         self.current = name
@@ -48,6 +44,6 @@ class LoginManager(ScreenManager, RootWidget):
     def logout(self, *args, **kwargs):
         self.logged_user = None
         self.clear_widgets()
+        self.login_screen.reinitialize()
         self.setup_screens()
-        self.get_screen('Login Screen').reinitialize()
-        self.go_to('Login Screen')
+        self.go_to(self.login_screen.name)

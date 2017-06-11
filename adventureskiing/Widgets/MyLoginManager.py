@@ -27,6 +27,7 @@ class MyLoginManager(LoginManager):
         self.user_chooser = None
 
     def setup_screens(self):
+        super(MyLoginManager, self).setup_screens()
         self.add_widget(ScreenCarousel(**carousel_with_actionbar_properties))
 
     def correct_login(self, *args, **kwargs):
