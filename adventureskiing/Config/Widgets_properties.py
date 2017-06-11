@@ -34,7 +34,7 @@ action_bar_properties = {
     'action_prev_properties': action_prev_properties,
     'background_image': 'adventureskiing/graphics/red_normal.png',
     'pos_hint': {'x': 0, 'y': 0.9},
-    'size_hint': (1, 0.1)
+    'size_hint_y': 0.1
 }
 
 todayscreen_properties = {
