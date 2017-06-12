@@ -21,6 +21,8 @@ class AdventureSkiing(App):
     # TODO remember session - logged in users after restart app
     # TODO android notifications
     # TODO refactoring - private methods
+    # TODO add refreshing on resume, refreshing userchooser, and whole carousel ( if permissions changed, or user removed)
+    # TODO automatically logout removed users
     icon = 'adventureskiing/graphics/logo.png'
 
     def build(self):

@@ -59,12 +59,13 @@ class MyLoginManager(LoginManager):
         self.choosen_user = None
         self.get_screen("CarouselWithActionBar").reinitialize()
 
-    def refresh_carousel(self):
+    def refresh_userchooser(self):
         caro = self.get_screen("CarouselWithActionBar")
-        current_slide_index = caro.carousel.index
-        caro.reinitialize()
-        self.setup_carousel_widgets()
-        caro.carousel.load_slide(caro.carousel.slides[int(current_slide_index)])
+        self.remove_user_chooser(caro)
+        self.setup_user_chooser(caro)
+
+    def remove_user_chooser(self, caro):
+        caro.actionBar.action_view._list_action_group.remove(self.user_chooser)
 
     def go_back(self):
         carousel = self.get_screen("CarouselWithActionBar").carousel

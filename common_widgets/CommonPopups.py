@@ -80,7 +80,7 @@ class UserModifyingPopup(CommonPopup):
         return True if self.choosen.user.__dict__ == App.get_running_app().root.logged_user.__dict__ else False
 
     def refresh_user_possibilities(self):
-        App.get_running_app().root.refresh_carousel()
+        App.get_running_app().root.refresh_userchooser()
 
 
 class PasswordChanger(CommonPopup):
@@ -173,7 +173,7 @@ class UserAddingPopup(CommonPopup):
 
     def refresh_user_chooser(self):
         """ Updates user chooser (currently added / removed user ). """
-        App.get_running_app().root.refresh_carousel()
+        App.get_running_app().root.refresh_userchooser()
 
 
 class UserRemovingPopup(UserModifyingPopup):
