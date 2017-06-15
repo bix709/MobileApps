@@ -39,7 +39,6 @@ class MyLoginManager(LoginManager):
         self.setup_carousels_screens(caro)
         if self.logged_user.privileges == "Admin":
             self.setup_user_chooser(caro)
-        caro.actionBar.action_view._layout_random()
 
     def setup_carousels_screens(self, caro):
         caro.add_screen(CalendarScreen(**calendarscreen_properties))
@@ -52,7 +51,7 @@ class MyLoginManager(LoginManager):
         self.user_chooser = UserChooser(**user_chooser_properties)
         caro.actionBar.action_view.add_widget(ActionSeparator(**separators_properties))
         caro.actionBar.action_view.add_widget(self.user_chooser)
-        caro.actionBar.action_view._layout_group()
+        caro.actionBar.action_view._layout_random()
 
     def logout(self, *args, **kwargs):
         super(MyLoginManager, self).logout()
