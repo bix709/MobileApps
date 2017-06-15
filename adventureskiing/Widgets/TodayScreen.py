@@ -44,7 +44,6 @@ class TodayScreen(ScrollableScreen):
         schedule_task(callback=GetUnoccupied(**db_kwargs), instance=self, button_instance=instance)
 
     def set_unoccupied(self, unoccupied_instructors, instance):
-        self.unoccupied_users.dismiss()
         self.unoccupied_users.clear_widgets()
         if unoccupied_instructors is not None:
             for instructor in unoccupied_instructors:
