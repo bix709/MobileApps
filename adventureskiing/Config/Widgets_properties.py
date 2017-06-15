@@ -42,7 +42,8 @@ todayscreen_properties = {
     # 'background_image': 'adventureskiing/graphics/bg.jpg',
     'name': 'Dzis',
     'buttons_properties': {'background_normal': 'adventureskiing/graphics/blue_snow.png'},
-    'dropdown_buttons_properties': {'background_normal': 'adventureskiing/graphics/yellow_snow.png'}
+    'dropdown_buttons_properties': {'background_normal': 'adventureskiing/graphics/yellow_snow.png'},
+    'busy_buttons_background': 'adventureskiing/graphics/red_snow.png'
 }
 
 calendarscreen_properties = {

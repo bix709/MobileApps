@@ -23,6 +23,7 @@ class TodayScreen(ScrollableScreen):
         self.unoccupied_users = DropDown()
         self.today = "{}/{}/{}".format(gmtime().tm_year, gmtime().tm_mon, gmtime().tm_mday)
         self.button_properties = kwargs.pop('buttons_properties', dict())
+        self.busy_buttons_background = kwargs.pop('busy_buttons_background', '')
         self.dropdown_buttons_properties = kwargs.pop('dropdown_buttons_properties', dict())
         self.dropdown_height = Window.height / 7 if Window.height > Window.width else Window.width / 7
         super(TodayScreen, self).__init__(**kwargs)
@@ -45,7 +46,8 @@ class TodayScreen(ScrollableScreen):
 
     def set_unoccupied(self, unoccupied_instructors, instance):
         self.unoccupied_users.clear_widgets()
-        if unoccupied_instructors is not None:
+        if unoccupied_instructors:
+            instance.background_normal = self.button_properties['background_normal']
             for instructor in unoccupied_instructors:
                 self.unoccupied_users.add_widget(UserButton(text="{}".format(instructor.name), user=instructor,
                                                             size_hint_y=None,
@@ -53,8 +55,10 @@ class TodayScreen(ScrollableScreen):
                                                             on_press=lambda a: self.add_lesson(a, instance),
                                                             **self.dropdown_buttons_properties))
             self.unoccupied_users.open(instance)
+        else: instance.background_normal = self.busy_buttons_background
 
     def add_lesson(self, instance, button):
+        self.unoccupied_users.dismiss()
         App.get_running_app().root.choosen_user = instance.user
         lesson_info = dict()
         lesson_info['lesson_id'] = "0"
