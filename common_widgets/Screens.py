@@ -124,6 +124,3 @@ class ScrollableScreen(Screen):
 
     def setup_widgets(self):
         pass
-
-    def printhi(self):
-        print 'hi'
