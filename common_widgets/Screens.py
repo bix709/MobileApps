@@ -3,8 +3,10 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+
 from kivy.app import App
 from kivy.core.window import Window
+from kivy.effects.dampedscroll import DampedScrollEffect
 from kivy.graphics import *
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
@@ -12,6 +14,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 
+from common_utilities.Utilities import ignored, call_once_within_period
 from common_widgets.FittingLabels import FontFittingLabel, FontFittingButton
 
 
@@ -91,12 +94,29 @@ class LoginScreen(BackgroundAdjustableScreen):
         self.initialize()
 
 
+class OverscrollRefresh(DampedScrollEffect):
+
+    def on_overscroll(self, *args):
+        super(OverscrollRefresh, self).on_overscroll()
+        # Ensure overscroll is on top of widget, and has proper value
+        if self.overscroll < -100:
+            self.refresh()
+
+    @staticmethod
+    @call_once_within_period(5)
+    def refresh(*args):
+        with ignored(Exception):
+            caro = App.get_running_app().root.get_screen("CarouselWithActionBar")
+            caro.carousel.current_slide.refresh(*args)
+
+
 class ScrollableScreen(Screen):
     def __init__(self, **kwargs):
         super(ScrollableScreen, self).__init__(**kwargs)
         self.main_layout = GridLayout(cols=1, size_hint_y=None, height=Window.height)
         self.main_layout.bind(minimum_height=self.main_layout.setter('height'))
         scroll = ScrollView(size_hint=(1, 1))
+        scroll.effect_cls = OverscrollRefresh
         scroll.add_widget(self.main_layout)
         self.add_widget(scroll)
         self.setup_widgets()
@@ -104,3 +124,6 @@ class ScrollableScreen(Screen):
 
     def setup_widgets(self):
         pass
+
+    def printhi(self):
+        print 'hi'

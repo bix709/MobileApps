@@ -31,8 +31,8 @@ class DailyScreen(ScrollableScreen):
         db_kwargs = {'day': self.day, 'user': user}
         schedule_task(callback=GetDailyGraph(**db_kwargs), instance=self)
 
-    def refresh(self, day):
-        self.day = day
+    def refresh(self, day=None, *args):
+        if day is not None: self.day = day
         self.setup_widgets()
 
     def add_hours(self, busy_hours):
@@ -62,10 +62,6 @@ class DailyScreen(ScrollableScreen):
         self.main_layout.add_widget(FontFittingLabel(text='Grafik z dnia {}'.format(self.day), size_hint_y=None,
                                                      height=self.buttons_height,
                                                      color=self.header_font_color))
-        self.main_layout.add_widget(FontFittingButton(text='Odśwież', size_hint_y=None,
-                                                      height=self.buttons_height,
-                                                      on_press=lambda a: self.refresh(self.day),
-                                                      **self.configuration_buttons_properties))
         self.main_layout.add_widget(FontFittingButton(text='Pokaz dzisiejszy', size_hint_y=None,
                                                       height=self.buttons_height,
                                                       on_press=lambda a: self.refresh(today),

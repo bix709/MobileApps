@@ -23,6 +23,7 @@ class AdventureSkiing(App):
     # TODO refactoring - private methods
     # TODO add refreshing on resume, refreshing userchooser, and whole carousel ( if permissions changed, or user removed)
     # TODO automatically logout removed users
+    # TODO add closing keyboard on confirmations in popup
     icon = 'adventureskiing/graphics/logo.png'
 
     def build(self):
