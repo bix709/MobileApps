@@ -113,7 +113,6 @@ class PasswordChange(CommonCallback):
 
     @wait_for_future_result
     def perform_callback(self, instance, *args, **kwargs):
-        SqlCommands.delete_session(plyer.uniqueid.id)
         func = instance.on_successful_change() if self.database_query.result() is True else instance.on_wrong_attempt()
         Clock.schedule_once(func)
 
