@@ -48,6 +48,7 @@ class MyLoginManager(LoginManager):
 
     def correct_login(self, *args, **kwargs):
         self.choosen_user = self.logged_user
+        plyer.vibrator.vibrate(10000)
         setup_notifications_checks(self.session_id)
         self.setup_carousel_widgets()
         self.go_to("CarouselWithActionBar")
