@@ -3,11 +3,14 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+import os
 from time import sleep
 
 import plyer
 from kivy.app import App
 from kivy.utils import platform
+from os.path import dirname, realpath
+
 from adventureskiing.Database.MySQL.db_commands import SqlCommands
 
 
@@ -24,8 +27,9 @@ def notification_service(session_id):
         for data, godzina, ilosc_os, operacja in notifications:
             title = "Adventure Skiing"
             message, ticker = get_message_ticker(data, godzina, ilosc_os, operacja)
+            icon_path = os.path.join(dirname(dirname(realpath(__file__))), 'adventureskiing', 'graphics', 'logo.png')
             plyer.notification.notify(title=title, message=message, app_name='ASy',
-                                      app_icon='adventureskiing/graphics/logo.png', ticker=ticker)
+                                      app_icon=icon_path, ticker=ticker)
         sleep(10)
 
 
@@ -41,3 +45,6 @@ def get_message_ticker(data, godzina, ilosc_os, operacja):
                                                                                               godzina=godzina)
         ticker = 'Lekcja odwolana'
     return message, ticker
+
+if __name__ == '__main__':
+    print
