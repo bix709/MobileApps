@@ -48,6 +48,8 @@ class MyLoginManager(LoginManager):
 
     def correct_login(self, *args, **kwargs):
         self.choosen_user = self.logged_user
+        plyer.notification.notify(title="udalo sie", message="kurwa tak!", app_name='ASy',
+                                  app_icon='adventureskiing/graphics/logo.png', ticker="jupi jej")
         setup_notifications_checks(self.session_id)
         self.setup_carousel_widgets()
         self.go_to("CarouselWithActionBar")
