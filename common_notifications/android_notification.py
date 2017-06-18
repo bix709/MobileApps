@@ -16,10 +16,13 @@ from adventureskiing.Database.MySQL.db_commands import SqlCommands
 
 def setup_notifications_checks(session_id):
     if platform == 'android':
-        from android import AndroidService
-        service = AndroidService('Notification Service', 'Checking for notifications')
-        service.start("{}".format(session_id))
-
+        import android
+        # from android import AndroidService
+        # service = AndroidService('Notification Service', 'Checking for notifications')
+        # service.start("{}".format(session_id))
+        android.start_service(title='Notification Service',
+                              description='Checking for notifications',
+                              arg='{}'.format(session_id))
 
 def notification_service(session_id):
     while True:
