@@ -3,14 +3,10 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
-import plyer
 from kivy.app import App
-from kivy.clock import Clock
 from kivy.core.window import Window
 
-from adventureskiing.Database.MySQL.db_commands import SqlCommands
 from adventureskiing.Widgets.MyLoginManager import MyLoginManager
-from common_database.MySqlConnection import DatabaseConnection
 
 
 class AdventureSkiing(App):
@@ -33,6 +29,9 @@ class AdventureSkiing(App):
     # TODO checking if session didnt expire !!!!
     # TODO refresh on userchooser's change user
     # TODO create common app, common session, and custom session with overriden sql command
+
+
+    # TODO Needed fixes : userchooser when automatic logging, supervisor needs to check session freshness, and stops gracefully on logout.
     icon = 'adventureskiing/graphics/logo.png'
 
     def build(self):

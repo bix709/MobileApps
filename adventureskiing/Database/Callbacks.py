@@ -26,7 +26,7 @@ class LoginCallback(CommonCallback):
                 #                                               permission=uprawnienia, lastname=nazwisko)
                 # App.get_running_app().root.choosen_user = App.get_running_app().root.logged_user
                 SqlCommands.insert_new_session(id, plyer.uniqueid.id)
-                Clock.schedule_once(instance.check_device_session)
+                Clock.schedule_once(lambda a: instance.check_device_session())
             except:
                 Clock.schedule_once(instance.wrong_login)
 
