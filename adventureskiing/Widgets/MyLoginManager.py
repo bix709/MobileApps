@@ -75,6 +75,7 @@ class MyLoginManager(LoginManager):
         schedule_task(callback=SqlCommands.delete_session, device_id=plyer.uniqueid.id)
         super(MyLoginManager, self).logout()
         self.session_id = None
+        self.__session_supervisor = BackgroundSessionSupervisor(self)
         self.choosen_user = None
         self.get_screen("CarouselWithActionBar").reinitialize()
 
