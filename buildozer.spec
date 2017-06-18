@@ -55,7 +55,7 @@ icon.filename =  %(source.dir)s/adventureskiing/graphics/logo.png
 orientation = all
 
 # (list) List of service to declare
-#services = NAME:ENTRYPOINT_TO_PY,NAME2:ENTRYPOINT2_TO_PY
+services = AS_NOTIFICATION_SERVICE:./service
 
 #
 # OSX Specific

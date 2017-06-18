@@ -45,6 +45,3 @@ def get_message_ticker(data, godzina, ilosc_os, operacja):
                                                                                               godzina=godzina)
         ticker = 'Lekcja odwolana'
     return message, ticker
-
-if __name__ == '__main__':
-    print
