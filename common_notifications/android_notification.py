@@ -13,8 +13,9 @@ from adventureskiing.Database.MySQL.db_commands import SqlCommands
 
 def setup_notifications_checks(session_id):
     if platform == 'android':
-        import android
-        android.start_service('Notification Name', 'Notification Message', session_id)
+        from android import AndroidService
+        service = AndroidService('Notification Service', 'Checking for notifications')
+        service.start("{}".format(session_id))
 
 
 def notification_service(session_id):
