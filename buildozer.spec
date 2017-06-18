@@ -36,7 +36,7 @@ version = 1.0
 
 # (list) Application requirements
 # comma seperated e.g. requirements = sqlite3,kivy
-requirements = kivy,android,plyer,futures,mysql_connector==2.1.4,hostpython2
+requirements = kivy,android,plyer,futures,mysql_connector==2.1.4,hostpython2,pyjnius
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -55,7 +55,7 @@ icon.filename =  %(source.dir)s/adventureskiing/graphics/logo.png
 orientation = all
 
 # (list) List of service to declare
-services = AS_NOTIFICATION_SERVICE:./service/main.py
+services = myservice:./service/main.py
 
 #
 # OSX Specific
@@ -72,7 +72,7 @@ services = AS_NOTIFICATION_SERVICE:./service/main.py
 fullscreen = 1
 
 # (list) Permissions
-android.permissions = INTERNET
+android.permissions = INTERNET,VIBRATE
 
 # (int) Android API to use
 #android.api = 19
