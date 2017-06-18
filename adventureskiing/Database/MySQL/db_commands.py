@@ -3,6 +3,7 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+from datetime import datetime
 from time import gmtime
 
 import plyer
@@ -75,7 +76,8 @@ class SqlCommands(object):
                                                              data=kwargs['date'], ilosc_osob=number_of_people,
                                                              koszt=cennik.get(int(number_of_people), 0),
                                                              id_instruktora=kwargs['user'].id, wiek=kwargs['age']))
-                SqlCommands.insert_notification(operation='ADD', **kwargs)
+                SqlCommands.insert_notification(operation='ADD', number_of_people=number_of_people,
+                                                user_id=kwargs['user'].id, **kwargs)
                 return True
         except:
             print "Couldnt add lesson {}".format(sys.exc_info()[0])
@@ -86,15 +88,16 @@ class SqlCommands(object):
             if kwargs['lesson_id'] != "0":
                 user_id, date, time, number_of_people = DatabaseConnection().fetch_query(
                     "select id_instruktora, data, godzina, ilosc_osob "
-                    "from lekcja where id = {}".format(kwargs['lesson_id']))
-                date = date.split()[0].replace("-", '/')
+                    "from lekcja where id = {}".format(kwargs['lesson_id']))[0]
+                date = "{}".format(datetime.date(date)).replace("-", "/")
                 DatabaseConnection().execute_command("delete from lekcja where id = {}".format(kwargs['lesson_id']))
-                SqlCommands.insert_notification("REMOVE", user_id, date, time, number_of_people)
+                SqlCommands.insert_notification(operation="REMOVE", user_id=user_id, date=date, hour=time,
+                                                number_of_people=number_of_people)
         except:
             print "Couldnt remove lesson from Database {}".format(sys.exc_info()[0])
 
     @staticmethod
-    def insert_notification(operation, user_id, date, time, number_of_people, **kwargs):
+    def insert_notification(operation, user_id, date, hour, number_of_people, **kwargs):
         device_id = plyer.uniqueid.id
         sessions_ids = DatabaseConnection().fetch_query(
             'select id from session where user_id = {} and device_id != "{}"'.format(user_id, device_id))
@@ -102,7 +105,7 @@ class SqlCommands(object):
             DatabaseConnection().execute_command(
                 'insert into powiadomienia (session_id, data, godzina, ilosc_osob, operacja)'
                 ' values ( {session_id}, STR_TO_DATE("{date}", "%Y/%m/%d"), '
-                '{hour}, {num_of_people}, "{operation}")'.format(date=date, hour=time, num_of_people=number_of_people,
+                '{hour}, {num_of_people}, "{operation}")'.format(date=date, hour=hour, num_of_people=number_of_people,
                                                                  session_id=session_id[0], operation=operation))
 
     @staticmethod

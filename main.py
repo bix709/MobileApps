@@ -3,10 +3,13 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+from datetime import datetime
+
 from kivy.app import App
 from kivy.core.window import Window
 
 from adventureskiing.Widgets.MyLoginManager import MyLoginManager
+from common_database.MySqlConnection import DatabaseConnection
 
 
 class AdventureSkiing(App):
