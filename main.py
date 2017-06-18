@@ -3,10 +3,14 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+import plyer
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.core.window import Window
 
+from adventureskiing.Database.MySQL.db_commands import SqlCommands
 from adventureskiing.Widgets.MyLoginManager import MyLoginManager
+from common_database.MySqlConnection import DatabaseConnection
 
 
 class AdventureSkiing(App):
@@ -24,6 +28,11 @@ class AdventureSkiing(App):
     # TODO add refreshing on resume, refreshing userchooser, and whole carousel ( if permissions changed, or user removed)
     # TODO automatically logout removed users
     # TODO add closing keyboard on confirmations in popup
+    #
+    # TODO add session on login ,remove on logout, and on user removal
+    # TODO checking if session didnt expire !!!!
+    # TODO refresh on userchooser's change user
+    # TODO create common app, common session, and custom session with overriden sql command
     icon = 'adventureskiing/graphics/logo.png'
 
     def build(self):

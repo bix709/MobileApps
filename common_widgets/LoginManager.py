@@ -3,6 +3,7 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+from kivy.core.window import Window
 from kivy.uix.screenmanager import FadeTransition
 from kivy.uix.screenmanager import ScreenManager
 
@@ -15,6 +16,7 @@ from common_widgets.Screens import LoginScreen
 class LoginManager(ScreenManager, RootWidget):
     def __init__(self, loginbutton_properties, credential_label_properties, loginscreen_properties, *args, **kwargs):
         """ This widget is supposed to be root of application! """
+        self.size = Window.size
         self.login_screen = LoginScreen(loginbutton_properties=loginbutton_properties,
                                         credential_label_properties=credential_label_properties,
                                         **loginscreen_properties)

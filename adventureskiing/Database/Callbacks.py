@@ -3,6 +3,7 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+import plyer
 from kivy.app import App
 from kivy.clock import Clock
 
@@ -21,10 +22,11 @@ class LoginCallback(CommonCallback):
         if App.get_running_app().root.logged_user is None:
             try:
                 imie, nazwisko, id, uprawnienia = self.database_query.result()
-                App.get_running_app().root.logged_user = User(name=imie, user_id=id,
-                                                              permission=uprawnienia, lastname=nazwisko)
-                App.get_running_app().root.choosen_user = App.get_running_app().root.logged_user
-                Clock.schedule_once(instance.correct_login)
+                # App.get_running_app().root.logged_user = User(name=imie, user_id=id,
+                #                                               permission=uprawnienia, lastname=nazwisko)
+                # App.get_running_app().root.choosen_user = App.get_running_app().root.logged_user
+                SqlCommands.insert_new_session(id, plyer.uniqueid.id)
+                Clock.schedule_once(instance.check_device_session)
             except:
                 Clock.schedule_once(instance.wrong_login)
 
@@ -111,6 +113,7 @@ class PasswordChange(CommonCallback):
 
     @wait_for_future_result
     def perform_callback(self, instance, *args, **kwargs):
+        SqlCommands.delete_session(plyer.uniqueid.id)
         func = instance.on_successful_change() if self.database_query.result() is True else instance.on_wrong_attempt()
         Clock.schedule_once(func)
 

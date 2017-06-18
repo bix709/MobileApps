@@ -8,6 +8,7 @@ from unittest import TestCase
 
 from adventureskiing.Database.MySQL.db_commands import SqlCommands
 from adventureskiing.Utils.Users import User
+from common_database.MySqlConnection import DatabaseConnection
 
 
 class TestDatabaseCommands(TestCase):
@@ -39,3 +40,11 @@ class TestDatabaseCommands(TestCase):
         self.assertIsNotNone(correct_user_properties)
         self.assertEqual(len(correct_user_properties), 4)
 
+    def test_create_delete_session(self):
+        device_id = '123-231-321'
+        SqlCommands.insert_new_session(3, device_id)
+        sessions = DatabaseConnection().fetch_query('select * from session where 1')
+        self.assertTrue(len(sessions) == 1)
+        SqlCommands.delete_session(device_id)
+        sessions = DatabaseConnection().fetch_query('select * from session where 1')
+        self.assertTrue(len(sessions) == 0)

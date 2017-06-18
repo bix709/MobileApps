@@ -3,9 +3,11 @@
     author: Tomasz Teter
     copyright : 5517 Company
 """
+import plyer
 from kivy.uix.actionbar import ActionSeparator
 
 from adventureskiing.Config.Widgets_properties import *
+from adventureskiing.Database.MySQL.db_commands import SqlCommands
 from adventureskiing.Widgets.CalendarScreen import CalendarScreen
 from adventureskiing.Widgets.DailyScreen import DailyScreen
 from adventureskiing.Widgets.EarningsScreen import EarningsScreen
@@ -13,24 +15,39 @@ from adventureskiing.Widgets.MaintenanceScreen import MaintenanceScreen
 from adventureskiing.Widgets.ScreenCarousel import ScreenCarousel
 from adventureskiing.Widgets.TodayScreen import TodayScreen
 from adventureskiing.Widgets.UserChooser import UserChooser
-from common_utilities.Utilities import ignored
+from common_callbacks.Callbacks import schedule_task
+from common_notifications.android_notification import setup_notifications_checks
+from common_session.sessionSupervisor import BackgroundSessionSupervisor
+from common_utilities.Utilities import ignored, wait_until_application_root_initialized
 from common_widgets.LoginManager import LoginManager
 
 
 class MyLoginManager(LoginManager):
     def __init__(self, *args, **kwargs):
+        self.__session_supervisor = BackgroundSessionSupervisor(self)
         super(MyLoginManager, self).__init__(loginscreen_properties=loginscreen_properties,
                                              loginbutton_properties=loginbutton_properties,
                                              credential_label_properties=credential_label_properties,
                                              *args, **kwargs)
-        self.choosen_user = None
+        self.session_id = None
         self.user_chooser = None
+        self.choosen_user = None
+        self.check_device_session()
+
+    def check_device_session(self):
+        self.session_id = SqlCommands.get_session(plyer.uniqueid.id)
+        self.logged_user = SqlCommands.get_user_from_session(self.session_id) if self.session_id else None
+        self.choosen_user = self.logged_user
+        if self.logged_user:
+            self.__session_supervisor.start()
 
     def setup_screens(self):
         super(MyLoginManager, self).setup_screens()
         self.add_widget(ScreenCarousel(**carousel_with_actionbar_properties))
 
     def correct_login(self, *args, **kwargs):
+        self.choosen_user = self.logged_user
+        setup_notifications_checks(self.session_id)
         self.setup_carousel_widgets()
         self.go_to("CarouselWithActionBar")
 
@@ -48,13 +65,16 @@ class MyLoginManager(LoginManager):
         caro.add_screen(MaintenanceScreen(**maintenancescreen_properties))
 
     def setup_user_chooser(self, caro):
-        self.user_chooser = UserChooser(**user_chooser_properties)
-        caro.actionBar.action_view.add_widget(ActionSeparator(**separators_properties))
-        caro.actionBar.action_view.add_widget(self.user_chooser)
+        # self.user_chooser = UserChooser(**user_chooser_properties)
+        # if caro.actionBar.action_view.width >= self.user_chooser.width:
+        #     caro.actionBar.action_view.add_widget(ActionSeparator(**separators_properties))
+        #     caro.actionBar.action_view.add_widget(self.user_chooser)
         caro.actionBar.action_view._layout_random()
 
     def logout(self, *args, **kwargs):
+        schedule_task(callback=SqlCommands.delete_session, device_id=plyer.uniqueid.id)
         super(MyLoginManager, self).logout()
+        self.session_id = None
         self.choosen_user = None
         self.get_screen("CarouselWithActionBar").reinitialize()
 

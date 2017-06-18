@@ -7,6 +7,8 @@ from contextlib import contextmanager
 
 import time
 
+from kivy.app import App
+
 
 @contextmanager
 def ignored(exc):
@@ -27,3 +29,10 @@ def call_once_within_period(period_in_seconds):
                 self.time = time.time()
                 return self.func(*args)
     return call_once_within_time
+
+
+def wait_until_application_root_initialized(func):
+    def wrapped(*args, **kwargs):
+        while App.get_running_app().root is None: pass
+        return func(*args, **kwargs)
+    return wrapped
