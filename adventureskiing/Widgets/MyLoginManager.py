@@ -4,6 +4,7 @@
     copyright : 5517 Company
 """
 import plyer
+from kivy.core.window import Window
 from kivy.uix.actionbar import ActionSeparator
 
 from adventureskiing.Config.Widgets_properties import *
@@ -65,10 +66,10 @@ class MyLoginManager(LoginManager):
         caro.add_screen(MaintenanceScreen(**maintenancescreen_properties))
 
     def setup_user_chooser(self, caro):
-        # self.user_chooser = UserChooser(**user_chooser_properties)
-        # if caro.actionBar.action_view.width >= self.user_chooser.width:
-        #     caro.actionBar.action_view.add_widget(ActionSeparator(**separators_properties))
-        #     caro.actionBar.action_view.add_widget(self.user_chooser)
+        caro.actionBar.action_view.width = Window.width
+        self.user_chooser = UserChooser(**user_chooser_properties)
+        caro.actionBar.action_view.add_widget(ActionSeparator(**separators_properties))
+        caro.actionBar.action_view.add_widget(self.user_chooser)
         caro.actionBar.action_view._layout_random()
 
     def logout(self, *args, **kwargs):
