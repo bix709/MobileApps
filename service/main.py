@@ -6,6 +6,8 @@
 import sys
 
 from common_notifications.android_notification import notification_service
+from common_utilities.Utilities import ignored
 
 if __name__ == '__main__':
-    notification_service(sys.argv[1])
+    with ignored(Exception):
+        notification_service(sys.argv[1])
