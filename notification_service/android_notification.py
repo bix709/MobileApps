@@ -10,19 +10,18 @@ import plyer
 from kivy.app import App
 from kivy.utils import platform
 from os.path import dirname, realpath
+from jnius import autoclass
+from plyer.platforms.android import activity
 
 from adventureskiing.Database.MySQL.db_commands import SqlCommands
 
 
 def setup_notifications_checks(session_id):
     if platform == 'android':
-        import android
-        # from android import AndroidService
-        # service = AndroidService('Notification Service', 'Checking for notifications')
-        # service.start("{}".format(session_id))
-        android.start_service(title='Notification Service',
-                              description='Checking for notifications',
-                              arg='{}'.format(session_id))
+        service = autoclass(activity.getPackageName() + '.Service' + 'Notify')
+        mActivity = autoclass('org.kivy.android.PythonActivity').mActivity
+        service.start(mActivity, str(session_id))
+
 
 def notification_service(session_id):
     while True:

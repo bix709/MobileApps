@@ -17,10 +17,10 @@ from adventureskiing.Widgets.ScreenCarousel import ScreenCarousel
 from adventureskiing.Widgets.TodayScreen import TodayScreen
 from adventureskiing.Widgets.UserChooser import UserChooser
 from common_callbacks.Callbacks import schedule_task
-from common_notifications.android_notification import setup_notifications_checks
 from common_session.sessionSupervisor import BackgroundSessionSupervisor
-from common_utilities.Utilities import ignored, wait_until_application_root_initialized
+from common_utilities.Utilities import ignored
 from common_widgets.LoginManager import LoginManager
+from notification_service.android_notification import setup_notifications_checks
 
 
 class MyLoginManager(LoginManager):

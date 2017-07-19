@@ -55,7 +55,7 @@ icon.filename =  %(source.dir)s/adventureskiing/graphics/logo.png
 orientation = all
 
 # (list) List of service to declare
-services = myservice:./service/main.py
+services = notify:notification_service/main.py
 
 #
 # OSX Specific
