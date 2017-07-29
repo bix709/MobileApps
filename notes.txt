@@ -1,3 +1,11 @@
 Launch mode of Python Activity must be single instance. It ensures that our application is Singleton like.
 It is also required for notifications to work properly
 AndroidManifest.tmpl.xml entry: android:launchMode="singleTask"
+
+Android service must be run by calling activity.getPackageName() + .Service + capitalized service name!
+__________________________________________________________________________
+example:
+service = autoclass(activity.getPackageName() + '.Service' + 'Notify')
+mActivity = autoclass('org.kivy.android.PythonActivity').mActivity
+service.start(mActivity, str(session_id))
+__________________________________________________________________________
