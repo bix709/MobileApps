@@ -1,3 +1,3 @@
 Launch mode of Python Activity must be single instance. It ensures that our application is Singleton like.
 It is also required for notifications to work properly
-xml entry: android:launchMode="singleTask"
+AndroidManifest.tmpl.xml entry: android:launchMode="singleTask"
