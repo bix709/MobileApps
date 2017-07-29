@@ -11,10 +11,8 @@ Intent = autoclass('android.content.Intent')
 NotificationClass = autoclass('android.app.Notification')
 PendingIntent = autoclass('android.app.PendingIntent')
 
-java_class = activity.getClass()
-notificationIntent = Intent(activity, java_class)
-notificationIntent.setFlags(
-    Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | NotificationClass.FLAG_AUTO_CANCEL | NotificationClass.FLAG_SHOW_LIGHTS | NotificationClass.FLAG_ONGOING_EVENT)
+notificationIntent = activity.getPackageManager().getLaunchIntentForPackage(activity.getPackageName())
+notificationIntent.setFlags(NotificationClass.FLAG_SHOW_LIGHTS)
 intent = PendingIntent.getActivity(activity, 0, notificationIntent, 0)
 
 
@@ -34,6 +32,8 @@ class AndroidNotification(Notification):
         noti.setTicker(AndroidString(
             kwargs.get('ticker').encode('utf-8')))
         noti.setSmallIcon(icon)
+        noti.setPriority(NotificationClass.PRIORITY_HIGH)
+        noti.setLights(0xff00ff00, 300, 100)
         noti.setAutoCancel(True)
         noti.setContentIntent(intent)
 
