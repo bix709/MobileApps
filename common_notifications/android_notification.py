@@ -8,12 +8,13 @@ Context = autoclass('android.content.Context')
 NotificationBuilder = autoclass('android.app.Notification$Builder')
 Drawable = autoclass("{}.R$drawable".format(activity.getPackageName()))
 Intent = autoclass('android.content.Intent')
+NotificationClass = autoclass('android.app.Notification')
 PendingIntent = autoclass('android.app.PendingIntent')
 
 java_class = activity.getClass()
 notificationIntent = Intent(activity, java_class)
 notificationIntent.setFlags(
-    Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_AUTO_CANCEL | Intent.FLAG_SHOW_LIGHTS | Intent.FLAG_ONGOING_EVENT)
+    Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | NotificationClass.FLAG_AUTO_CANCEL | NotificationClass.FLAG_SHOW_LIGHTS | NotificationClass.FLAG_ONGOING_EVENT)
 intent = PendingIntent.getActivity(activity, 0, notificationIntent, 0)
 
 
