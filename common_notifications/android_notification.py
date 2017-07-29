@@ -1,3 +1,4 @@
+import plyer
 from jnius import autoclass
 from plyer.facades import Notification
 from plyer.platforms.android import activity, SDK_INT
@@ -39,7 +40,7 @@ class AndroidNotification(Notification):
             noti = noti.build()
         else:
             noti = noti.getNotification()
-
+        plyer.vibrator.vibrate(1)
         self._get_notification_service().notify(0, noti)
 
 

@@ -33,6 +33,7 @@ class AdventureSkiing(App):
 
 
     # TODO Needed fixes : userchooser when automatic logging, supervisor needs to check session freshness, and stops gracefully on logout.
+    # TODO fix error handling when no connection to db
     icon = 'adventureskiing/graphics/logo.png'
 
     def build(self):

@@ -5,7 +5,7 @@
 """
 import os
 
-from adventureskiing.notification_service import dispatch_incoming_notifications
+from adventureskiing.notification_service.notification_service import dispatch_incoming_notifications
 from common_utilities.Utilities import ignored
 
 if __name__ == '__main__':

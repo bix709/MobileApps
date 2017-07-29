@@ -16,7 +16,7 @@ from adventureskiing.Widgets.MaintenanceScreen import MaintenanceScreen
 from adventureskiing.Widgets.ScreenCarousel import ScreenCarousel
 from adventureskiing.Widgets.TodayScreen import TodayScreen
 from adventureskiing.Widgets.UserChooser import UserChooser
-from adventureskiing.notification_service import start_notification_service
+from adventureskiing.notification_service.notification_service import start_notification_service
 from common_callbacks.Callbacks import schedule_task
 from common_session.sessionSupervisor import BackgroundSessionSupervisor
 from common_utilities.Utilities import ignored

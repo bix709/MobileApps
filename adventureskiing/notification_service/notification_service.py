@@ -33,7 +33,7 @@ def dispatch_incoming_notifications(session_id):
             message, ticker = get_message_ticker(data, godzina, ilosc_os, operacja)
             icon_path = os.path.join(dirname(dirname(realpath(__file__))), 'adventureskiing', 'graphics', 'logo.png')
             AndroidNotification().notify(title=title, message=message, app_name='ASy',
-                                         icon_android=icon_path, ticker=ticker)
+                                         app_icon=icon_path, ticker=ticker)
         sleep(10)
 
 
