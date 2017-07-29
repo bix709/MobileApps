@@ -74,7 +74,8 @@ class MyLoginManager(LoginManager):
         caro.actionBar.action_view._layout_random()
 
     def logout(self, *args, **kwargs):
-        self.notification_service.stop()
+        with ignored(Exception):
+            self.notification_service.stop()
         schedule_task(callback=SqlCommands.delete_session, device_id=plyer.uniqueid.id)
         super(MyLoginManager, self).logout()
         self.session_id = None
