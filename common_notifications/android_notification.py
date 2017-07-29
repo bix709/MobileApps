@@ -13,7 +13,7 @@ PendingIntent = autoclass('android.app.PendingIntent')
 java_class = activity.getClass()
 notificationIntent = Intent(activity, java_class)
 notificationIntent.setFlags(
-    Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_AUTO_CANCEL)
+    Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_AUTO_CANCEL | Intent.FLAG_SHOW_LIGHTS | Intent.FLAG_ONGOING_EVENT)
 intent = PendingIntent.getActivity(activity, 0, notificationIntent, 0)
 
 
