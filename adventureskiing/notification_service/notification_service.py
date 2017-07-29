@@ -23,13 +23,14 @@ def start_notification_service(session_id):
 def dispatch_incoming_notifications(session_id):
     if platform == 'android':
         from common_notifications.android_notification import AndroidNotification
+        notification = AndroidNotification()
         while True:
             notifications = SqlCommands.get_notifications(session_id)
             for data, godzina, ilosc_os, operacja in notifications:
                 message, ticker = get_message_ticker(data, godzina, ilosc_os, operacja)
                 icon_path = os.path.join(dirname(dirname(realpath(__file__))), 'adventureskiing', 'graphics', 'logo.png')
-                AndroidNotification().notify(title=ticker, message=message, app_name='ASy',
-                                             app_icon=icon_path, ticker=ticker)
+                notification.notify(title=ticker, message=message, app_name='ASy',
+                                    app_icon=icon_path, ticker=ticker)
 
 
 def get_message_ticker(data, godzina, ilosc_os, operacja):
