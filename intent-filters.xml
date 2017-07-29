@@ -1,3 +1,0 @@
-<intent-filter>
-    <activity android:launchMode="singleTask" />
-</intent-filter>
