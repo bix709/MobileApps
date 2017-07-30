@@ -12,7 +12,10 @@ NotificationClass = autoclass('android.app.Notification')
 PendingIntent = autoclass('android.app.PendingIntent')
 
 notificationIntent = activity.getPackageManager().getLaunchIntentForPackage(activity.getPackageName())
-notificationIntent.setFlags(NotificationClass.FLAG_SHOW_LIGHTS)
+notificationIntent.setFlags(
+    Intent.FLAG_ACTIVITY_CLEAR_TOP |
+    Intent.FLAG_ACTIVITY_SINGLE_TOP |
+    NotificationClass.FLAG_SHOW_LIGHTS)
 intent = PendingIntent.getActivity(activity, 0, notificationIntent, 0)
 
 
