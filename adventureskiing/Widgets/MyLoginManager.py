@@ -17,6 +17,7 @@ from adventureskiing.Widgets.ScreenCarousel import ScreenCarousel
 from adventureskiing.Widgets.TodayScreen import TodayScreen
 from adventureskiing.Widgets.UserChooser import UserChooser
 from adventureskiing.notification_service.notification_service import start_notification_service
+from common_alarms.android_alarm import schedule_alarm_manager
 from common_callbacks.Callbacks import schedule_task
 from common_session.sessionSupervisor import BackgroundSessionSupervisor
 from common_utilities.Utilities import ignored
@@ -49,7 +50,7 @@ class MyLoginManager(LoginManager):
 
     def correct_login(self, *args, **kwargs):
         self.choosen_user = self.logged_user
-        self.notification_service = start_notification_service(self.session_id)
+        schedule_alarm_manager(20)
         self.setup_carousel_widgets()
         self.go_to("CarouselWithActionBar")
 
@@ -74,8 +75,8 @@ class MyLoginManager(LoginManager):
         caro.actionBar.action_view._layout_random()
 
     def logout(self, *args, **kwargs):
-        with ignored(Exception):
-            self.notification_service.stop()
+        # with ignored(Exception):
+        #     self.notification_service.stop()
         schedule_task(callback=SqlCommands.delete_session, device_id=plyer.uniqueid.id)
         super(MyLoginManager, self).logout()
         self.session_id = None
