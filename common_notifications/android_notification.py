@@ -34,7 +34,9 @@ class AndroidNotification(Notification):
         noti.setTicker(AndroidString(
             kwargs.get('ticker').encode('utf-8')))
         noti.setSmallIcon(icon)
-        noti.defaults |= NotificationClass.DEFAULT_LIGHTS
+        noti.ledARGB = "0xFF0000FF"
+        noti.ledOnMS = 200
+        noti.ledOffMS = 0
         noti.setPriority(NotificationClass.PRIORITY_HIGH)
         noti.setAutoCancel(True)
         noti.setContentIntent(intent)
