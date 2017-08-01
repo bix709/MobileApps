@@ -11,7 +11,7 @@ from kivy.lib import osc
 from adventureskiing.notification_service.notification_manager import NotificationManager
 
 
-def stop_service():
+def stop_service(*args):
     notification_listener.stop()
     exit(0)
 
