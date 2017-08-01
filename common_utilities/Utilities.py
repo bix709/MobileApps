@@ -11,7 +11,7 @@ from kivy.app import App
 
 
 @contextmanager
-def ignored(exc):
+def ignored(*exc):
     try:
         yield
     except exc:

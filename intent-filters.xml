@@ -1,0 +1,3 @@
+<intent-filter>
+    <action android:name="org.test.asy.NOTIFICATION_ALARM" />
+</intent-filter>

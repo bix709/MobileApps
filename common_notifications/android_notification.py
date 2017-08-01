@@ -14,8 +14,7 @@ PendingIntent = autoclass('android.app.PendingIntent')
 notificationIntent = activity.getPackageManager().getLaunchIntentForPackage(activity.getPackageName())
 notificationIntent.setFlags(
     Intent.FLAG_ACTIVITY_CLEAR_TOP |
-    Intent.FLAG_ACTIVITY_SINGLE_TOP |
-    NotificationClass.FLAG_SHOW_LIGHTS)
+    Intent.FLAG_ACTIVITY_SINGLE_TOP)
 intent = PendingIntent.getActivity(activity, 0, notificationIntent, 0)
 
 
@@ -35,9 +34,7 @@ class AndroidNotification(Notification):
         noti.setTicker(AndroidString(
             kwargs.get('ticker').encode('utf-8')))
         noti.setSmallIcon(icon)
-        noti.ledARGB = "0xFFFF0000"
-        noti.ledOnMS = 200
-        noti.ledOffMS = 200
+        noti.defaults |= NotificationClass.DEFAULT_LIGHTS
         noti.setPriority(NotificationClass.PRIORITY_HIGH)
         noti.setAutoCancel(True)
         noti.setContentIntent(intent)

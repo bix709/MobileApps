@@ -20,7 +20,6 @@ class AdventureSkiing(App):
     # TODO refactoring - no communication via returning none, true, false in db_commands. do it via exceptions.
     # TODO Changing state of already down action button on click
     # TODO remember session - logged in users after restart app
-    # TODO android notifications
     # TODO refactoring - private methods
     # TODO add refreshing on resume, refreshing userchooser, and whole carousel ( if permissions changed, or user removed)
     # TODO automatically logout removed users
@@ -34,6 +33,10 @@ class AdventureSkiing(App):
 
     # TODO Needed fixes : userchooser when automatic logging, supervisor needs to check session freshness, and stops gracefully on logout.
     # TODO fix error handling when no connection to db
+    # TODO Reconsider using singleton in notification listener, session supervisor, background callback executioner
+    # TODO if working, cleanup after redundant service
+    # TODO remove redundant logic in executing callbacks ( probably no need for doing it on threads), change to sequential
+    # TODO refactoring - notification manager must be importing accoring to platform, remove ignoring import exception in myloginmanager
     icon = 'adventureskiing/graphics/logo.png'
 
     def build(self):
