@@ -12,7 +12,7 @@ class NotificationManager(object):
         self.alarm_manager = AlarmManager('{}.NOTIFICATION_ALARM'.format(activity.getPackageName()))
         self.session_id = session_id
 
-    def dispatch_incoming_notifications(self):
+    def dispatch_incoming_notifications(self, *args):
         if platform == 'android':
             from common_notifications.android_notification import AndroidNotification
             notifier = AndroidNotification()
