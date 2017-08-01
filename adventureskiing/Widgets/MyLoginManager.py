@@ -16,6 +16,7 @@ from adventureskiing.Widgets.MaintenanceScreen import MaintenanceScreen
 from adventureskiing.Widgets.ScreenCarousel import ScreenCarousel
 from adventureskiing.Widgets.TodayScreen import TodayScreen
 from adventureskiing.Widgets.UserChooser import UserChooser
+from adventureskiing.notification_service.notification_service import start_notification_service, stop_notification_service
 from common_callbacks.Callbacks import schedule_task
 from common_session.sessionSupervisor import BackgroundSessionSupervisor
 from common_utilities.Utilities import ignored
@@ -30,7 +31,6 @@ class MyLoginManager(LoginManager):
                                              credential_label_properties=credential_label_properties,
                                              *args, **kwargs)
         self.session_id = None
-        self.notification_listener = None
         self.user_chooser = None
         self.choosen_user = None
         self.check_device_session()
@@ -48,10 +48,7 @@ class MyLoginManager(LoginManager):
 
     def correct_login(self, *args, **kwargs):
         self.choosen_user = self.logged_user
-        with ignored(ImportError, Exception):
-            from adventureskiing.notification_service.notification_service import NotificationManager
-            self.notification_listener = NotificationManager(self.session_id)
-            self.notification_listener.start()
+        start_notification_service(self.session_id)
         self.setup_carousel_widgets()
         self.go_to("CarouselWithActionBar")
 
@@ -76,8 +73,8 @@ class MyLoginManager(LoginManager):
         caro.actionBar.action_view._layout_random()
 
     def logout(self, *args, **kwargs):
-        with ignored(ImportError, Exception):
-            self.notification_listener.stop()
+        with ignored(Exception):
+            stop_notification_service()
         schedule_task(callback=SqlCommands.delete_session, device_id=plyer.uniqueid.id)
         super(MyLoginManager, self).logout()
         self.session_id = None
