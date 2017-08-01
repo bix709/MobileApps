@@ -4,10 +4,7 @@
     copyright : 5517 Company
 """
 import os
-from time import sleep
-
 from kivy.lib import osc
-
 from adventureskiing.notification_service.notification_manager import NotificationManager
 
 
@@ -24,4 +21,3 @@ if __name__ == '__main__':
     osc.bind(oscid, stop_service, '/stop')
     while True:  # Needs to be alive, because broadcast_receiver will no longer exist.
         osc.readQueue(oscid)
-        sleep(10)
